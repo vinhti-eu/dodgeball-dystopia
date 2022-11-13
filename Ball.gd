@@ -1,10 +1,10 @@
-extends Camera2D
+extends KinematicBody2D
 
 
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
-
+var attached_to = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -13,4 +13,14 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	self.position.x = ((get_parent().get_node("Player").position.x +60) *1.1)-self.position.x * delta;
+	if(attached_to != null):
+		self.position = attached_to.position
+
+func attach(var person):
+	attached_to = person
+	
+func throw():
+	detach()	
+	
+func detach():
+	attached_to = null	

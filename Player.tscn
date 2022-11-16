@@ -36,3 +36,4 @@ __meta__ = {
 }
 
 [connection signal="area_entered" from="ballbox" to="." method="_on_ballbox_area_entered"]
+[connection signal="area_exited" from="ballbox" to="." method="_on_ballbox_area_exited"]

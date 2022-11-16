@@ -75,3 +75,9 @@ func _on_ballbox_area_entered(area):
 		if(ball.get_name()=='Ball'):
 			ball_is_in_area = ball
 
+
+
+func _on_ballbox_area_exited(area):
+		var ball = area.get_parent();
+		if(ball.get_name()=='Ball'):
+			ball_is_in_area = null

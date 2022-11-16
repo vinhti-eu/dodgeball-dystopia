@@ -1,6 +1,6 @@
-extends Camera2D
+extends Node2D
 
-
+export var y_ratio = 0.8
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -12,5 +12,5 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	self.position.x = ((get_parent().get_node("Left").current_player.position.x +60) *1.1)-self.position.x * delta;
+#func _process(delta):
+#	pass

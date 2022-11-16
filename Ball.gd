@@ -5,6 +5,8 @@ extends KinematicBody2D
 # var a = 2
 # var b = "text"
 var attached_to = null
+var direction = null
+var speed = 200
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -15,12 +17,15 @@ func _ready():
 func _process(delta):
 	if(attached_to != null):
 		self.position = attached_to.position
+	if(direction != null):
+		move_and_slide(direction * speed)
 
 func attach(var person):
 	attached_to = person
 	
-func throw():
+func throw(var vector, var speed_multiplyer):
 	detach()	
+	direction = vector * speed_multiplyer
 	
 func detach():
 	attached_to = null	

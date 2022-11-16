@@ -5,7 +5,7 @@ extends KinematicBody2D
 # var a = 2
 # var b = "text"
 var direction = Vector2();
-var run_speed = 80
+var run_speed = 100
 export var team = 'left'
 var attached_ball = null
 
@@ -17,7 +17,8 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
 	if(team == 'left'):
-		read_input();
+		if(get_parent().current_player == self):
+			read_input();
 	if(direction.length() !=0):
 		move_and_slide(direction * run_speed);
 
@@ -29,17 +30,26 @@ func read_input():
 	if Input.is_action_pressed("ui_right"):
 		direction.x += 1;
 	if Input.is_action_pressed("ui_down"):
-		direction.y += 1;
+		direction.y += 1 
 	if Input.is_action_pressed("ui_up"):
 		direction.y += -1;
-	direction = direction.normalized()
-	if(attached_ball != null and Input.is_action_just_pressed("ui_accept")):
-		throw_ball()
+	direction = direction.normalized() 
+	direction.y = direction.y * Arena.y_ratio
+	if(Input.is_action_pressed("ui_accept") and attached_ball != null):
+		direction= Vector2(0,0);
+		get_node("AnimatedSprite").modulate = (Color(1,1,0,1))
+	if(attached_ball != null and Input.is_action_just_released("ui_accept")):
+		var throw_direction = direction
+		throw_direction.x = abs(throw_direction.x)
+		throw_direction = throw_direction + Vector2(1.2,0)
+		throw_direction = throw_direction.normalized() 
+		throw_ball(throw_direction)
+		get_node("AnimatedSprite").modulate = (Color(1,1,1,1))
 
 	
 
-func throw_ball():
-	attached_ball.throw()
+func throw_ball(direction):
+	attached_ball.throw(direction,1)
 	attached_ball = null
 
 func attach_ball(ball):

@@ -21,6 +21,8 @@ func _physics_process(delta):
 	if(team == 'left'):
 		if(get_parent().current_player == self):
 			read_input();
+		else:
+			ai_move()
 	if(direction.length() !=0):
 		move_and_slide(direction * run_speed);
 
@@ -81,3 +83,6 @@ func _on_ballbox_area_exited(area):
 		var ball = area.get_parent();
 		if(ball.get_name()=='Ball'):
 			ball_is_in_area = null
+			
+func ai_move():
+	self.direction = Vector2(0,0)

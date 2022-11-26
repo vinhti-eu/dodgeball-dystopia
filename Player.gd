@@ -25,6 +25,8 @@ func _physics_process(delta):
 			ai_move()
 	if(direction.length() !=0):
 		move_and_slide(direction * run_speed);
+	update()
+
 
 		
 func read_input():
@@ -58,7 +60,13 @@ func read_input():
 		ball_just_picked_up = true;
 
 
-	
+
+func _draw():
+	if(direction.length()>0):
+		draw_line(global_position.normalized() ,global_position.normalized() + direction * 100 , Color(1,1,1), 1)
+
+
+
 
 func throw_ball(direction):
 	attached_ball.throw(direction,1)

@@ -14,4 +14,4 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	postion_to_reach = ((get_parent().get_node("Left").current_player.position.x +60) *1.1)-self.position.x * delta;
-	self.position.x = self.position.x + ((pos<tion_to_reach-self.position.x) * 0.08)
+	self.position.x = self.position.x + ((postion_to_reach-self.position.x) * 0.08)

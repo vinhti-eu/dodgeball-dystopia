@@ -37,7 +37,7 @@ team = "right"
 [node name="Ball" parent="." instance=ExtResource( 3 )]
 position = Vector2( 127, 105 )
 
-[node name="Left" type="Node" parent="."]
+[node name="Left" type="Node2D" parent="."]
 script = ExtResource( 6 )
 
 [node name="Player" parent="Left" instance=ExtResource( 1 )]

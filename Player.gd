@@ -11,9 +11,12 @@ var attached_ball = null
 var ball_is_in_area = null
 var ball_just_picked_up = false
 
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	pass
+
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

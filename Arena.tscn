@@ -47,7 +47,10 @@ position = Vector2( 47, 107 )
 position = Vector2( 81, 109 )
 
 [node name="Player3" parent="Left" instance=ExtResource( 1 )]
-position = Vector2( 81, 109 )
+position = Vector2( 104, 125 )
+
+[node name="Player4" parent="Left" instance=ExtResource( 1 )]
+position = Vector2( 104, 125 )
 
 [node name="LeftSelectIcon" type="Node2D" parent="."]
 script = ExtResource( 8 )
@@ -55,4 +58,5 @@ script = ExtResource( 8 )
 [node name="Sprite" type="Sprite" parent="LeftSelectIcon"]
 position = Vector2( 0, 15 )
 scale = Vector2( 0.3, 0.2 )
+z_index = -1
 texture = ExtResource( 9 )

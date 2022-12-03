@@ -7,7 +7,7 @@ extends Node2D
 var current_player = null
 var team_players = null
 var pass_player = null
-var min_dist = 0
+var min_dist_team = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -22,6 +22,22 @@ func _process(delta):
 		if(current_player.attached_ball == null):
 			switch(get_child((current_player.get_index() +1) % get_child_count()))
 	update()
+	
+
+	
+	min_dist_team = get_player_closest_to_look_direction(team_players)
+
+	for child in get_children():
+		child.modulate = Color(1,1,1)	
+	get_child(min_dist_team).modulate = Color(1,0,1)
+
+	
+	
+				
+			
+func get_player_closest_to_look_direction(var players):
+
+	var min_dist = 0
 	var angles = []
 	var current_angle_to_min = rad2deg(current_player.position.angle_to_point(team_players[min_dist].global_position))
 
@@ -46,19 +62,13 @@ func _process(delta):
 
 				angles.append((min(abs(current_look_angle-angle),360-abs(current_look_angle-angle))))
 	for i in range(0,len(angles)):
-		if(abs(angles[i])< abs(angles[min_dist]) and current_player.direction.length() > 0):
+		if(abs(angles[i])< abs(angles[min_dist])):
 			min_dist = i
+	
+	
+	
+	return min_dist
 
-	for child in get_children():
-		child.modulate = Color(1,1,1)	
-	get_child(min_dist).modulate = Color(1,0,1)
-	print(current_angle_to_min)
-	print(angles)
-	print(current_look_angle,"is current look angle")
-	
-	
-				
-			
 
 func switch(var player):
 	current_player = player

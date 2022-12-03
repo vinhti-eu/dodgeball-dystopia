@@ -33,7 +33,7 @@ func _physics_process(delta):
 
 		
 func read_input():
-	direction = Vector2.ZERO
+	direction = Vector2.ZERO.normalized()
 	if Input.is_action_pressed("ui_left"):
 		direction.x += -1;
 	if Input.is_action_pressed("ui_right"):
@@ -65,7 +65,6 @@ func read_input():
 
 
 func _draw():
-	if(direction.length()>0):
 		draw_line(global_position.normalized() ,global_position.normalized() + direction * 100 , Color(1,1,1), 1)
 
 

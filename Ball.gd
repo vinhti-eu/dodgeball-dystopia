@@ -28,7 +28,7 @@ func _process(delta):
 func _physics_process(delta):
 
 			
-	if(jumping):
+	if(jumping and attached_to==null):
 		if(z>=0):
 			z = z+ z_velocity 
 			z_velocity = z_velocity -0.1

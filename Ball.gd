@@ -26,8 +26,6 @@ func _process(delta):
 	
 
 func _physics_process(delta):
-
-			
 	if(jumping and attached_to==null):
 		if(z>=0):
 			z_velocity = z_velocity -0.1
@@ -37,6 +35,7 @@ func _physics_process(delta):
 				jumping = true
 				z_velocity= abs(z_velocity) * 0.5
 				direction= direction * 0.5
+				z= 0.001
 			else:
 				jumping = false
 				z = 0
@@ -45,8 +44,6 @@ func _physics_process(delta):
 		z = z+ z_velocity 
 		self.get_node("spr_ball").position.y = z_position - z
 	print(z_velocity)
-		
-
 	update()
 
 func attach(var person):

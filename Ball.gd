@@ -30,14 +30,21 @@ func _physics_process(delta):
 			
 	if(jumping and attached_to==null):
 		if(z>=0):
-			z = z+ z_velocity 
 			z_velocity = z_velocity -0.1
 			move_and_slide(direction * speed)
-			self.get_node("spr_ball").position.y = z_position - z
 		else:
-			jumping = false
-			z = 0
-	print(z)
+			if(abs(z_velocity)> 0.1):
+				jumping = true
+				z_velocity= abs(z_velocity) * 0.5
+				direction= direction * 0.5
+			else:
+				jumping = false
+				z = 0
+				direction = Vector2.ZERO
+				z_velocity = 0
+		z = z+ z_velocity 
+		self.get_node("spr_ball").position.y = z_position - z
+	print(z_velocity)
 		
 
 	update()

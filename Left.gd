@@ -18,9 +18,9 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if(Input.is_action_just_pressed("ui_select")):
-		if(current_player.attached_ball == null):
-			switch(get_child((current_player.get_index() +1) % get_child_count()))
+	if(Input.is_action_just_pressed("ui_pass")):
+			#switch(get_child((current_player.get_index() +1) % get_child_count()))
+		switch(get_child(min_dist_team))	
 	update()
 	
 

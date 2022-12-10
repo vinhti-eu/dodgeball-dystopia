@@ -58,5 +58,5 @@ script = ExtResource( 8 )
 [node name="Sprite" type="Sprite" parent="LeftSelectIcon"]
 position = Vector2( 0, 15 )
 scale = Vector2( 0.3, 0.2 )
-z_index = -1
+z_index = -2
 texture = ExtResource( 9 )

@@ -10,12 +10,16 @@ export var team = 'left'
 var attached_ball = null
 var ball_is_in_area = null
 var ball_just_picked_up = false
+var z = 0
+var z_velocity = 0
+var jumping = false
+var z_position = 0
 
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass
+	z_position = get_node("AnimatedSprite").position.y
 
 
 
@@ -28,6 +32,14 @@ func _physics_process(delta):
 			ai_move()
 	if(direction.length() !=0):
 		move_and_slide(direction * run_speed);
+	if(jumping):
+		if(z>=0):
+			z = z+ z_velocity 
+			z_velocity = z_velocity -0.1
+			self.get_node("AnimatedSprite").position.y = z_position - z
+		else:
+			jumping = false
+			z = 0
 	update()
 
 
@@ -44,23 +56,28 @@ func read_input():
 		direction.y += -1;
 	direction = direction.normalized() 
 	direction.y = direction.y * Arena.y_ratio
-	if(Input.is_action_pressed("ui_accept") and attached_ball != null):
+	if(Input.is_action_pressed("ui_shoot") and attached_ball != null):
 		direction= Vector2(0,0);
 		if(!ball_just_picked_up):
 			get_node("AnimatedSprite").modulate = (Color(1,1,0,1))
-	if(attached_ball != null and Input.is_action_just_released("ui_accept")):
+	if(attached_ball != null and Input.is_action_just_released("ui_shoot")):
 		if(!ball_just_picked_up):
 			var throw_direction = direction
 			throw_direction.x = abs(throw_direction.x)
 			throw_direction = throw_direction + Vector2(1.2,0)
-			throw_direction = throw_direction.normalized() 
+			throw_direction = throw_direction.normalized() * Arena.y_ratio
 			throw_ball(throw_direction)
 		else:
 			ball_just_picked_up = false 
 		get_node("AnimatedSprite").modulate = (Color(1,1,1,1))
-	if(Input.is_action_just_pressed("ui_accept") and ball_is_in_area !=null and attached_ball ==null):
+	if(Input.is_action_just_pressed("ui_shoot") and ball_is_in_area !=null and attached_ball ==null):
 		attach_ball(ball_is_in_area)
 		ball_just_picked_up = true;
+	if(attached_ball != null and Input.is_action_just_pressed("ui_pass")):	
+		pass_ball(get_parent().get_child(get_parent().min_dist_team))
+	if((Input.is_action_just_pressed("ui_accept") and !jumping)):
+		jumping = true
+		z_velocity = 3
 
 
 
@@ -80,7 +97,9 @@ func attach_ball(ball):
 	if(self.team == 'left'):
 		get_parent().current_player = self
 	
-
+func pass_ball(player):
+	attached_ball.pass(player,1)
+	attached_ball = null
 
 func _on_ballbox_area_entered(area):
 		var ball = area.get_parent();

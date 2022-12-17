@@ -5,7 +5,7 @@
 [node name="Field" type="Node2D"]
 
 [node name="Sprite_Field" type="Sprite" parent="."]
-position = Vector2( 180, 90 )
+position = Vector2( 288, 128 )
 z_index = -3
 texture = ExtResource( 1 )
 
@@ -14,22 +14,24 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="col_player" type="CollisionPolygon2D" parent="area_player"]
+position = Vector2( 107, 38 )
 polygon = PoolVector2Array( -44, 186, -6, 84, 180, 84, 180, 187 )
-__meta__ = {
-"_edit_lock_": true
-}
 
 [node name="area_enemy" type="StaticBody2D" parent="."]
 collision_layer = 0
 
 [node name="col_enemy" type="CollisionPolygon2D" parent="area_enemy"]
-polygon = PoolVector2Array( 180, 187, 180, 84, 366, 85, 405, 186 )
+position = Vector2( 110, 37 )
+polygon = PoolVector2Array( 180, 187, 180, 84, 366, 84, 405, 187 )
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="area_enemy"]
+position = Vector2( 107, 38 )
 polygon = PoolVector2Array( -52, 206, 0, 68, -25, 67, -85, 206 )
 
 [node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="area_enemy"]
+position = Vector2( 108, 37 )
 polygon = PoolVector2Array( -6, 84, 0, 68, 180, 68, 180, 84 )
 
 [node name="CollisionPolygon2D3" type="CollisionPolygon2D" parent="area_enemy"]
+position = Vector2( 108, 37 )
 polygon = PoolVector2Array( -44, 186, 179, 187, 179, 206, -52, 206 )

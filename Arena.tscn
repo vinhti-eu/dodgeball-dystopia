@@ -16,12 +16,12 @@ script = ExtResource( 5 )
 [node name="Field" parent="." instance=ExtResource( 2 )]
 
 [node name="Camera" type="Camera2D" parent="."]
-position = Vector2( -40, 0 )
+position = Vector2( 0, 80 )
 current = true
-limit_left = -40
+limit_left = 0
 limit_top = 0
-limit_right = 400
-limit_bottom = 0
+limit_right = 576
+limit_bottom = 256
 script = ExtResource( 4 )
 
 [node name="Node2D" type="Node2D" parent="."]
@@ -29,7 +29,7 @@ position = Vector2( 120, 93 )
 script = ExtResource( 7 )
 
 [node name="Enemy" parent="." instance=ExtResource( 1 )]
-position = Vector2( 222, 113 )
+position = Vector2( 325, 154 )
 collision_layer = 2
 collision_mask = 2
 team = "right"
@@ -41,16 +41,16 @@ position = Vector2( 127, 105 )
 script = ExtResource( 6 )
 
 [node name="Player" parent="Left" instance=ExtResource( 1 )]
-position = Vector2( 47, 107 )
+position = Vector2( 127, 160 )
 
 [node name="Player2" parent="Left" instance=ExtResource( 1 )]
-position = Vector2( 81, 109 )
+position = Vector2( 251, 145 )
 
 [node name="Player3" parent="Left" instance=ExtResource( 1 )]
-position = Vector2( 104, 125 )
+position = Vector2( 238, 175 )
 
 [node name="Player4" parent="Left" instance=ExtResource( 1 )]
-position = Vector2( 104, 125 )
+position = Vector2( 162, 149 )
 
 [node name="LeftSelectIcon" type="Node2D" parent="."]
 script = ExtResource( 8 )

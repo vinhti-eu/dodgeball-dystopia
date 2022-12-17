@@ -20,14 +20,15 @@ Arena="*res://Arena.gd"
 
 [display]
 
-window/size/width=400
-window/size/height=225
+window/size/width=384
+window/size/height=216
 window/size/fullscreen=true
 window/stretch/mode="viewport"
 
 [global]
 
 resolution=false
+window=false
 
 [gui]
 

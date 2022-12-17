@@ -1,2 +1,2 @@
-﻿50501
-C:/Users/Dreedmo/Downloads/Godot_v3.5.1-stable_mono_win64/Godot_v3.5.1-stable_mono_win64/Godot_v3.5.1-stable_mono_win64.exe
+﻿42909
+/opt/godot-mono-bin/godot/Godot_v3.5.1-stable_mono_x11.64

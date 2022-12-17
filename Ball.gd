@@ -32,10 +32,11 @@ func _physics_process(delta):
 			move_and_slide(direction * speed)
 		else:
 			if(abs(z_velocity)> 0.1):
+				z= 0
 				jumping = true
 				z_velocity= abs(z_velocity) * 0.5
 				direction= direction * 0.5
-				z= 0
+
 			else:
 				jumping = false
 				z = 0

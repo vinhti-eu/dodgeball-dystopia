@@ -14,6 +14,7 @@ var z = 0
 var z_velocity = 0
 var jumping = false
 var z_position = 0
+var ready_to_catch_pass = false
 
 
 
@@ -70,9 +71,10 @@ func read_input():
 		else:
 			ball_just_picked_up = false 
 		get_node("AnimatedSprite").modulate = (Color(1,1,1,1))
-	if(Input.is_action_just_pressed("ui_shoot") and ball_is_in_area !=null and attached_ball ==null):
+	if((Input.is_action_just_pressed("ui_shoot")or ready_to_catch_pass ) and ball_is_in_area !=null and attached_ball ==null):
 		attach_ball(ball_is_in_area)
 		ball_just_picked_up = true;
+		ready_to_catch_pass = false;
 	if(attached_ball != null and Input.is_action_just_pressed("ui_pass")):	
 		pass_ball(get_parent().get_child(get_parent().min_dist_team))
 	if((Input.is_action_just_pressed("ui_accept") and !jumping)):
@@ -100,6 +102,7 @@ func attach_ball(ball):
 func pass_ball(player):
 	attached_ball.pass(player,1)
 	attached_ball = null
+	player.ready_to_catch_pass = true
 
 func _on_ballbox_area_entered(area):
 		var ball = area.get_parent();

@@ -12,6 +12,7 @@ var z = 0
 var z_velocity = 0
 var jumping = false
 
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
@@ -56,9 +57,11 @@ func throw(var vector, var speed_multiplyer):
 	z_velocity = 1.5
 	
 func pass(var player, var speed_multiplyer):
+	
 	detach()	
-	attach(player)
-	player.attached_ball = self
+	direction = (player.global_position - self.global_position).normalized() * speed_multiplyer
+	#attach(player)
+	#player.attached_ball = self
 
 func detach():
 	attached_to = null	

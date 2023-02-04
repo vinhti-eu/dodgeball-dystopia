@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
 [ext_resource path="res://player.png" type="Texture" id=3]
@@ -16,6 +16,9 @@ extents = Vector2( 6, 1.5 )
 
 [sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 9, 9 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 2.875, 3.5 )
 
 [node name="Player" type="KinematicBody2D"]
 script = ExtResource( 1 )
@@ -35,5 +38,12 @@ __meta__ = {
 "_edit_lock_": true
 }
 
+[node name="catchbox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="catchbox"]
+shape = SubResource( 4 )
+
 [connection signal="area_entered" from="ballbox" to="." method="_on_ballbox_area_entered"]
 [connection signal="area_exited" from="ballbox" to="." method="_on_ballbox_area_exited"]
+[connection signal="area_entered" from="catchbox" to="." method="_on_catchbox_area_entered"]
+[connection signal="area_exited" from="catchbox" to="." method="_on_catchbox_area_exited"]

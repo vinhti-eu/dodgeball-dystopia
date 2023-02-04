@@ -15,11 +15,14 @@ var z_velocity = 0
 var jumping = false
 var z_position = 0
 var ready_to_catch_pass = false
+var ball_is_in_catch = false
 
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	if(get_parent().name !='Left'):
+		self.scale = Vector2(-1, 1)
 	z_position = get_node("AnimatedSprite").position.y
 
 
@@ -71,7 +74,11 @@ func read_input():
 		else:
 			ball_just_picked_up = false 
 		get_node("AnimatedSprite").modulate = (Color(1,1,1,1))
-	if((Input.is_action_just_pressed("ui_shoot")or ready_to_catch_pass ) and ball_is_in_area !=null and attached_ball ==null):
+	if((Input.is_action_just_pressed("ui_shoot")) and ball_is_in_area !=null and attached_ball ==null):
+		attach_ball(ball_is_in_area)
+		ball_just_picked_up = true;
+		ready_to_catch_pass = false;
+	if(ball_is_in_catch and ready_to_catch_pass):
 		attach_ball(ball_is_in_area)
 		ball_just_picked_up = true;
 		ready_to_catch_pass = false;
@@ -118,3 +125,15 @@ func _on_ballbox_area_exited(area):
 			
 func ai_move():
 	self.direction = Vector2(0,0)
+
+
+func _on_catchbox_area_entered(area):
+	var ball = area.get_parent();
+	if(ball.get_name()=='Ball'):
+		ball_is_in_catch = true
+
+
+func _on_catchbox_area_exited(area):
+	var ball = area.get_parent();
+	if(ball.get_name()=='Ball'):
+		ball_is_in_catch = false

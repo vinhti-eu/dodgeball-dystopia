@@ -29,7 +29,7 @@ position = Vector2( 120, 93 )
 script = ExtResource( 7 )
 
 [node name="Ball" parent="." instance=ExtResource( 3 )]
-position = Vector2( 127, 105 )
+position = Vector2( 187, 144 )
 
 [node name="Left" type="YSort" parent="."]
 script = ExtResource( 6 )

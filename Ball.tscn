@@ -4,19 +4,27 @@
 [ext_resource path="res://Ball.gd" type="Script" id=2]
 [ext_resource path="res://ball-shadow.png" type="Texture" id=3]
 
-[sub_resource type="CircleShape2D" id=4]
-radius = 6.0
-
 [sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 10, 9 )
 
+[sub_resource type="CircleShape2D" id=4]
+radius = 6.0
+
 [node name="Ball" type="KinematicBody2D"]
+z_index = -1
 script = ExtResource( 2 )
 
+[node name="Ball_shadow" type="Area2D" parent="."]
+
+[node name="shadow_sprite" type="Sprite" parent="Ball_shadow"]
+position = Vector2( 0, 3 )
+z_index = -1
+texture = ExtResource( 3 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ball_shadow"]
+shape = SubResource( 5 )
+
 [node name="Ball_body" type="Area2D" parent="."]
-__meta__ = {
-"_edit_lock_": true
-}
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Ball_body"]
 shape = SubResource( 4 )
@@ -30,13 +38,3 @@ texture = ExtResource( 1 )
 __meta__ = {
 "_edit_lock_": true
 }
-
-[node name="Ball_shadow" type="Area2D" parent="."]
-
-[node name="shadow_sprite" type="Sprite" parent="Ball_shadow"]
-position = Vector2( 0, 3 )
-z_index = -1
-texture = ExtResource( 3 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Ball_shadow"]
-shape = SubResource( 5 )

@@ -18,7 +18,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if(Input.is_action_just_pressed("ui_pass")):
+	if(Input.is_action_just_pressed("ui_pass") and self.name =="Left"):
 			#switch(get_child((current_player.get_index() +1) % get_child_count()))
 		switch(get_child(min_dist_team))	
 	update()
@@ -34,8 +34,7 @@ func _process(delta):
 
 	
 	
-				
-			
+
 func get_player_closest_to_look_direction(var players):
 
 	var min_dist = 0

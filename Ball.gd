@@ -23,6 +23,7 @@ func _process(delta):
 	if(attached_to != null):
 		self.position = attached_to.get_node("shadow").get_node("walkbox").global_position + attached_to.hand_x_offset
 		z = 10 +  attached_to.z
+
 		
 		self.get_node("Ball_body").position.y = z_position - z
 	

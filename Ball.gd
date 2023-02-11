@@ -38,11 +38,16 @@ func _physics_process(delta):
 				z_velocity= abs(z_velocity) * 0.5
 				direction= direction * 0.5
 
+
 			else:
 				jumping = false
 				z = 0
 				direction = Vector2.ZERO
 				z_velocity = 0
+				for p in get_parent().get_node("Left").get_children():
+					p.ready_to_catch_pass = false
+				for p in get_parent().get_node("Right").get_children():
+					p.ready_to_catch_pass = false
 		z = z+ z_velocity 
 	self.get_node("spr_ball").position.y = z_position - z
 	update()
@@ -53,12 +58,13 @@ func attach(var person):
 
 	
 func throw(var vector, var speed_multiplyer):
+	speed = 400
 	detach()	
 	direction = vector * speed_multiplyer
 	z_velocity = 1.5
 	
 func pass(var player, var speed_multiplyer):
-	var distance = (player.global_position-self.global_position).length()*0.9# distance in meters
+	var distance = (player.get_node("walkbox").global_position+ -self.global_position).length()# distance in meters
 	var angle = 45 # angle in degrees
 	var g = 6 # acceleration due to gravity in m/s^2
 
@@ -78,7 +84,7 @@ func pass(var player, var speed_multiplyer):
 
 	
 	detach()	
-	direction = (player.global_position - self.global_position).normalized() * Vx * speed_multiplyer
+	direction = (player.get_node("walkbox").global_position - self.global_position).normalized() * Vx * speed_multiplyer
 	z_velocity =  Vz * speed_multiplyer #since move_and_slide already multiplies by 60
 	speed = velocity
 

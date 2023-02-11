@@ -1,11 +1,12 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
+[ext_resource path="res://player2-export.png" type="Texture" id=2]
 [ext_resource path="res://player.png" type="Texture" id=3]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
-"frames": [ ExtResource( 3 ) ],
+"frames": [ ExtResource( 3 ), ExtResource( 2 ) ],
 "loop": true,
 "name": "default",
 "speed": 5.0
@@ -15,10 +16,10 @@ animations = [ {
 extents = Vector2( 6, 1.5 )
 
 [sub_resource type="RectangleShape2D" id=3]
-extents = Vector2( 9, 9 )
+extents = Vector2( 9, 11.5 )
 
 [sub_resource type="RectangleShape2D" id=4]
-extents = Vector2( 2.875, 3.5 )
+extents = Vector2( 2.875, 8.25 )
 
 [node name="Player" type="KinematicBody2D"]
 script = ExtResource( 1 )
@@ -33,6 +34,7 @@ shape = SubResource( 2 )
 [node name="ballbox" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ballbox"]
+position = Vector2( 0, 2.5 )
 shape = SubResource( 3 )
 __meta__ = {
 "_edit_lock_": true
@@ -41,6 +43,7 @@ __meta__ = {
 [node name="catchbox" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="catchbox"]
+position = Vector2( 0, 4.75 )
 shape = SubResource( 4 )
 
 [connection signal="area_entered" from="ballbox" to="." method="_on_ballbox_area_entered"]

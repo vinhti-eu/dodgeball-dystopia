@@ -28,12 +28,6 @@ script = ExtResource( 4 )
 position = Vector2( 120, 93 )
 script = ExtResource( 7 )
 
-[node name="Enemy" parent="." instance=ExtResource( 1 )]
-position = Vector2( 325, 154 )
-collision_layer = 2
-collision_mask = 2
-team = "right"
-
 [node name="Ball" parent="." instance=ExtResource( 3 )]
 position = Vector2( 127, 105 )
 
@@ -52,6 +46,21 @@ position = Vector2( 238, 175 )
 [node name="Player4" parent="Left" instance=ExtResource( 1 )]
 position = Vector2( 162, 149 )
 
+[node name="Right" type="Node2D" parent="."]
+script = ExtResource( 6 )
+
+[node name="Player" parent="Right" instance=ExtResource( 1 )]
+position = Vector2( 325, 154 )
+collision_layer = 2
+collision_mask = 2
+team = "right"
+
+[node name="Player2" parent="Right" instance=ExtResource( 1 )]
+position = Vector2( 345, 138 )
+collision_layer = 2
+collision_mask = 2
+team = "right"
+
 [node name="LeftSelectIcon" type="Node2D" parent="."]
 script = ExtResource( 8 )
 
@@ -60,3 +69,5 @@ position = Vector2( 0, 15 )
 scale = Vector2( 0.3, 0.2 )
 z_index = -2
 texture = ExtResource( 9 )
+
+[editable path="Right/Player"]

@@ -23,6 +23,10 @@ var ball_is_in_catch = false
 func _ready():
 	if(get_parent().name !='Left'):
 		self.scale = Vector2(-1, 1)
+		var sprite = self.get_node("AnimatedSprite")
+		sprite.frame = 1
+
+
 	z_position = get_node("AnimatedSprite").position.y
 
 

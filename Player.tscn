@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
 [ext_resource path="res://player2-export.png" type="Texture" id=2]
 [ext_resource path="res://player.png" type="Texture" id=3]
+[ext_resource path="res://player_shadow.png" type="Texture" id=4]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -45,6 +46,13 @@ __meta__ = {
 [node name="CollisionShape2D" type="CollisionShape2D" parent="catchbox"]
 position = Vector2( 0, 4.75 )
 shape = SubResource( 4 )
+
+[node name="shadow" type="Area2D" parent="."]
+z_index = -1
+
+[node name="Sprite" type="Sprite" parent="shadow"]
+position = Vector2( 0, 15 )
+texture = ExtResource( 4 )
 
 [connection signal="area_entered" from="ballbox" to="." method="_on_ballbox_area_entered"]
 [connection signal="area_exited" from="ballbox" to="." method="_on_ballbox_area_exited"]

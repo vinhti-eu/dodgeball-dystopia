@@ -21,9 +21,10 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if(attached_to != null):
-		self.position = attached_to.get_node("walkbox").global_position
+		self.position = attached_to.get_node("shadow").get_node("walkbox").global_position + attached_to.hand_x_offset
 		z = 10 +  attached_to.z
-		self.get_node("spr_ball").position.y = z_position - z
+		
+		self.get_node("Ball_body").position.y = z_position - z
 	
 
 func _physics_process(delta):
@@ -49,7 +50,7 @@ func _physics_process(delta):
 				for p in get_parent().get_node("Right").get_children():
 					p.ready_to_catch_pass = false
 		z = z+ z_velocity 
-	self.get_node("spr_ball").position.y = z_position - z
+	self.get_node("Ball_body").position.y = z_position - z
 	update()
 
 
@@ -64,7 +65,7 @@ func throw(var vector, var speed_multiplyer):
 	z_velocity = 1.5
 	
 func pass(var player, var speed_multiplyer):
-	var distance = (player.get_node("walkbox").global_position+ -self.global_position).length()# distance in meters
+	var distance = (player.get_node("shadow").get_node("walkbox").global_position+ player.hand_x_offset -self.global_position).length()# distance in meters
 	var angle = 45 # angle in degrees
 	var g = 6 # acceleration due to gravity in m/s^2
 
@@ -84,7 +85,7 @@ func pass(var player, var speed_multiplyer):
 
 	
 	detach()	
-	direction = (player.get_node("walkbox").global_position - self.global_position).normalized() * Vx * speed_multiplyer
+	direction = (player.get_node("shadow").get_node("walkbox").global_position + player.hand_x_offset - self.global_position).normalized() * Vx * speed_multiplyer
 	z_velocity =  Vz * speed_multiplyer #since move_and_slide already multiplies by 60
 	speed = velocity
 

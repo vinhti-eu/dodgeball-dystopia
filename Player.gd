@@ -16,6 +16,8 @@ var jumping = false
 var z_position = 0
 var ready_to_catch_pass = false
 var ball_is_in_catch = false
+var hand_x_offset = Vector2(5,0)
+var ball_shadow_is_in_shadow =false
 
 
 
@@ -23,11 +25,11 @@ var ball_is_in_catch = false
 func _ready():
 	if(get_parent().name !='Left'):
 		self.scale = Vector2(-1, 1)
-		var sprite = self.get_node("AnimatedSprite")
+		var sprite = self.get_node("Body").get_node("AnimatedSprite")
 		sprite.frame = 1
 
 
-	z_position = get_node("AnimatedSprite").position.y
+	z_position = get_node("Body").get_node("AnimatedSprite").position.y
 
 
 
@@ -44,7 +46,7 @@ func _physics_process(delta):
 		if(z>=0):
 			z = z+ z_velocity 
 			z_velocity = z_velocity -0.1
-			self.get_node("AnimatedSprite").position.y = z_position - z
+			self.get_node("Body").position.y = z_position - z
 		else:
 			jumping = false
 			z = 0
@@ -67,7 +69,7 @@ func read_input():
 	if(Input.is_action_pressed("ui_shoot") and attached_ball != null):
 		direction= Vector2(0,0);
 		if(!ball_just_picked_up):
-			get_node("AnimatedSprite").modulate = (Color(1,1,0,1))
+			get_node("Body").get_node("AnimatedSprite").modulate = (Color(1,1,0,1))
 	if(attached_ball != null and Input.is_action_just_released("ui_shoot")):
 		if(!ball_just_picked_up):
 			var throw_direction = direction
@@ -77,12 +79,12 @@ func read_input():
 			throw_ball(throw_direction)
 		else:
 			ball_just_picked_up = false 
-		get_node("AnimatedSprite").modulate = (Color(1,1,1,1))
-	if((Input.is_action_just_pressed("ui_shoot")) and ball_is_in_area !=null and attached_ball ==null):
+		get_node("Body").get_node("AnimatedSprite").modulate = (Color(1,1,1,1))
+	if((Input.is_action_just_pressed("ui_shoot")) and ball_is_in_area !=null and attached_ball ==null and ball_shadow_is_in_shadow):
 		attach_ball(ball_is_in_area)
 		ball_just_picked_up = true;
 		ready_to_catch_pass = false;
-	if(ball_is_in_catch and ready_to_catch_pass):
+	if(ball_is_in_catch and ready_to_catch_pass and ball_shadow_is_in_shadow and ball_is_in_area ):
 		attach_ball(ball_is_in_area)
 		ball_just_picked_up = true;
 		ready_to_catch_pass = false;
@@ -132,12 +134,24 @@ func ai_move():
 
 
 func _on_catchbox_area_entered(area):
-	var ball = area.get_parent();
-	if(ball.get_name()=='Ball'):
+	var ball = area;
+	if(ball.get_name()=='Ball_body'):
 		ball_is_in_catch = true
 
 
 func _on_catchbox_area_exited(area):
-	var ball = area.get_parent();
-	if(ball.get_name()=='Ball'):
+	var ball = area;
+	if(ball.get_name()=='Ball_body'):
 		ball_is_in_catch = false
+
+
+func _on_shadow_area_entered(area):
+	var shadow = area;
+	if(shadow.get_name()=='Ball_shadow'):
+		ball_shadow_is_in_shadow = true
+
+
+func _on_shadow_area_exited(area):
+	var shadow = area;
+	if(shadow.get_name()=='Ball_shadow'):
+		ball_shadow_is_in_shadow = false

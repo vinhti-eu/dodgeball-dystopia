@@ -31,7 +31,7 @@ script = ExtResource( 7 )
 [node name="Ball" parent="." instance=ExtResource( 3 )]
 position = Vector2( 127, 105 )
 
-[node name="Left" type="Node2D" parent="."]
+[node name="Left" type="YSort" parent="."]
 script = ExtResource( 6 )
 
 [node name="Player" parent="Left" instance=ExtResource( 1 )]
@@ -46,7 +46,7 @@ position = Vector2( 238, 175 )
 [node name="Player4" parent="Left" instance=ExtResource( 1 )]
 position = Vector2( 162, 149 )
 
-[node name="Right" type="Node2D" parent="."]
+[node name="Right" type="YSort" parent="."]
 script = ExtResource( 6 )
 
 [node name="Player" parent="Right" instance=ExtResource( 1 )]

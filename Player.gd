@@ -97,6 +97,7 @@ func read_input():
 
 
 func _draw():
+	if(get_node("/root/Arena").debug_mode and false):
 		draw_line(global_position.normalized() ,global_position.normalized() + direction * 100 , Color(1,1,1), 1)
 
 

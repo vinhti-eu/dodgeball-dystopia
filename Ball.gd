@@ -11,6 +11,7 @@ var z_position = 0
 var z = 0
 var z_velocity = 0
 var jumping = false
+var ball_is_shot = false #identifies if the ball can hurt someone
 
 
 # Called when the node enters the scene tree for the first time.
@@ -34,6 +35,7 @@ func _physics_process(delta):
 			z_velocity = z_velocity -0.1
 			move_and_slide(direction * speed)
 		else:
+			ball_is_shot = false # ball not dangerous after touching ground
 			if(abs(z_velocity)> 0.1):
 				z= 0
 				jumping = true
@@ -62,8 +64,10 @@ func attach(var person):
 func throw(var vector, var speed_multiplyer):
 	speed = 400
 	detach()	
+	ball_is_shot = true
 	direction = vector * speed_multiplyer
 	z_velocity = 1.5
+	
 	
 func pass(var player, var speed_multiplyer):
 	var distance = (player.get_node("shadow").get_node("walkbox").global_position+ player.hand_x_offset -self.global_position).length()# distance in meters

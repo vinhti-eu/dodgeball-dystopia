@@ -6,7 +6,6 @@ extends KinematicBody2D
 # var b = "text"
 var direction = Vector2();
 var run_speed = 100
-export var team = 'left'
 var attached_ball = null
 var ball_is_in_area = null
 var ball_just_picked_up = false
@@ -35,7 +34,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
-	if(team == 'left'):
+	if(get_parent().name == 'Left'):
 		if(get_parent().current_player == self):
 			read_input();
 		else:
@@ -89,7 +88,7 @@ func read_input():
 		ball_just_picked_up = true;
 		ready_to_catch_pass = false;
 	if(attached_ball != null and Input.is_action_just_pressed("ui_pass")):	
-		pass_ball(get_parent().get_child(get_parent().min_dist_team))
+		pass_ball(get_parent().pass_player)
 	if((Input.is_action_just_pressed("ui_accept") and !jumping)):
 		jumping = true
 		z_velocity = 3
@@ -110,7 +109,7 @@ func throw_ball(direction):
 func attach_ball(ball):
 	ball.attach(self)
 	attached_ball = ball
-	if(self.team == 'left'):
+	if(get_parent().name == 'Left'):
 		get_parent().current_player = self
 	
 func pass_ball(player):

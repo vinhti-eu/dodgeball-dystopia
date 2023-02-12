@@ -23,14 +23,10 @@ func _process(delta):
 		switch(get_child(min_dist_team))	
 	update()
 	
-
-	
 	min_dist_team = get_player_closest_to_look_direction(team_players)
+	pass_player = get_child(min_dist_team)
 
-	if(Arena.debug_mode):
-		for child in get_children():
-			child.modulate = Color(1,1,1)	
-		get_child(min_dist_team).modulate = Color(1,0,1)
+
 
 	
 	
@@ -73,10 +69,5 @@ func get_player_closest_to_look_direction(var players):
 func switch(var player):
 	current_player = player
 
-func _draw():
-	if( get_node("/root/Arena").debug_mode== true):
-		if(current_player != null and team_players != null):
-			for player in team_players:
-				if(current_player != player):
-					draw_line(current_player.get_node("Body").get_node("catchbox").global_position, player.get_node("Body").get_node("catchbox").global_position  + current_player.global_position.normalized()  ,Color(0,1,0), 1)
+
 					

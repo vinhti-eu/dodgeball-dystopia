@@ -11,6 +11,11 @@ func _process(delta):
 	current_player = get_parent().get_node("YSort").get_node("Left").current_player
 	team_players =  get_parent().get_node("YSort").get_node("Left").team_players
 	update()
+	
+	if(Arena.debug_mode):
+		for child in get_parent().get_node("YSort/Left").get_children():
+			child.modulate = Color(1,1,1)	
+		get_parent().get_node("YSort/Left").pass_player.modulate = Color(1,0,1)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

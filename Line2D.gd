@@ -30,7 +30,6 @@ func _ready():
 	team_players =  get_parent().get_node("YSort").get_node("Left").team_players
 
 func _draw():
-	print("drawing")
 	if( get_node("/root/Arena").debug_mode):
 			if(current_player != null and team_players != null):
 				for player in team_players:

@@ -43,7 +43,7 @@ func _physics_process(delta):
 		move_and_slide(direction * run_speed);
 	if(jumping):
 		if(z>=0):
-			z = z+ z_velocity 
+			z = z+ z_velocity
 			z_velocity = z_velocity -0.1
 			self.get_node("Body").position.y = z_position - z
 		else:
@@ -52,7 +52,7 @@ func _physics_process(delta):
 	update()
 
 
-		
+
 func read_input():
 	direction = Vector2.ZERO.normalized()
 	if Input.is_action_pressed("ui_left"):
@@ -60,10 +60,10 @@ func read_input():
 	if Input.is_action_pressed("ui_right"):
 		direction.x += 1;
 	if Input.is_action_pressed("ui_down"):
-		direction.y += 1 
+		direction.y += 1
 	if Input.is_action_pressed("ui_up"):
 		direction.y += -1;
-	direction = direction.normalized() 
+	direction = direction.normalized()
 	direction.y = direction.y * Arena.y_ratio
 	if(Input.is_action_pressed("ui_shoot") and attached_ball != null):
 		direction= Vector2(0,0);
@@ -81,7 +81,7 @@ func read_input():
 				throw_direction = throw_direction.normalized() * Arena.y_ratio
 			throw_ball(throw_direction)
 		else:
-			ball_just_picked_up = false 
+			ball_just_picked_up = false
 		get_node("Body").get_node("AnimatedSprite").modulate = (Color(1,1,1,1))
 	if((Input.is_action_just_pressed("ui_shoot")) and ball_is_in_catch !=null and attached_ball ==null and ball_shadow_is_in_shadow):
 		attach_ball(ball_is_in_catch)
@@ -91,7 +91,7 @@ func read_input():
 		attach_ball(ball_is_in_catch)
 		ball_just_picked_up = true;
 		ready_to_catch_pass = false;
-	if(attached_ball != null and Input.is_action_just_pressed("ui_pass")):	
+	if(attached_ball != null and Input.is_action_just_pressed("ui_pass")):
 		pass_ball(get_parent().pass_player)
 	if((Input.is_action_just_pressed("ui_accept") and !jumping)):
 		jumping = true
@@ -107,7 +107,7 @@ func _draw():
 
 
 func throw_ball(direction):
-	attached_ball.throw(direction,1)
+	attached_ball.throw(direction,1, self)
 	attached_ball = null
 
 func attach_ball(ball):
@@ -115,7 +115,7 @@ func attach_ball(ball):
 	attached_ball = ball
 	if(get_parent().name == 'Left'):
 		get_parent().current_player = self
-	
+
 func pass_ball(player):
 	attached_ball.pass(player,1)
 	attached_ball = null
@@ -125,6 +125,9 @@ func _on_ballbox_area_entered(area):
 		var ball = area.get_parent();
 		if(ball.get_name()=='Ball'):
 			ball_is_in_area = ball
+			if(ball.ball_is_shot != null and ball.ball_is_shot !=self and self.ball_shadow_is_in_shadow):
+				self.jumping= true
+				self.z_velocity = 8
 
 
 
@@ -132,7 +135,7 @@ func _on_ballbox_area_exited(area):
 		var ball = area.get_parent();
 		if(ball.get_name()=='Ball'):
 			ball_is_in_area = null
-			
+
 func ai_move():
 	self.direction = Vector2(0,0)
 

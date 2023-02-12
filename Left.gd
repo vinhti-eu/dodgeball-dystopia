@@ -1,18 +1,22 @@
 extends Node2D
 
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
+# var team 
 var current_player = null
 var team_players = null
 var pass_player = null
 var min_dist_team = 0
 
+# var opponent
+var opponent_players = null
+var min_dist_opponent = 0
+var shoot_player = null
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	current_player = get_child(0)
 	team_players = get_children()
+	opponent_players = get_parent().get_node("Right").get_children()
 
 
 
@@ -24,7 +28,11 @@ func _process(delta):
 	update()
 	
 	min_dist_team = get_player_closest_to_look_direction(team_players)
+	min_dist_opponent = get_player_closest_to_look_direction(opponent_players)
+	
 	pass_player = get_child(min_dist_team)
+	shoot_player = get_parent().get_node("Right").get_child(min_dist_opponent)
+	
 
 
 
@@ -35,7 +43,7 @@ func get_player_closest_to_look_direction(var players):
 
 	var min_dist = 0
 	var angles = []
-	var current_angle_to_min = rad2deg(current_player.position.angle_to_point(team_players[min_dist].global_position))
+	var current_angle_to_min = rad2deg(current_player.position.angle_to_point(players[min_dist].global_position))
 
 	var current_look_angle
 	var direction = current_player.direction.normalized()
@@ -47,7 +55,7 @@ func get_player_closest_to_look_direction(var players):
 		current_angle_to_min = current_angle_to_min + 180
 		
 	var current_dif_to_min = rad2deg(min(abs(current_look_angle-current_angle_to_min),360-abs(current_look_angle-current_angle_to_min)))
-	for player in team_players:
+	for player in players:
 			var line_between = current_player.global_position + player.global_position 
 			if(player == current_player):
 				angles.append(1000)

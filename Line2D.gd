@@ -16,6 +16,9 @@ func _process(delta):
 		for child in get_parent().get_node("YSort/Left").get_children():
 			child.modulate = Color(1,1,1)	
 		get_parent().get_node("YSort/Left").pass_player.modulate = Color(1,0,1)
+		for child in get_parent().get_node("YSort/Right").get_children():
+			child.modulate = Color(1,1,1)	
+		get_parent().get_node("YSort/Left").shoot_player.modulate = Color(0,1,1)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

@@ -29,6 +29,10 @@ func _ready():
 
 
 	z_position = get_node("Body").get_node("AnimatedSprite").position.y
+	if(get_parent().name == 'Left'):
+		hand_x_offset = Vector2(5,0)
+	else:
+		hand_x_offset = Vector2(-5,0)	
 
 
 
@@ -49,6 +53,12 @@ func _physics_process(delta):
 		else:
 			jumping = false
 			z = 0
+	#no input needed for this one		
+	if( ball_is_in_catch !=null and attached_ball ==null 
+	and ball_is_in_catch.ball_is_shot==null and ball_is_in_catch.ball_is_passed!=self and ball_shadow_is_in_shadow):
+		attach_ball(ball_is_in_catch)
+		ball_just_picked_up = true;
+		ready_to_catch_pass = false;
 	update()
 
 
@@ -83,10 +93,7 @@ func read_input():
 		else:
 			ball_just_picked_up = false
 		get_node("Body").get_node("AnimatedSprite").modulate = (Color(1,1,1,1))
-	if((Input.is_action_just_pressed("ui_shoot")) and ball_is_in_catch !=null and attached_ball ==null and ball_shadow_is_in_shadow):
-		attach_ball(ball_is_in_catch)
-		ball_just_picked_up = true;
-		ready_to_catch_pass = false;
+
 	if(ball_is_in_catch and ready_to_catch_pass and ball_shadow_is_in_shadow ):
 		attach_ball(ball_is_in_catch)
 		ball_just_picked_up = true;
@@ -117,7 +124,7 @@ func attach_ball(ball):
 		get_parent().current_player = self
 
 func pass_ball(player):
-	attached_ball.pass(player,1)
+	attached_ball.pass(player,1, self)
 	attached_ball = null
 	player.ready_to_catch_pass = true
 

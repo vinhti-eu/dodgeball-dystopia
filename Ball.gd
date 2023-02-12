@@ -12,7 +12,7 @@ var z = 0
 var z_velocity = 0
 var jumping = false
 var ball_is_shot = null #identifies if the ball can hurt someone
-
+var ball_is_passed = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -69,10 +69,11 @@ func throw(var vector, var speed_multiplyer,var shooting_player):
 	z_velocity = 1.5
 	
 	
-func pass(var player, var speed_multiplyer):
+func pass(var player, var speed_multiplyer, var passing_player):
 	var distance = (player.get_node("shadow").get_node("walkbox").global_position+ player.hand_x_offset -self.global_position).length()# distance in meters
 	var angle = 45 # angle in degrees
 	var g = 6 # acceleration due to gravity in m/s^2
+	ball_is_passed = passing_player
 
 # convert angle to radians
 	var radians = angle * PI / 180

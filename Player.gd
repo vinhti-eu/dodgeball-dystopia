@@ -118,7 +118,7 @@ func read_input():
 		if(!ball_just_picked_up):
 			var throw_direction
 			if(get_parent().shoot_player !=null):
-				throw_direction = (get_parent().shoot_player.get_node("Body/catchbox").global_position - self.get_node("Body/catchbox").global_position).normalized()
+				throw_direction = (get_parent().shoot_player.get_node("shadow").global_position - self.get_node("shadow").global_position).normalized()
 			else:
 				throw_direction = direction
 				throw_direction.x = abs(throw_direction.x)

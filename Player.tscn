@@ -20,7 +20,7 @@ animations = [ {
 } ]
 
 [sub_resource type="RectangleShape2D" id=3]
-extents = Vector2( 5, 12 )
+extents = Vector2( 5, 11.5 )
 
 [sub_resource type="RectangleShape2D" id=4]
 extents = Vector2( 2.875, 11.625 )
@@ -48,7 +48,7 @@ __meta__ = {
 position = Vector2( 0, -10 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Body/ballbox"]
-position = Vector2( 0, 1 )
+position = Vector2( 0, 1.5 )
 shape = SubResource( 3 )
 __meta__ = {
 "_edit_lock_": true

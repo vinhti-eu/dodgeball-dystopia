@@ -52,6 +52,8 @@ func _physics_process(delta):
 					p.ready_to_catch_pass = false
 				for p in get_parent().get_node("Right").get_children():
 					p.ready_to_catch_pass = false
+				position.x = round(position.x)
+				position.y = round(position.y)	
 		z = z+ z_velocity 
 	self.get_node("Ball_body").position.y = z_position - z
 	update()

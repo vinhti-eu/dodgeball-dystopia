@@ -57,7 +57,7 @@ func _physics_process(delta):
 
 
 func main_state():
-
+	get_node("Body/AnimatedSprite").animation = "main"
 	if(get_parent().name == 'Left'):
 		if(get_parent().current_player == self):
 			read_input();
@@ -75,24 +75,27 @@ func main_state():
 			z = 0
 	#no input needed for this one		
 	if( ball_is_in_catch !=null and attached_ball ==null 
-	and ball_is_in_catch.ball_is_shot==null and ball_is_in_catch.ball_is_passed!=self and ball_shadow_is_in_shadow):
+	and ball_is_in_catch.ball_is_shot==null and ball_is_in_catch.attached_to == null and ball_is_in_catch.ball_is_passed!=self and ball_shadow_is_in_shadow):
 		attach_ball(ball_is_in_catch)
 		ball_just_picked_up = true;
 		ready_to_catch_pass = false;
 		
 func knocked_state():
-		if(z>=0):
-			z = z+ z_velocity
-			z_velocity = z_velocity -0.1
-			self.get_node("Body").position.y = z_position - z
-		else:
-			z = 0
-			z_velocity = 0
-			knockback_direction = Vector2()
-			knockback_speed = 0
-			self.state = STATE.main
-		if(knockback_direction.length() !=0):
-			move_and_slide(knockback_direction * knockback_speed);
+	self.get_node("Body/AnimatedSprite").animation = "knocked"
+
+	if(z>=0):
+		z = z+ z_velocity
+		z_velocity = z_velocity -0.1
+		self.get_node("Body").position.y = z_position - z
+
+	else:
+		z = 0
+		z_velocity = 0
+		knockback_direction = Vector2()
+		knockback_speed = 0
+		self.state = STATE.main
+	if(knockback_direction.length() !=0):
+		move_and_slide(knockback_direction * knockback_speed);
 
 
 func read_input():
@@ -168,6 +171,7 @@ func _on_ballbox_area_entered(area):
 				hit_by_ball(ball)
 
 func hit_by_ball(ball):
+
 	print("knocked")
 	self.state = STATE.knocked
 	self.knockback_speed = ball.speed /6

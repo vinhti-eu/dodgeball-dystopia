@@ -1,7 +1,7 @@
 extends Node2D
 
 export var y_ratio = 0.8
-var debug_mode = true;
+var debug_mode = false;
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"

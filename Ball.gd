@@ -98,3 +98,9 @@ func pass(var player, var speed_multiplyer, var passing_player):
 func detach():
 	attached_to = null	
 	jumping = true
+	
+func knocked(var player):
+	self.direction = direction * -1
+	self.z_velocity = player.z_velocity /2
+	self.speed = speed/8
+

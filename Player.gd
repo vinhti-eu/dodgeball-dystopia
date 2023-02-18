@@ -19,6 +19,16 @@ var hand_x_offset = Vector2(5,0)
 var ball_shadow_is_in_shadow =false
 
 
+var knockback_speed = 200
+var knockback_direction = Vector2()
+
+enum STATE{
+	main,
+	knocked
+}
+
+var state = STATE.main
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -37,7 +47,17 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _physics_process(delta):
+func _physics_process(delta):	
+	if(self.state== STATE.main):
+		main_state()
+	elif(self.state == STATE.knocked):
+		knocked_state()
+	update()
+
+
+
+func main_state():
+
 	if(get_parent().name == 'Left'):
 		if(get_parent().current_player == self):
 			read_input();
@@ -59,8 +79,20 @@ func _physics_process(delta):
 		attach_ball(ball_is_in_catch)
 		ball_just_picked_up = true;
 		ready_to_catch_pass = false;
-	update()
-
+		
+func knocked_state():
+		if(z>=0):
+			z = z+ z_velocity
+			z_velocity = z_velocity -0.1
+			self.get_node("Body").position.y = z_position - z
+		else:
+			z = 0
+			z_velocity = 0
+			knockback_direction = Vector2()
+			knockback_speed = 0
+			self.state = STATE.main
+		if(knockback_direction.length() !=0):
+			move_and_slide(knockback_direction * knockback_speed);
 
 
 func read_input():
@@ -132,10 +164,16 @@ func _on_ballbox_area_entered(area):
 		var ball = area.get_parent();
 		if(ball.get_name()=='Ball'):
 			ball_is_in_area = ball
-			if(ball.ball_is_shot != null and ball.ball_is_shot !=self and self.ball_shadow_is_in_shadow):
-				self.jumping= true
-				self.z_velocity = 8
+			if(ball.ball_is_shot != null and ball.ball_is_shot !=self and self.ball_shadow_is_in_shadow and self.state != STATE.knocked):
+				hit_by_ball(ball)
 
+func hit_by_ball(ball):
+	print("knocked")
+	self.state = STATE.knocked
+	self.knockback_speed = ball.speed /6
+	self.z_velocity = knockback_speed/30#/60 2
+	knockback_direction = ball.direction.normalized()
+	ball.knocked(self)
 
 
 func _on_ballbox_area_exited(area):

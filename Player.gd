@@ -78,7 +78,8 @@ func main_state():
 		else:
 			get_node("shadow/Particles2D").position.x = -11
 	else:
-		get_node("Body/AnimatedSprite").animation = "main"
+		if(!(Input.is_action_pressed("ui_shoot") and attached_ball != null)):
+			get_node("Body/AnimatedSprite").animation = "main"
 		get_node("shadow/Particles2D").emitting = false
 
 	if(jumping):
@@ -97,6 +98,7 @@ func main_state():
 		
 func knocked_state():
 	self.get_node("Body/AnimatedSprite").animation = "knocked"
+	
 
 	if(z>=0):
 		z = z+ z_velocity
@@ -129,6 +131,8 @@ func read_input():
 		direction= Vector2(0,0);	
 		get_node("Body").get_node("AnimatedSprite").modulate = (Color(1,1,0,1))
 		attached_ball.get_node("Ball_body/spr_ball").set_offset(Vector2(-15,-5))
+		get_node("Body").get_node("AnimatedSprite").animation = "throw"
+		print("jau")
 	if(attached_ball != null and Input.is_action_just_released("ui_shoot")):	
 		get_node("Body").get_node("AnimatedSprite").modulate = (Color(1,1,1,1))
 		attached_ball.get_node("Ball_body/spr_ball").set_offset(Vector2(0,0))

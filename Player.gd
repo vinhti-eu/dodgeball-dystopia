@@ -8,7 +8,6 @@ var direction = Vector2();
 var run_speed = 100
 var attached_ball = null
 var ball_is_in_area = null
-var ball_just_picked_up = false
 var z = 0
 var z_velocity = 0
 var jumping = false
@@ -52,19 +51,36 @@ func _physics_process(delta):
 		main_state()
 	elif(self.state == STATE.knocked):
 		knocked_state()
-	update()
+
 
 
 
 func main_state():
-	get_node("Body/AnimatedSprite").animation = "main"
+
 	if(get_parent().name == 'Left'):
 		if(get_parent().current_player == self):
 			read_input();
 		else:
 			ai_move()
 	if(direction.length() !=0):
+		if(get_node("Body/AnimatedSprite").animation != "run"):
+			get_node("Body/AnimatedSprite").animation = "run"
+		if(get_node("Body/AnimatedSprite").get_frame()==1 ):
+			if(attached_ball != null):
+				hand_x_offset = Vector2(5,-1)
+		else:
+			hand_x_offset = Vector2(5,0)
 		move_and_slide(direction * run_speed);
+		get_node("shadow/Particles2D").position = get_node("shadow/Particles2D").position 
+		get_node("shadow/Particles2D").emitting = true
+		if(direction.x <0):
+			get_node("shadow/Particles2D").position.x = 11
+		else:
+			get_node("shadow/Particles2D").position.x = -11
+	else:
+		get_node("Body/AnimatedSprite").animation = "main"
+		get_node("shadow/Particles2D").emitting = false
+
 	if(jumping):
 		if(z>=0):
 			z = z+ z_velocity
@@ -77,7 +93,6 @@ func main_state():
 	if( ball_is_in_catch !=null and attached_ball ==null 
 	and ball_is_in_catch.ball_is_shot==null and ball_is_in_catch.attached_to == null and ball_is_in_catch.ball_is_passed!=self and ball_shadow_is_in_shadow):
 		attach_ball(ball_is_in_catch)
-		ball_just_picked_up = true;
 		ready_to_catch_pass = false;
 		
 func knocked_state():
@@ -111,33 +126,31 @@ func read_input():
 	direction = direction.normalized()
 	direction.y = direction.y * Arena.y_ratio
 	if(Input.is_action_pressed("ui_shoot") and attached_ball != null):
-		direction= Vector2(0,0);
-		if(!ball_just_picked_up):
-			get_node("Body").get_node("AnimatedSprite").modulate = (Color(1,1,0,1))
-	if(attached_ball != null and Input.is_action_just_released("ui_shoot")):
-		if(!ball_just_picked_up):
-			var throw_direction
-			if(get_parent().shoot_player !=null):
-				throw_direction = (get_parent().shoot_player.get_node("shadow").global_position - self.get_node("shadow").global_position).normalized()
-			else:
-				throw_direction = direction
-				throw_direction.x = abs(throw_direction.x)
-				throw_direction = throw_direction + Vector2(1.2,0)
-				throw_direction = throw_direction.normalized() * Arena.y_ratio
-			throw_ball(throw_direction)
-		else:
-			ball_just_picked_up = false
+		direction= Vector2(0,0);	
+		get_node("Body").get_node("AnimatedSprite").modulate = (Color(1,1,0,1))
+		attached_ball.get_node("Ball_body/spr_ball").set_offset(Vector2(-15,-5))
+	if(attached_ball != null and Input.is_action_just_released("ui_shoot")):	
 		get_node("Body").get_node("AnimatedSprite").modulate = (Color(1,1,1,1))
+		attached_ball.get_node("Ball_body/spr_ball").set_offset(Vector2(0,0))
+		var throw_direction
+		if(get_parent().shoot_player !=null):
+			throw_direction = (get_parent().shoot_player.get_node("shadow").global_position - self.get_node("shadow").global_position).normalized()
+		else:
+			throw_direction = direction
+			throw_direction.x = abs(throw_direction.x)
+			throw_direction = throw_direction + Vector2(1.2,0)
+			throw_direction = throw_direction.normalized() * Arena.y_ratio
+		throw_ball(throw_direction)
+		
 
 	if(ball_is_in_catch and ready_to_catch_pass and ball_shadow_is_in_shadow ):
 		attach_ball(ball_is_in_catch)
-		ball_just_picked_up = true;
 		ready_to_catch_pass = false;
 	if(attached_ball != null and Input.is_action_just_pressed("ui_pass")):
 		pass_ball(get_parent().pass_player)
 	if((Input.is_action_just_pressed("ui_accept") and !jumping)):
 		jumping = true
-		z_velocity = 3
+		z_velocity = 2.8
 
 
 

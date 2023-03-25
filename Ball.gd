@@ -71,6 +71,8 @@ func throw(var vector, var speed_multiplyer,var shooting_player):
 	ball_is_shot = shooting_player
 	direction = vector * speed_multiplyer
 	z_velocity = 1.5
+	get_node("AudioThrow").pitch_scale = rand_range(1,1.5)
+	get_node("AudioThrow").play()
 	
 	
 func pass(var player, var speed_multiplyer, var passing_player):
@@ -78,6 +80,8 @@ func pass(var player, var speed_multiplyer, var passing_player):
 	var angle = 45 # angle in degrees
 	var g = 6 # acceleration due to gravity in m/s^2
 	ball_is_passed = passing_player
+	get_node("AudioPass").pitch_scale = rand_range(1,1.5)
+	get_node("AudioPass").play()
 
 # convert angle to radians
 	var radians = angle * PI / 180

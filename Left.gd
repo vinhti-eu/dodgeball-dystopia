@@ -1,6 +1,6 @@
 extends Node2D
 
-
+var command = load("res://command.gd")
 # var team 
 var current_player = null
 var team_players = null
@@ -22,9 +22,14 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	if(self.name== "Left"):
+		read_input()
+	
+	
 	if(Input.is_action_just_pressed("ui_pass") and self.name =="Left"):
 			#switch(get_child((current_player.get_index() +1) % get_child_count()))
-		switch(get_child(min_dist_team))	
+		#switch(get_child(min_dist_team))	
+		pass
 	update()
 	
 	min_dist_team = get_player_closest_to_look_direction(team_players)
@@ -36,8 +41,30 @@ func _process(delta):
 
 
 
-	
-	
+var moveCommand = command.MoveCommand.new()
+
+var commands_to_execute = []
+
+func read_input():
+	var directions = []
+
+	if Input.is_action_pressed("ui_left"):
+		directions.append(Vector2(-1, 0))
+	if Input.is_action_pressed("ui_right"):
+		directions.append(Vector2(1, 0))
+	if Input.is_action_pressed("ui_down"):
+		directions.append(Vector2(0, 1))
+	if Input.is_action_pressed("ui_up"):
+		directions.append(Vector2(0, -1))
+
+	if directions.size() > 0:
+		var combined_direction = Vector2.ZERO
+		for direction in directions:
+			combined_direction += direction
+		combined_direction = combined_direction.normalized()
+		moveCommand.executeMove(current_player, combined_direction)
+	else: moveCommand.executeMove(current_player, Vector2(0,0))
+
 
 func get_player_closest_to_look_direction(var players):
 

@@ -17,21 +17,39 @@ collision_mask = 2
 position = Vector2( 107, 38 )
 polygon = PoolVector2Array( -44, 186, -6, 84, 180, 84, 180, 187 )
 
+[node name="CollisionPolygon2D5" type="CollisionPolygon2D" parent="area_player"]
+position = Vector2( 468, 38 )
+rotation = 3.14159
+scale = Vector2( 1, -1 )
+polygon = PoolVector2Array( -46, 186, 179, 187, 179, 206, -52, 206 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="area_player"]
+position = Vector2( 469, 38 )
+rotation = 3.14159
+scale = Vector2( 1, -1 )
+polygon = PoolVector2Array( -52, 206, 0, 68, -25, 67, -85, 206 )
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="area_player"]
+position = Vector2( 469, 38 )
+rotation = 3.14159
+scale = Vector2( 1, -1 )
+polygon = PoolVector2Array( -6, 84, 0, 68, 180, 68, 180, 84 )
+
 [node name="area_enemy" type="StaticBody2D" parent="."]
 collision_layer = 0
 
 [node name="col_enemy" type="CollisionPolygon2D" parent="area_enemy"]
-position = Vector2( 110, 37 )
+position = Vector2( 109, 37 )
 polygon = PoolVector2Array( 180, 187, 180, 84, 366, 84, 405, 187 )
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="area_enemy"]
-position = Vector2( 107, 38 )
-polygon = PoolVector2Array( -52, 206, 0, 68, -25, 67, -85, 206 )
-
-[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="area_enemy"]
-position = Vector2( 108, 37 )
-polygon = PoolVector2Array( -6, 84, 0, 68, 180, 68, 180, 84 )
 
 [node name="CollisionPolygon2D3" type="CollisionPolygon2D" parent="area_enemy"]
 position = Vector2( 108, 37 )
 polygon = PoolVector2Array( -44, 186, 179, 187, 179, 206, -52, 206 )
+
+[node name="CollisionPolygon2D6" type="CollisionPolygon2D" parent="area_enemy"]
+position = Vector2( 108, 37 )
+polygon = PoolVector2Array( -6, 84, 0, 68, 180, 68, 180, 84 )
+
+[node name="CollisionPolygon2D4" type="CollisionPolygon2D" parent="area_enemy"]
+position = Vector2( 107, 38 )
+polygon = PoolVector2Array( -52, 206, 0, 68, -25, 67, -85, 206 )

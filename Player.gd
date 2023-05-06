@@ -17,6 +17,8 @@ var ball_is_in_catch = null
 var hand_x_offset = Vector2(7,0)
 var ball_shadow_is_in_shadow =false
 onready var ball = get_node("/root/Arena/YSort/YSort_ball/Ball")
+var flip = Vector2(1,1)
+
 
 
 var knockback_speed = 200
@@ -27,6 +29,7 @@ enum STATE{
 	knocked,
 	throwing,
 	throwing_post
+	passing
 	passing_post
 }
 
@@ -39,13 +42,15 @@ func _ready():
 		self.scale = Vector2(-1, 1)
 		var sprite = self.get_node("Body").get_node("AnimatedSprite")
 		sprite.frame = 1
+		flip = Vector2(-1,1)
+	
+	
+		
 
 
 	z_position = get_node("Body").get_node("AnimatedSprite").position.y
-	if(get_parent().name == 'Left'):
-		hand_x_offset = Vector2(5,0)
-	else:
-		hand_x_offset = Vector2(-5,0)	
+	hand_x_offset = Vector2(5,0) * flip
+
 
 
 
@@ -59,16 +64,23 @@ func _physics_process(delta):
 		throwing_state()
 	elif(self.state==STATE.throwing_post):
 		throwing_post_state()
+	elif(self.state==STATE.passing):
+		passing_state()
 	elif(self.state==STATE.passing_post):
 		passing_post()
-	print(self.state)
+
 
 func passing_post():
 	get_node("Body").get_node("AnimatedSprite").animation = "pass"
 	get_node("Body").get_node("AnimatedSprite").frame = 0
 	get_node("Body").get_node("AnimatedSprite").playing   = false
 	get_node("Body").get_node("AnimatedSprite").modulate = (Color(1,1,1,1))
-	yield(get_tree().create_timer(0.25), "timeout")  # Wait for one second
+	yield(get_tree().create_timer(0.15), "timeout")  # Wait for one second
+	get_node("Body").get_node("AnimatedSprite").animation = "pass"
+	get_node("Body").get_node("AnimatedSprite").frame = 1
+	get_node("Body").get_node("AnimatedSprite").playing   = false
+	get_node("Body").get_node("AnimatedSprite").modulate = (Color(1,1,1,1))
+
 
 	self.state= STATE.main
 
@@ -82,32 +94,40 @@ func throwing_post_state():
 	self.state= STATE.main
 
 func throwing_state():
-	if(Input.is_action_pressed("ui_shoot") and attached_ball != null):
+	if(attached_ball != null):
 		direction= Vector2(0,0);	
 		get_node("Body").get_node("AnimatedSprite").modulate = (Color(1,1,0,1))
-		hand_x_offset = Vector2(-23,-4)
+		hand_x_offset = Vector2(-23,-4) * flip
 		get_node("Body").get_node("AnimatedSprite").animation = "throw"
 		get_node("Body").get_node("AnimatedSprite").frame = 0
 		get_node("Body").get_node("AnimatedSprite").playing   = false
-	if(attached_ball != null and Input.is_action_just_released("ui_shoot")):	
-		hand_x_offset = Vector2(15,-4)
-		attached_ball.position = self.position + hand_x_offset
+
+	
+func executeBallThrow():
+	if(attached_ball != null):	
+		hand_x_offset = Vector2(15,-4) * flip
+		attached_ball.position = self.position + hand_x_offset 
 		var throw_direction
 		if(get_parent().shoot_player !=null):
-			throw_direction = (get_parent().shoot_player.get_node("shadow").global_position - self.get_node("shadow").global_position).normalized()
+			throw_direction = (get_parent().shoot_player.get_node("shadow").get_node("walkbox").global_position - self.hand_x_offset  - self.get_node("shadow").get_node("walkbox").global_position).normalized()
+			
 		else:
-			throw_direction = direction
+			throw_direction = direction 
 			throw_direction.x = abs(throw_direction.x)
-			throw_direction = throw_direction + Vector2(1.2,0)
+			throw_direction = throw_direction + Vector2(1.2,0) 
 			throw_direction = throw_direction.normalized() * Arena.y_ratio
 		throw_ball(throw_direction)
 		throwing_post_state()
+	
 
 
 func main_state():
-	hand_x_offset = Vector2(7,0)
+	
+	hand_x_offset = Vector2(7,0) * flip
+	
+	
 	get_node("Body/AnimatedSprite").playing = true
-	if(get_parent().name == 'Left'):
+	if(get_parent().name == 'Left'|| 'Right'):
 		if(get_parent().current_player == self):
 			read_input();
 		else:
@@ -117,9 +137,11 @@ func main_state():
 			get_node("Body/AnimatedSprite").animation = "run"
 		if(get_node("Body/AnimatedSprite").get_frame()==1 ):
 			if(attached_ball != null):
-				hand_x_offset = Vector2(5,-1)
+				hand_x_offset = Vector2(5,-1)*flip
+
+				
 		else:
-			hand_x_offset = Vector2(7,0)
+			hand_x_offset = Vector2(7,0) * flip	
 		move_and_slide(direction * run_speed);
 		get_node("shadow/Particles2D").position = get_node("shadow/Particles2D").position 
 		get_node("shadow/Particles2D").emitting = true
@@ -128,22 +150,14 @@ func main_state():
 		else:
 			get_node("shadow/Particles2D").position.x = -11
 	else:
-		if(!(Input.is_action_pressed("ui_shoot") and attached_ball != null and get_parent().current_player == self)):
-			get_node("Body/AnimatedSprite").animation = "main"
+		get_node("Body/AnimatedSprite").animation = "main"
 		get_node("shadow/Particles2D").emitting = false
-	if(attached_ball != null and Input.is_action_just_pressed("ui_shoot")):	
-		state = STATE.throwing
+
 		
 	if(ball_is_in_catch and ready_to_catch_pass and ball_shadow_is_in_shadow ):
 		attach_ball(ball_is_in_catch)
 		ready_to_catch_pass = false;
-	if(attached_ball != null and Input.is_action_just_pressed("ui_pass") and get_parent().current_player == self):
-		hand_x_offset = Vector2(14,-2)
-		attached_ball.position = self.position + hand_x_offset
-		pass_ball(get_parent().pass_player)	
-		state = STATE.passing_post#TODO replace with pass_post
-	if(attached_ball == null and Input.is_action_just_pressed("ui_pass") and get_parent().current_player == self):
-		get_parent().switch(get_parent().pass_player)
+
 
 	if(jumping):
 		if(z>=0):
@@ -179,19 +193,65 @@ func knocked_state():
 
 
 func read_input():
-	
-	if((Input.is_action_just_pressed("ui_accept") and !jumping)):
-		jumping = true
-		z_velocity = 2.8
+	pass
 
 
 func set_direction(move_direction):
 	direction = move_direction.normalized() * Arena.y_ratio
+	
+func jump():
+	print('jump test')
+	jumping = true
+	z_velocity = 2.8
+
+func aCommand():
+	if(!jumping):
+		jump()
+
+func bCommand():
+	if(attached_ball != null and state==STATE.main):	
+		state = STATE.throwing
+		
+func bCommandRelease():
+	if(attached_ball != null and state==STATE.throwing):
+		executeBallThrow()
+
+func cCommand():
+	if(state==STATE.main or state == STATE.throwing):
+		if(attached_ball != null  and get_parent().current_player == self):
+			self.state= STATE.passing
+		if(attached_ball == null and get_parent().current_player == self):
+			get_parent().switch(get_parent().pass_player) 
 
 func _draw():
 	if(get_node("/root/Arena").debug_mode):
 		draw_line(global_position.normalized() ,global_position.normalized() + direction * 100 , Color(1,1,1), 1)
 
+
+func passing_state():
+	get_node("Body").get_node("AnimatedSprite").animation = "pass"
+	get_node("Body").get_node("AnimatedSprite").frame = 0
+	get_node("Body").get_node("AnimatedSprite").playing   = false
+	hand_x_offset = Vector2(-13,0) * flip
+	attached_ball.position = self.position + hand_x_offset
+
+	var timer = Timer.new()
+	timer.set_wait_time(0.15)
+	timer.set_one_shot(true)
+	timer.connect("timeout", self, "on_timer_timeout")
+	add_child(timer)
+	timer.start()
+
+	state = STATE.passing_post #hacky solution that needs to keep in sync
+
+
+
+func on_timer_timeout():
+	hand_x_offset = Vector2(14,-2) * flip
+	attached_ball.position = self.position + hand_x_offset
+	pass_ball(get_parent().pass_player)
+
+	
 
 
 
@@ -202,8 +262,8 @@ func throw_ball(direction):
 func attach_ball(ball):
 	ball.attach(self)
 	attached_ball = ball
-	if(get_parent().name == 'Left'):
-		get_parent().current_player = self
+	get_parent().current_player = self
+	get_parent().emit_signal('got_ball',get_parent().name)
 
 func pass_ball(player):
 	attached_ball.pass(player,1, self)

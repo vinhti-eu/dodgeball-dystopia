@@ -10,19 +10,19 @@ class MoveCommand extends Command:
 	func executeMove(player:Node, direction: Vector2) -> void:
 		player.set_direction(direction)
 
+class ACommand extends Command:
+	func execute(player:Node) -> void:
+		print('command jump test')
+		player.aCommand()
 
-class LeftCommand extends Command:
-	func execute(player: Node) -> void:
-		player.set_direction(Vector2(-1, 0))
+class BCommand extends Command:
+	func execute(player:Node) -> void:
+		player.bCommand()
 
-class RightCommand extends Command:
-	func execute(player: Node) -> void:
-		player.set_direction(Vector2(1, 0))
+class BCommandRelease extends Command:
+	func execute(player:Node) -> void:
+		player.bCommandRelease()
 
-class UpCommand extends Command:
-	func execute(player: Node) -> void:
-		player.set_direction(Vector2(0, -1))
-
-class DownCommand extends Command:
-	func execute(player: Node) -> void:
-		player.set_direction(Vector2(0, 1))
+class CCommand extends Command:
+	func execute(player:Node)-> void:
+		player.cCommand()

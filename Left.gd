@@ -12,49 +12,61 @@ var opponent_players = null
 var min_dist_opponent = 0
 var shoot_player = null
 
+export var p_left = "p1_left"
+export var p_right = "p1_right"
+export var p_down = "p1_down"
+export var p_up = "p1_up"
+export var p_a = "p1_a"
+export var p_b = "p1_b"
+export var p_c = "p1_c"
+
+export var team_label = "Left"
+export var opponent_label = "Right"
+
+signal got_ball(team)
+
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	current_player = get_child(0)
 	team_players = get_children()
-	opponent_players = get_parent().get_node("Right").get_children()
+	opponent_players = get_parent().get_node(opponent_label).get_children()
 
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if(self.name== "Left"):
-		read_input()
+	read_input()
 	
-	
-	if(Input.is_action_just_pressed("ui_pass") and self.name =="Left"):
-			#switch(get_child((current_player.get_index() +1) % get_child_count()))
-		#switch(get_child(min_dist_team))	
-		pass
 	update()
 	
 	min_dist_team = get_player_closest_to_look_direction(team_players)
 	min_dist_opponent = get_player_closest_to_look_direction(opponent_players)
 	
 	pass_player = get_child(min_dist_team)
-	shoot_player = get_parent().get_node("Right").get_child(min_dist_opponent)
+	shoot_player = get_parent().get_node(opponent_label).get_child(min_dist_opponent)
 	
 
 
 
 var moveCommand = command.MoveCommand.new()
-
+var aCommand = command.ACommand.new()
+var bCommand = command.BCommand.new()
+var bCommandRelease = command.BCommandRelease.new()
+var cCommand = command.CCommand.new()
 var commands_to_execute = []
 
 func read_input():
 	var directions = []
 
-	if Input.is_action_pressed("ui_left"):
+	if Input.is_action_pressed(p_left):
 		directions.append(Vector2(-1, 0))
-	if Input.is_action_pressed("ui_right"):
+	if Input.is_action_pressed(p_right):
 		directions.append(Vector2(1, 0))
-	if Input.is_action_pressed("ui_down"):
+	if Input.is_action_pressed(p_down):
 		directions.append(Vector2(0, 1))
-	if Input.is_action_pressed("ui_up"):
+	if Input.is_action_pressed(p_up):
 		directions.append(Vector2(0, -1))
 
 	if directions.size() > 0:
@@ -64,6 +76,18 @@ func read_input():
 		combined_direction = combined_direction.normalized()
 		moveCommand.executeMove(current_player, combined_direction)
 	else: moveCommand.executeMove(current_player, Vector2(0,0))
+	
+	if(Input.is_action_just_pressed(p_a)):
+		aCommand.execute(current_player)
+		
+	if(Input.is_action_just_pressed(p_b)):
+		bCommand.execute(current_player)
+	
+	if(Input.is_action_just_released(p_b)):
+		bCommandRelease.execute(current_player)
+		
+	if(Input.is_action_just_pressed(p_c)):
+		cCommand.execute(current_player)
 
 
 func get_player_closest_to_look_direction(var players):
@@ -73,7 +97,7 @@ func get_player_closest_to_look_direction(var players):
 	var current_angle_to_min = rad2deg(current_player.position.angle_to_point(players[min_dist].global_position))
 
 	var current_look_angle
-	var direction = current_player.direction.normalized()
+	var direction = current_player.direction.normalized() * current_player.flip
 	current_look_angle =  rad2deg(direction.angle())
 	if current_look_angle < 0:
 		current_look_angle = current_look_angle + 360

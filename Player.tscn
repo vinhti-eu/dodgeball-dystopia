@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
 [ext_resource path="res://sprites/p1/running_cloud.png" type="Texture" id=2]
@@ -16,6 +16,10 @@ region = Rect2( 0, 0, 32, 48 )
 [sub_resource type="AtlasTexture" id=20]
 atlas = ExtResource( 3 )
 region = Rect2( 32, 0, 32, 48 )
+
+[sub_resource type="AtlasTexture" id=23]
+atlas = ExtResource( 8 )
+region = Rect2( 0, 0, 48, 48 )
 
 [sub_resource type="AtlasTexture" id=24]
 atlas = ExtResource( 8 )
@@ -57,7 +61,7 @@ animations = [ {
 "name": "main",
 "speed": 4.0
 }, {
-"frames": [ SubResource( 24 ) ],
+"frames": [ SubResource( 23 ), SubResource( 24 ) ],
 "loop": true,
 "name": "pass",
 "speed": 5.0

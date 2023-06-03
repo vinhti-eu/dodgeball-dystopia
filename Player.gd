@@ -15,9 +15,14 @@ var z_position = 0
 var ready_to_catch_pass = false
 var ball_is_in_catch = null
 var hand_x_offset = Vector2(7,0)
+var pos_to_reach = Vector2(186, 168)
 var ball_shadow_is_in_shadow =false
 onready var ball = get_node("/root/Arena/YSort/YSort_ball/Ball")
 var flip = Vector2(1,1)
+export var spy = false
+var tactics = TACTICS.neutral
+var location_change_time = 0
+
 
 
 
@@ -35,19 +40,27 @@ enum STATE{
 
 var state = STATE.main
 
+enum TACTICS{
+	neutral,
+	offense,
+	defense
+	
+}
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	if(get_parent().name !='Left'):
+	location_change_time = randf() * 10
+	
+	get_parent().connect("got_ball", self, "_on_got_ball")
+	if(get_parent().name !='Left' and !spy || (get_parent().name =='Left') and spy):
 		self.scale = Vector2(-1, 1)
 		var sprite = self.get_node("Body").get_node("AnimatedSprite")
 		sprite.frame = 1
 		flip = Vector2(-1,1)
 	
 	
-		
-
-
+	
 	z_position = get_node("Body").get_node("AnimatedSprite").position.y
 	hand_x_offset = Vector2(5,0) * flip
 
@@ -129,9 +142,12 @@ func main_state():
 	get_node("Body/AnimatedSprite").playing = true
 	if(get_parent().name == 'Left'|| 'Right'):
 		if(get_parent().current_player == self):
+			run_speed = 100
 			read_input();
 		else:
+			run_speed = 70
 			ai_move()
+
 	if(direction.length() !=0):
 		if(get_node("Body/AnimatedSprite").animation != "run"):
 			get_node("Body/AnimatedSprite").animation = "run"
@@ -200,7 +216,6 @@ func set_direction(move_direction):
 	direction = move_direction.normalized() * Arena.y_ratio
 	
 func jump():
-	print('jump test')
 	jumping = true
 	z_velocity = 2.8
 
@@ -263,7 +278,8 @@ func attach_ball(ball):
 	ball.attach(self)
 	attached_ball = ball
 	get_parent().current_player = self
-	get_parent().emit_signal('got_ball',get_parent().name)
+	get_parent().get_parent().get_node("Left").emit_signal('got_ball',get_parent().name)
+	get_parent().get_parent().get_node("Right").emit_signal('got_ball',get_parent().name)
 
 func pass_ball(player):
 	attached_ball.pass(player,1, self)
@@ -280,12 +296,13 @@ func _on_ballbox_area_entered(area):
 
 func hit_by_ball(ball):
 
-	print("knocked")
 	self.state = STATE.knocked
 	self.knockback_speed = ball.speed /6
 	self.z_velocity = knockback_speed/30#/60 2
 	knockback_direction = ball.direction.normalized()
 	ball.knocked(self)
+	get_parent().switch(self)
+	
 
 
 func _on_ballbox_area_exited(area):
@@ -293,8 +310,19 @@ func _on_ballbox_area_exited(area):
 		if(ball.get_name()=='Ball'):
 			ball_is_in_area = null
 
+var move_timer_started = false
+
 func ai_move():
-	self.direction = Vector2(0,0)
+	if(self.tactics == TACTICS.defense):
+		var enemy_positon = get_parent().get_parent().get_node(get_parent().opponent_label).current_player.global_position
+		direction = (self.global_position - enemy_positon).normalized()
+	else:
+		if((self.pos_to_reach - self.global_position).length()>1):
+			direction = (self.pos_to_reach - self.global_position ).normalized()
+		else:
+			direction = Vector2(0,0)
+
+
 
 
 func _on_catchbox_area_entered(area):
@@ -319,3 +347,10 @@ func _on_shadow_area_exited(area):
 	var shadow = area;
 	if(shadow.get_name()=='Ball_shadow'):
 		ball_shadow_is_in_shadow = false
+
+
+func _on_got_ball(team) -> void:
+	if team == get_parent().name:
+		self.tactics = TACTICS.offense
+	else:
+		self.tactics = TACTICS.defense

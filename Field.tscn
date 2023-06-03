@@ -35,6 +35,8 @@ rotation = 3.14159
 scale = Vector2( 1, -1 )
 polygon = PoolVector2Array( -6, 84, 0, 68, 180, 68, 180, 84 )
 
+[node name="Node2D" type="Node2D" parent="area_player"]
+
 [node name="area_enemy" type="StaticBody2D" parent="."]
 collision_layer = 0
 

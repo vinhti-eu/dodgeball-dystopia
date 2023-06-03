@@ -7,6 +7,7 @@ var team_players = null
 var pass_player = null
 var min_dist_team = 0
 
+
 # var opponent
 var opponent_players = null
 var min_dist_opponent = 0
@@ -23,8 +24,10 @@ export var p_c = "p1_c"
 export var team_label = "Left"
 export var opponent_label = "Right"
 
-signal got_ball(team)
 
+signal got_ball(team, true)
+
+		
 
 
 # Called when the node enters the scene tree for the first time.
@@ -32,8 +35,28 @@ func _ready():
 	current_player = get_child(0)
 	team_players = get_children()
 	opponent_players = get_parent().get_node(opponent_label).get_children()
+	
+	for i in rand_range(0,team_players.size() -1 ):
+		set_playerpos(i)
+	
+		
+
+	var timer = Timer.new()
+	timer.set_wait_time(1)
+	timer.set_one_shot(false)
+	timer.connect("timeout", self, "on_timer_timeout")
+
+	get_node("/root/Arena").add_child(timer)
+	timer.start()
 
 
+
+func on_timer_timeout():
+	for i in range(team_players.size() -1):
+		team_players[i].location_change_time = team_players[i].location_change_time-1
+		if team_players[i].location_change_time <= 0:
+			set_playerpos(i)
+			team_players[i].location_change_time = randf()  * 10
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -47,6 +70,19 @@ func _process(delta):
 	pass_player = get_child(min_dist_team)
 	shoot_player = get_parent().get_node(opponent_label).get_child(min_dist_opponent)
 	
+
+
+
+	
+
+func set_playerpos(i):
+		var vec = (Vector2.ONE * rand_range(0, 25)).rotated(rand_range(0, PI))
+		team_players[i].pos_to_reach = (get_node("/root/Arena").positions_array[i]) + vec
+
+
+		
+
+
 
 
 
@@ -130,3 +166,4 @@ func switch(var player):
 
 
 					
+

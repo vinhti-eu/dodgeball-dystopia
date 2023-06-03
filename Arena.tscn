@@ -58,13 +58,17 @@ script = ExtResource( 6 )
 position = Vector2( 117, 128 )
 
 [node name="Player2" parent="YSort/Left" instance=ExtResource( 1 )]
-position = Vector2( 251, 145 )
+position = Vector2( 233, 137 )
 
 [node name="Player3" parent="YSort/Left" instance=ExtResource( 1 )]
-position = Vector2( 238, 175 )
+position = Vector2( 126, 179 )
 
 [node name="Player4" parent="YSort/Left" instance=ExtResource( 1 )]
-position = Vector2( 162, 149 )
+position = Vector2( 201, 178 )
+
+[node name="Player5" parent="YSort/Left" instance=ExtResource( 1 )]
+position = Vector2( 506, 159 )
+spy = true
 
 [node name="Right" type="YSort" parent="YSort"]
 script = ExtResource( 6 )
@@ -88,7 +92,29 @@ __meta__ = {
 "_edit_lock_": true
 }
 
+[node name="AnimatedSprite" parent="YSort/Right/Player/Body" index="0"]
+frame = 0
+
 [node name="shadow" parent="YSort/Right/Player" index="1"]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Player5" parent="YSort/Right" instance=ExtResource( 1 )]
+position = Vector2( 64, 169 )
+collision_layer = 2
+collision_mask = 2
+spy = true
+
+[node name="Body" parent="YSort/Right/Player5" index="0"]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="AnimatedSprite" parent="YSort/Right/Player5/Body" index="0"]
+frame = 0
+
+[node name="shadow" parent="YSort/Right/Player5" index="1"]
 __meta__ = {
 "_edit_lock_": true
 }
@@ -116,3 +142,4 @@ script = ExtResource( 7 )
 [connection signal="got_ball" from="YSort/Right" to="Camera" method="_on_Right_got_ball"]
 
 [editable path="YSort/Right/Player"]
+[editable path="YSort/Right/Player5"]

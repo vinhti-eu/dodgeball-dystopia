@@ -78,7 +78,7 @@ animations = [ {
 } ]
 
 [sub_resource type="RectangleShape2D" id=3]
-extents = Vector2( 5, 11.5 )
+extents = Vector2( 6, 13.5 )
 
 [sub_resource type="RectangleShape2D" id=4]
 extents = Vector2( 2.875, 11.625 )
@@ -114,7 +114,8 @@ script = ExtResource( 1 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="Body"]
 frames = SubResource( 1 )
-animation = "knocked"
+animation = "main"
+frame = 1
 playing = true
 offset = Vector2( 0, -10 )
 __meta__ = {
@@ -125,7 +126,7 @@ __meta__ = {
 position = Vector2( 0, -10 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Body/ballbox"]
-position = Vector2( 0, 1.5 )
+position = Vector2( -1, 3.5 )
 shape = SubResource( 3 )
 __meta__ = {
 "_edit_lock_": true

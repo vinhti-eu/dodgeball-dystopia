@@ -20,7 +20,6 @@ var ball_shadow_is_in_shadow =false
 onready var ball = get_node("/root/Arena/YSort/YSort_ball/Ball")
 var flip = Vector2(1,1)
 export var spy = false
-var tactics = TACTICS.neutral
 var location_change_time = 0
 
 
@@ -145,7 +144,7 @@ func main_state():
 			run_speed = 100
 			read_input();
 		else:
-			run_speed = 70
+			run_speed = 75
 			ai_move()
 
 	if(direction.length() !=0):
@@ -313,9 +312,11 @@ func _on_ballbox_area_exited(area):
 var move_timer_started = false
 
 func ai_move():
-	if(self.tactics == TACTICS.defense):
-		var enemy_positon = get_parent().get_parent().get_node(get_parent().opponent_label).current_player.global_position
-		direction = (self.global_position - enemy_positon).normalized()
+	if(get_parent().tactics == TACTICS.defense):
+		if((self.pos_to_reach - self.global_position).length()>1):
+			direction = (self.pos_to_reach - self.global_position ).normalized()
+		else:
+			direction = Vector2(0,0)
 	else:
 		if((self.pos_to_reach - self.global_position).length()>1):
 			direction = (self.pos_to_reach - self.global_position ).normalized()
@@ -351,6 +352,8 @@ func _on_shadow_area_exited(area):
 
 func _on_got_ball(team) -> void:
 	if team == get_parent().name:
-		self.tactics = TACTICS.offense
+		get_parent().tactics = TACTICS.offense
 	else:
-		self.tactics = TACTICS.defense
+		get_parent().tactics = TACTICS.defense
+		self.location_change_time = rand_range(0,1)
+

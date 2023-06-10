@@ -6,6 +6,7 @@ var current_player = null
 var team_players = null
 var pass_player = null
 var min_dist_team = 0
+var tactics = TACTICS.neutral
 
 
 # var opponent
@@ -27,6 +28,12 @@ export var opponent_label = "Right"
 
 signal got_ball(team, true)
 
+
+enum TACTICS{
+	neutral,
+	offense,
+	defense
+}
 		
 
 
@@ -53,7 +60,10 @@ func _ready():
 
 func on_timer_timeout():
 	for i in range(team_players.size() -1):
-		team_players[i].location_change_time = team_players[i].location_change_time-1
+		if(self.tactics == TACTICS.offense):
+			team_players[i].location_change_time = team_players[i].location_change_time-1
+		else:
+			team_players[i].location_change_time = team_players[i].location_change_time-4
 		if team_players[i].location_change_time <= 0:
 			set_playerpos(i)
 			team_players[i].location_change_time = randf()  * 10
@@ -76,8 +86,41 @@ func _process(delta):
 	
 
 func set_playerpos(i):
-		var vec = (Vector2.ONE * rand_range(0, 25)).rotated(rand_range(0, PI))
-		team_players[i].pos_to_reach = (get_node("/root/Arena").positions_array[i]) + vec
+		if(self.tactics == TACTICS.offense):
+			var vec = (Vector2.ONE * rand_range(0, 25)).rotated(rand_range(0, PI))
+			if(self.team_label == "Left"):
+				team_players[i].pos_to_reach = (get_node("/root/Arena").positions_array[i]) + vec
+			else:
+				team_players[i].pos_to_reach = (get_node("/root/Arena").positions_array2[i]) + vec
+		else:
+			if self.team_label == "Left" and self.tactics == TACTICS.defense:
+				var opp = get_parent().get_node("Right").current_player
+				var pos_to_reach = get_node("/root/Arena").positions_array[i] - (opp.global_position - get_node("/root/Arena").left_center)
+				var left_center = get_node("/root/Arena").left_center
+				var left_upleft = get_node("/root/Arena").left_upleft
+				var left_downleft = get_node("/root/Arena").left_downleft
+				var left_upright = get_node("/root/Arena").left_upright
+				var left_downright = get_node("/root/Arena").left_downright
+
+				var x = clamp(pos_to_reach.x, left_upleft.x, left_upright.x)
+				var y = clamp(pos_to_reach.y, left_upleft.y, left_downleft.y)
+
+				var vec = (Vector2.ONE * rand_range(0, 25)).rotated(rand_range(0, PI))
+				team_players[i].pos_to_reach = Vector2(x, y) + vec
+			if self.team_label == "Right" and self.tactics == TACTICS.defense:
+					var opp = get_parent().get_node("Left").current_player
+					var pos_to_reach = get_node("/root/Arena").positions_array2[i] + (opp.global_position - get_node("/root/Arena").right_center)
+					var right_center = get_node("/root/Arena").right_center
+					var right_upleft = get_node("/root/Arena").right_upleft
+					var right_downleft = get_node("/root/Arena").right_downleft
+					var right_upright = get_node("/root/Arena").right_upright
+					var right_downright = get_node("/root/Arena").right_downright
+					
+					var x = clamp(pos_to_reach.x, right_upleft.x, right_upright.x)
+					var y = clamp(pos_to_reach.y, right_downleft.y, right_upleft.y)
+					
+					var vec = (Vector2.ONE * rand_range(0, 25)).rotated(rand_range(0, PI))
+					team_players[i].pos_to_reach = Vector2(x, y) + vec
 
 
 		

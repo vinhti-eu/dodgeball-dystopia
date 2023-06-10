@@ -7,7 +7,17 @@ export var left_downleft = Vector2(119, 197)
 export var left_upright = Vector2(259, 145)
 export var left_downright = Vector2(259, 197)
 
+
+export var right_center = Vector2(390, 168)
+export var right_upleft = Vector2(451, 145)
+export var right_downleft = Vector2(457, 197)
+export var right_upright = Vector2(325, 145)
+export var right_downright = Vector2(325, 197)
+
 var positions_array =  [left_upleft,left_upright, left_downleft, left_downright]
+
+var positions_array2 = [right_upleft, right_upright, right_downleft, right_downright]
+
 
 var debug_mode = false;
 # Declare member variables here. Examples:

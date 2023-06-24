@@ -93,7 +93,7 @@ __meta__ = {
 }
 
 [node name="AnimatedSprite" parent="YSort/Right/Player/Body" index="0"]
-frame = 0
+frame = 1
 
 [node name="shadow" parent="YSort/Right/Player" index="1"]
 __meta__ = {
@@ -127,7 +127,7 @@ __meta__ = {
 }
 
 [node name="AnimatedSprite" parent="YSort/Right/Player5/Body" index="0"]
-frame = 0
+frame = 1
 
 [node name="shadow" parent="YSort/Right/Player5" index="1"]
 __meta__ = {

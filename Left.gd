@@ -176,7 +176,7 @@ func get_player_closest_to_look_direction(var players):
 	var current_angle_to_min = rad2deg(current_player.position.angle_to_point(players[min_dist].global_position))
 
 	var current_look_angle
-	var direction = current_player.direction.normalized() * current_player.flip
+	var direction = current_player.direction.normalized() 
 	current_look_angle =  rad2deg(direction.angle())
 	if current_look_angle < 0:
 		current_look_angle = current_look_angle + 360

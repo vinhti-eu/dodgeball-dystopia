@@ -112,3 +112,6 @@ func knocked(var player):
 	self.z_velocity = player.z_velocity /2
 	self.speed = speed/8
 
+func borderd():
+	self.direction = direction * -1
+	self.speed = speed/8

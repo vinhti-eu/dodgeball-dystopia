@@ -49,7 +49,7 @@ enum TACTICS{
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	location_change_time = randf() * 10
+	location_change_time = 0
 	
 	get_parent().connect("got_ball", self, "_on_got_ball")
 	if(get_parent().name !='Left' and !spy || (get_parent().name =='Left') and spy):

@@ -11,7 +11,7 @@ config_version=4
 [application]
 
 config/name="dodgeball_dystopia"
-run/main_scene="res://Arena.tscn"
+run/main_scene="res://Menu.tscn"
 config/icon="res://icon.png"
 
 [autoload]
@@ -30,6 +30,7 @@ window/stretch/mode="viewport"
 resolution=false
 window=false
 color=false
+start=false
 
 [gui]
 

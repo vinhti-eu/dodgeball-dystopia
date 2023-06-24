@@ -86,7 +86,7 @@ func _process(delta):
 	
 
 func set_playerpos(i):
-		if(self.tactics == TACTICS.offense):
+		if(self.tactics == TACTICS.offense or self.tactics == TACTICS.neutral):
 			var vec = (Vector2.ONE * rand_range(0, 25)).rotated(rand_range(0, PI))
 			if(self.team_label == "Left"):
 				team_players[i].pos_to_reach = (get_node("/root/Arena").positions_array[i]) + vec

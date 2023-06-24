@@ -1,0 +1,40 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Button.gd" type="Script" id=2]
+[ext_resource path="res://sprites/menu/menu_back.png" type="Texture" id=3]
+
+[sub_resource type="Theme" id=1]
+Fonts/fonts/large = null
+
+[node name="Menu" type="Node2D"]
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 192, 108 )
+texture = ExtResource( 3 )
+
+[node name="Button" type="Button" parent="."]
+margin_left = 39.0
+margin_top = 90.0
+margin_right = 151.0
+margin_bottom = 114.0
+text = "Player vs Player"
+script = ExtResource( 2 )
+
+[node name="Button2" type="Button" parent="."]
+margin_left = 66.0
+margin_top = 135.0
+margin_right = 178.0
+margin_bottom = 159.0
+text = "Player vs CPU"
+script = ExtResource( 2 )
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+margin_left = 98.0
+margin_top = 18.0
+margin_right = 300.0
+margin_bottom = 40.0
+theme = SubResource( 1 )
+text = "Dodgeball Dystopia Alpha"
+
+[connection signal="button_down" from="Button" to="Button" method="_on_Button_button_down"]
+[connection signal="button_down" from="Button2" to="Button2" method="_on_Button_button_down"]

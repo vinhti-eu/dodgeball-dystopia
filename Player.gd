@@ -53,7 +53,7 @@ func _ready():
 	
 	get_parent().connect("got_ball", self, "_on_got_ball")
 	if(get_parent().name !='Left' and !spy || (get_parent().name =='Left') and spy):
-		self.scale = Vector2(-1, 1)
+		get_node("Body").scale = Vector2(-1, 1)
 		var sprite = self.get_node("Body").get_node("AnimatedSprite")
 		sprite.frame = 1
 		flip = Vector2(-1,1)

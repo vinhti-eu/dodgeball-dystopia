@@ -1,6 +1,9 @@
 extends Node2D
 
+var isPlayer = true
+
 var command = load("res://command.gd")
+var CPUController
 # var team 
 var current_player = null
 var team_players = null
@@ -39,6 +42,9 @@ enum TACTICS{
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	CPUController = get_parent().get_node("CPUController")
+	
+	
 	current_player = get_child(0)
 	team_players = get_children()
 	opponent_players = get_parent().get_node(opponent_label).get_children()
@@ -70,7 +76,10 @@ func on_timer_timeout():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	read_input()
+	if(isPlayer):
+		read_input()
+	else:
+		CPUController.get_actions(current_player,delta)
 	
 	update()
 	

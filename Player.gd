@@ -35,6 +35,7 @@ enum STATE{
 	throwing_post
 	passing
 	passing_post
+	freezing
 }
 
 var state = STATE.main
@@ -80,6 +81,30 @@ func _physics_process(delta):
 		passing_state()
 	elif(self.state==STATE.passing_post):
 		passing_post()
+	elif(self.state==STATE.freezing):
+		freezing()
+
+
+func freezing():
+	get_node("Body").get_node("AnimatedSprite").modulate = (Color(0.8, 0.8 ,0.8,0.8))
+	get_node("Body/AnimatedSprite").animation = "main"
+	self.direction = Vector2(0,0)
+
+func unfreeze():
+	self.state = STATE.main
+	
+func setFreezing(freezetime):
+	print(freezetime)
+	if(freezetime > 0):
+		self.state= STATE.freezing
+		
+		var timer = Timer.new()
+		timer.set_wait_time(freezetime)
+		timer.set_one_shot(true)
+		timer.connect("timeout", self, "unfreeze")
+		add_child(timer)
+		timer.start()
+
 
 
 func passing_post():
@@ -134,7 +159,7 @@ func executeBallThrow():
 
 
 func main_state():
-	
+	get_node("Body").get_node("AnimatedSprite").modulate = (Color(1, 1 , 1, 1 ))
 	hand_x_offset = Vector2(7,0) * flip
 	
 	
@@ -339,14 +364,22 @@ func _on_catchbox_area_exited(area):
 
 
 func _on_shadow_area_entered(area):
-	var shadow = area;
-	if(shadow.get_name()=='Ball_shadow'):
+	
+	if(area.get_name()=='Ball_shadow'):
 		ball_shadow_is_in_shadow = true
+
+	if(area.name == "area_player" and get_parent().name == "Right" or area.name == "area_enemy" and get_parent().name == "Left"):
+		if(self.spy == false):
+			get_parent().run_to_center(self)
+
+
+
+
+
 
 
 func _on_shadow_area_exited(area):
-	var shadow = area;
-	if(shadow.get_name()=='Ball_shadow'):
+	if(area.get_name()=='Ball_shadow'):
 		ball_shadow_is_in_shadow = false
 
 

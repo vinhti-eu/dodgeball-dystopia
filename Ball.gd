@@ -14,6 +14,9 @@ var jumping = false
 var ball_is_shot = null #identifies if the ball can hurt someone
 var ball_is_passed = null
 
+var ball_is_in_left_field
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
@@ -56,10 +59,14 @@ func _physics_process(delta):
 					p.ready_to_catch_pass = false
 				position.x = round(position.x)
 				position.y = round(position.y)	
+				emit_floor_signal()
 		z = z+ z_velocity 
 	self.get_node("Ball_body").position.y = z_position - z
 	update()
 
+func emit_floor_signal():
+	pass
+	
 
 func attach(var person):
 	attached_to = person
@@ -115,3 +122,7 @@ func knocked(var player):
 func borderd():
 	self.direction = direction * -1
 	self.speed = speed/8
+
+
+func _on_Ball_shadow_area_entered(area):
+	print(area)

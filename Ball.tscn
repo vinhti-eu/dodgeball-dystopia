@@ -54,3 +54,5 @@ pitch_scale = 1.28
 stream = ExtResource( 5 )
 volume_db = 1.592
 pitch_scale = 1.12
+
+[connection signal="area_entered" from="Ball_shadow" to="." method="_on_Ball_shadow_area_entered"]

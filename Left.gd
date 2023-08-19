@@ -29,6 +29,7 @@ export var team_label = "Left"
 export var opponent_label = "Right"
 
 
+
 signal got_ball(team, true)
 
 
@@ -79,7 +80,7 @@ func _process(delta):
 	if(isPlayer):
 		read_input()
 	else:
-		CPUController.get_actions(current_player,delta)
+		CPUController.get_actions(current_player, tactics)
 	
 	update()
 	
@@ -216,6 +217,23 @@ func get_player_closest_to_look_direction(var players):
 func switch(var player):
 	current_player = player
 
+func run_to_center(player):
+	var timer = Timer.new()
+	timer.set_wait_time(0.2)
+	timer.set_one_shot(true)
+	timer.connect("timeout", self, "on_timer_timeout_run_to_center", [player])
+	add_child(timer)
+	timer.start()
 
+		
+
+
+func on_timer_timeout_run_to_center(player):
+	if(player == current_player):
+		if(pass_player!= null):
+			switch(pass_player)
+	player.setFreezing(1)
+	player.setFreezing(0)
+	set_playerpos(player.get_index())
 					
 

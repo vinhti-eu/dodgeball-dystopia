@@ -13,4 +13,5 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	self.position = get_parent().get_node("YSort").get_node(Team).current_player.get_node("Body").get_node("AnimatedSprite").global_position + Vector2(-3,-46)
+	if(get_parent().get_node("YSort").get_node(Team).current_player !=null):
+		self.position = get_parent().get_node("YSort").get_node(Team).current_player.get_node("Body").get_node("AnimatedSprite").global_position + Vector2(-3,-46)

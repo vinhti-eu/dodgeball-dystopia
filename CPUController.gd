@@ -6,6 +6,8 @@ var command = load("res://command.gd")
 # var b = "text"
 var jump = false;
 var passes = 0; 
+var has_ball = false
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

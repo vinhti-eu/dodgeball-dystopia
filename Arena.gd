@@ -40,4 +40,3 @@ func _draw():
 		draw_circle(left_downright, 5, point_color)
 
 
-

@@ -14,6 +14,10 @@ export var right_downleft = Vector2(457, 197)
 export var right_upright = Vector2(325, 145)
 export var right_downright = Vector2(325, 197)
 
+export var left_spy = Vector2(505, 145)
+export var right_spy = Vector2(70, 145)
+
+
 var positions_array =  [left_upleft,left_upright, left_downleft, left_downright]
 
 var positions_array2 = [right_upleft, right_upright, right_downleft, right_downright]

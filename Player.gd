@@ -21,7 +21,7 @@ onready var ball = get_node("/root/Arena/YSort/YSort_ball/Ball")
 var flip = Vector2(1,1)
 export var spy = false
 var location_change_time = 0
-
+var is_in_own_field
 
 
 
@@ -59,7 +59,7 @@ func _ready():
 		sprite.frame = 1
 		flip = Vector2(-1,1)
 	
-	
+	is_in_own_field = true
 	
 	z_position = get_node("Body").get_node("AnimatedSprite").position.y
 	hand_x_offset = Vector2(5,0) * flip
@@ -299,11 +299,12 @@ func throw_ball(direction):
 	attached_ball = null
 
 func attach_ball(ball):
-	ball.attach(self)
-	attached_ball = ball
-	get_parent().current_player = self
-	get_parent().get_parent().get_node("Left").emit_signal('got_ball',get_parent().name)
-	get_parent().get_parent().get_node("Right").emit_signal('got_ball',get_parent().name)
+	if(self.is_in_own_field):
+		ball.attach(self)
+		attached_ball = ball
+		get_parent().current_player = self
+		get_parent().get_parent().get_node("Left").emit_signal('got_ball',get_parent().name)
+		get_parent().get_parent().get_node("Right").emit_signal('got_ball',get_parent().name)
 
 func pass_ball(player):
 	attached_ball.pass(player,1, self)
@@ -369,8 +370,13 @@ func _on_shadow_area_entered(area):
 		ball_shadow_is_in_shadow = true
 
 	if(area.name == "area_player" and get_parent().name == "Right" or area.name == "area_enemy" and get_parent().name == "Left"):
-		if(self.spy == false):
-			get_parent().run_to_center(self)
+		self.is_in_own_field = false
+		if(self.attached_ball != null):
+			drop_ball(direction)
+		get_parent().run_to_center(self)
+		if(area.name == "area_player" and get_parent().name == "Left" or area.name == "area_enemy" and get_parent().name == "Right"):	
+			self.is_in_own_field = true
+			
 
 
 
@@ -381,7 +387,11 @@ func _on_shadow_area_entered(area):
 func _on_shadow_area_exited(area):
 	if(area.get_name()=='Ball_shadow'):
 		ball_shadow_is_in_shadow = false
-
+		
+func drop_ball(direction):
+	print("HELLLLOOo")
+	attached_ball.drop(direction,  run_speed, self)
+	attached_ball = null
 
 func _on_got_ball(team) -> void:
 	if team == get_parent().name:

@@ -50,7 +50,7 @@ func _ready():
 	team_players = get_children()
 	opponent_players = get_parent().get_node(opponent_label).get_children()
 	
-	for i in rand_range(0,team_players.size() -1 ):
+	for i in rand_range(0,team_players.size() ):
 		set_playerpos(i)
 	
 		
@@ -66,7 +66,7 @@ func _ready():
 
 
 func on_timer_timeout():
-	for i in range(team_players.size() -1):
+	for i in range(team_players.size()):
 		if(self.tactics == TACTICS.offense):
 			team_players[i].location_change_time = team_players[i].location_change_time-1
 		else:
@@ -98,26 +98,40 @@ func _process(delta):
 func set_playerpos(i):
 		if(self.tactics == TACTICS.offense or self.tactics == TACTICS.neutral):
 			var vec = (Vector2.ONE * rand_range(0, 25)).rotated(rand_range(0, PI))
-			if(self.team_label == "Left"):
-				team_players[i].pos_to_reach = (get_node("/root/Arena").positions_array[i]) + vec
-			else:
-				team_players[i].pos_to_reach = (get_node("/root/Arena").positions_array2[i]) + vec
+			if(self.team_label == "Left" ):
+				print(team_players[i])
+				if(! team_players[i].spy):
+					team_players[i].pos_to_reach = (get_node("/root/Arena").positions_array[i]) + vec
+				else: 
+					team_players[i].pos_to_reach = (get_node("/root/Arena").left_spy)
+					print("there is a spy")
+			elif(self.team_label == "Right"):
+				if(! team_players[i].spy):
+					team_players[i].pos_to_reach = (get_node("/root/Arena").positions_array2[i]) + vec
+				else: 
+					team_players[i].pos_to_reach = (get_node("/root/Arena").right_spy)
+					print("there is a spy")
+			
 		else:
 			if self.team_label == "Left" and self.tactics == TACTICS.defense:
-				var opp = get_parent().get_node("Right").current_player
-				var pos_to_reach = get_node("/root/Arena").positions_array[i] - (opp.global_position - get_node("/root/Arena").left_center)
-				var left_center = get_node("/root/Arena").left_center
-				var left_upleft = get_node("/root/Arena").left_upleft
-				var left_downleft = get_node("/root/Arena").left_downleft
-				var left_upright = get_node("/root/Arena").left_upright
-				var left_downright = get_node("/root/Arena").left_downright
+				if( ! team_players[i].spy):
+					var opp = get_parent().get_node("Right").current_player
+					var pos_to_reach = get_node("/root/Arena").positions_array[i] - (opp.global_position - get_node("/root/Arena").left_center)
+					var left_center = get_node("/root/Arena").left_center
+					var left_upleft = get_node("/root/Arena").left_upleft
+					var left_downleft = get_node("/root/Arena").left_downleft
+					var left_upright = get_node("/root/Arena").left_upright
+					var left_downright = get_node("/root/Arena").left_downright
 
-				var x = clamp(pos_to_reach.x, left_upleft.x, left_upright.x)
-				var y = clamp(pos_to_reach.y, left_upleft.y, left_downleft.y)
+					var x = clamp(pos_to_reach.x, left_upleft.x, left_upright.x)
+					var y = clamp(pos_to_reach.y, left_upleft.y, left_downleft.y)
 
-				var vec = (Vector2.ONE * rand_range(0, 25)).rotated(rand_range(0, PI))
-				team_players[i].pos_to_reach = Vector2(x, y) + vec
-			if self.team_label == "Right" and self.tactics == TACTICS.defense:
+					var vec = (Vector2.ONE * rand_range(0, 25)).rotated(rand_range(0, PI))
+					team_players[i].pos_to_reach = Vector2(x, y) + vec
+			else :
+				team_players[i].pos_to_reach = get_node("/root/Arena").left_spy
+			if self.team_label == "Right" and self.tactics == TACTICS.defense :
+				if( ! team_players[i].spy):
 					var opp = get_parent().get_node("Left").current_player
 					var pos_to_reach = get_node("/root/Arena").positions_array2[i] + (opp.global_position - get_node("/root/Arena").right_center)
 					var right_center = get_node("/root/Arena").right_center
@@ -131,6 +145,8 @@ func set_playerpos(i):
 					
 					var vec = (Vector2.ONE * rand_range(0, 25)).rotated(rand_range(0, PI))
 					team_players[i].pos_to_reach = Vector2(x, y) + vec
+				else :
+					team_players[i].pos_to_reach = get_node("/root/Arena").right_spy
 
 
 		
@@ -219,7 +235,7 @@ func switch(var player):
 
 func run_to_center(player):
 	var timer = Timer.new()
-	timer.set_wait_time(0.2)
+	timer.set_wait_time(0.15)
 	timer.set_one_shot(true)
 	timer.connect("timeout", self, "on_timer_timeout_run_to_center", [player])
 	add_child(timer)
@@ -229,11 +245,13 @@ func run_to_center(player):
 
 
 func on_timer_timeout_run_to_center(player):
+
 	if(player == current_player):
+		player.setFreezing(0.5)
 		if(pass_player!= null):
 			switch(pass_player)
-	player.setFreezing(1)
-	player.setFreezing(0)
+	else:
+		player.setFreezing(0)
 	set_playerpos(player.get_index())
 					
 

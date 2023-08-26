@@ -1,4 +1,4 @@
-extends StaticBody2D
+extends Area2D
 
 
 # Declare member variables here. Examples:
@@ -19,8 +19,12 @@ func _ready():
 			
 
 
-func _on_BorderArea_area_entered(area):
-	if(area.name=="Ball_shadow"):
-		var ball = area.get_parent();
-		if(ball.get_name()=='Ball'):
-			ball.borderd()
+
+
+
+
+func _on_Border_area_entered(area):
+		if(area.name=="Ball_shadow"):
+			var ball = area.get_parent();
+			if(ball.get_name()=='Ball'):
+				ball.borderd()

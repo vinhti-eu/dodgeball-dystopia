@@ -17,6 +17,7 @@ var ball_is_passed = null
 var ball_is_in_left_field
 
 
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
@@ -81,6 +82,16 @@ func throw(var vector, var speed_multiplyer,var shooting_player):
 	get_node("AudioThrow").pitch_scale = rand_range(1,1.5)
 	get_node("AudioThrow").play()
 	
+func drop(var vector, var speed_of_player,var shooting_player):
+	speed = speed_of_player
+	z_velocity = 0
+	direction = vector
+	ball_is_shot = shooting_player
+	detach()	
+
+
+
+		
 	
 func pass(var player, var speed_multiplyer, var passing_player):
 	var distance = (player.get_node("shadow").get_node("walkbox").global_position+ player.hand_x_offset -self.global_position).length()# distance in meters
@@ -125,4 +136,5 @@ func borderd():
 
 
 func _on_Ball_shadow_area_entered(area):
-	print(area)
+	pass
+

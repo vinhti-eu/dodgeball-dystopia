@@ -56,8 +56,9 @@ polygon = PoolVector2Array( -6, 84, 0, 68, 180, 68, 180, 84 )
 position = Vector2( 107, 38 )
 polygon = PoolVector2Array( -52, 206, 0, 68, -25, 67, -85, 206 )
 
-[node name="Border" type="StaticBody2D" parent="."]
-collision_mask = 3
+[node name="Border" type="Area2D" parent="."]
+collision_layer = 7
+collision_mask = 7
 script = ExtResource( 2 )
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Border"]
@@ -67,9 +68,14 @@ polygon = PoolVector2Array( 18, 239, 79, 101, 493, 103, 492, 37, 1, 35, 0, 245, 
 polygon = PoolVector2Array( 496, 102, 560, 246, 0, 246, 0, 266, 584, 258, 507, 85, 493, 86 )
 
 [node name="BorderArea" type="StaticBody2D" parent="."]
+collision_layer = 7
+collision_mask = 7
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="BorderArea"]
 polygon = PoolVector2Array( 18, 239, 79, 101, 493, 103, 492, 37, 1, 35, 0, 245, 16, 245 )
 
 [node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="BorderArea"]
 polygon = PoolVector2Array( 496, 102, 560, 246, 0, 246, 0, 266, 584, 258, 507, 85, 493, 86 )
+
+[connection signal="area_entered" from="area_enemy" to="Border" method="_on_area_enemy_area_entered"]
+[connection signal="area_entered" from="Border" to="Border" method="_on_Border_area_entered"]

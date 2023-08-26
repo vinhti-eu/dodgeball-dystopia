@@ -374,8 +374,8 @@ func _on_shadow_area_entered(area):
 		if(self.attached_ball != null):
 			drop_ball(direction)
 		get_parent().run_to_center(self)
-		if(area.name == "area_player" and get_parent().name == "Left" or area.name == "area_enemy" and get_parent().name == "Right"):	
-			self.is_in_own_field = true
+	if(area.name == "area_player" and get_parent().name == "Left" or area.name == "area_enemy" and get_parent().name == "Right"):	
+		self.is_in_own_field = true
 			
 
 

@@ -131,7 +131,7 @@ func knocked(var player):
 	self.speed = speed/8
 
 func borderd():
-	if(attached_to!= null):
+	if(direction != null):
 		self.direction = direction * -1
 		self.speed = speed/8
 

@@ -131,8 +131,9 @@ func knocked(var player):
 	self.speed = speed/8
 
 func borderd():
-	self.direction = direction * -1
-	self.speed = speed/8
+	if(attached_to!= null):
+		self.direction = direction * -1
+		self.speed = speed/8
 
 
 func _on_Ball_shadow_area_entered(area):

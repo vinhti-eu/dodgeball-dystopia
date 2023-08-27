@@ -94,7 +94,6 @@ func unfreeze():
 	self.state = STATE.main
 	
 func setFreezing(freezetime):
-	print(freezetime)
 	if(freezetime > 0):
 		self.state= STATE.freezing
 		
@@ -205,7 +204,8 @@ func main_state():
 			z_velocity = z_velocity -0.1
 			self.get_node("Body").position.y = z_position - z
 		else:
-			jumping = false
+			jumping = false		
+			landing_from_jump()
 			z = 0
 	#no input needed for this one		
 	if( ball_is_in_catch !=null and attached_ball ==null 
@@ -266,6 +266,9 @@ func _draw():
 	if(get_node("/root/Arena").debug_mode):
 		draw_line(global_position.normalized() ,global_position.normalized() + direction * 100 , Color(1,1,1), 1)
 
+func landing_from_jump():
+	if(!self.is_in_own_field):
+		has_touched_enemy_field()
 
 func passing_state():
 	get_node("Body").get_node("AnimatedSprite").animation = "pass"
@@ -292,7 +295,10 @@ func on_timer_timeout():
 
 	
 
-
+func has_touched_enemy_field():
+	if(self.attached_ball != null):
+		drop_ball(direction)
+	get_parent().run_to_center(self)
 
 func throw_ball(direction):
 	attached_ball.throw(direction,1, self)
@@ -371,11 +377,14 @@ func _on_shadow_area_entered(area):
 
 	if(area.name == "area_player" and get_parent().name == "Right" or area.name == "area_enemy" and get_parent().name == "Left"):
 		self.is_in_own_field = false
-		if(self.attached_ball != null):
-			drop_ball(direction)
-		get_parent().run_to_center(self)
-	if(area.name == "area_player" and get_parent().name == "Left" or area.name == "area_enemy" and get_parent().name == "Right"):	
-		self.is_in_own_field = true
+		if(!jumping):
+			if(self.attached_ball != null):
+				drop_ball(direction)
+			get_parent().run_to_center(self)
+
+		
+
+
 			
 
 
@@ -387,6 +396,8 @@ func _on_shadow_area_entered(area):
 func _on_shadow_area_exited(area):
 	if(area.get_name()=='Ball_shadow'):
 		ball_shadow_is_in_shadow = false
+	if(area.name == "area_player" and get_parent().name == "Right" or area.name == "area_enemy" and get_parent().name == "Left"):	
+		self.is_in_own_field = true	
 		
 func drop_ball(direction):
 	print("HELLLLOOo")

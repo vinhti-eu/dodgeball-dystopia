@@ -104,13 +104,11 @@ func set_playerpos(i):
 					team_players[i].pos_to_reach = (get_node("/root/Arena").positions_array[i]) + vec
 				else: 
 					team_players[i].pos_to_reach = (get_node("/root/Arena").left_spy)
-					print("there is a spy")
 			elif(self.team_label == "Right"):
 				if(! team_players[i].spy):
 					team_players[i].pos_to_reach = (get_node("/root/Arena").positions_array2[i]) + vec
 				else: 
 					team_players[i].pos_to_reach = (get_node("/root/Arena").right_spy)
-					print("there is a spy")
 			
 		else:
 			if self.team_label == "Left" and self.tactics == TACTICS.defense:
@@ -231,7 +229,8 @@ func get_player_closest_to_look_direction(var players):
 
 
 func switch(var player):
-	current_player = player
+	if(player.is_in_own_field):
+		current_player = player
 
 func run_to_center(player):
 	var timer = Timer.new()

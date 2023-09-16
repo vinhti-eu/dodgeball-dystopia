@@ -15,6 +15,7 @@ class ACommand extends Command:
 		print('command jump test')
 		player.aCommand()
 
+#throwing and TODO catching
 class BCommand extends Command:
 	func execute(player:Node) -> void:
 		player.bCommand()

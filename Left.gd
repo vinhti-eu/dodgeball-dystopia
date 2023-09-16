@@ -1,6 +1,6 @@
 extends Node2D
 
-var isPlayer = true
+var isPlayer = false
 
 var command = load("res://command.gd")
 var CPUController
@@ -30,7 +30,7 @@ export var opponent_label = "Right"
 
 
 
-signal got_ball(team, true)
+signal got_ball(team)
 
 
 enum TACTICS{
@@ -43,7 +43,8 @@ enum TACTICS{
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	CPUController = get_parent().get_node("CPUController")
+	
+	CPUController = get_parent().get_node("CPUController" + self.name)
 	
 	
 	current_player = get_child(0)
@@ -99,7 +100,6 @@ func set_playerpos(i):
 		if(self.tactics == TACTICS.offense or self.tactics == TACTICS.neutral):
 			var vec = (Vector2.ONE * rand_range(0, 25)).rotated(rand_range(0, PI))
 			if(self.team_label == "Left" ):
-				print(team_players[i])
 				if(! team_players[i].spy):
 					team_players[i].pos_to_reach = (get_node("/root/Arena").positions_array[i]) + vec
 				else: 
@@ -252,5 +252,7 @@ func on_timer_timeout_run_to_center(player):
 	else:
 		player.setFreezing(0)
 	set_playerpos(player.get_index())
+	
+
 					
 

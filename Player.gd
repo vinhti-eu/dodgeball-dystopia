@@ -50,6 +50,9 @@ enum TACTICS{
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+
+
+	
 	location_change_time = 0
 	
 	get_parent().connect("got_ball", self, "_on_got_ball")
@@ -135,7 +138,7 @@ func throwing_state():
 		get_node("Body").get_node("AnimatedSprite").modulate = (Color(1,1,0,1))
 		hand_x_offset = Vector2(-23,-4) * flip
 		get_node("Body").get_node("AnimatedSprite").animation = "throw"
-		get_node("Body").get_node("AnimatedSprite").frame = 0
+
 		get_node("Body").get_node("AnimatedSprite").playing   = false
 
 	
@@ -309,6 +312,8 @@ func attach_ball(ball):
 		ball.attach(self)
 		attached_ball = ball
 		get_parent().current_player = self
+		#always called on attachement 
+		print("should be emitted now")
 		get_parent().get_parent().get_node("Left").emit_signal('got_ball',get_parent().name)
 		get_parent().get_parent().get_node("Right").emit_signal('got_ball',get_parent().name)
 
@@ -400,7 +405,6 @@ func _on_shadow_area_exited(area):
 		self.is_in_own_field = true	
 		
 func drop_ball(direction):
-	print("HELLLLOOo")
 	attached_ball.drop(direction,  run_speed, self)
 	attached_ball = null
 

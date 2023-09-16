@@ -14,9 +14,9 @@ var jumping = false
 var ball_is_shot = null #identifies if the ball can hurt someone
 var ball_is_passed = null
 
-var ball_is_in_left_field
-
-
+var ball_is_in_left_field = true
+var ball_is_lying = true
+signal ball_stopped_on_floor(isLying)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -66,11 +66,14 @@ func _physics_process(delta):
 	update()
 
 func emit_floor_signal():
-	pass
+	ball_is_lying = true
+	emit_signal("ball_stopped_on_floor", ball_is_lying)
 	
 
 func attach(var person):
 	attached_to = person
+	ball_is_lying = false
+	emit_signal("ball_stopped_on_floor",ball_is_lying)
 
 	
 func throw(var vector, var speed_multiplyer,var shooting_player):
@@ -116,6 +119,7 @@ func pass(var player, var speed_multiplyer, var passing_player):
 	var Vz = ((distance * sin(radians) * g) / T)/10
 
 	
+	
 	detach()	
 	direction = (player.get_node("shadow").get_node("walkbox").global_position + player.hand_x_offset - self.global_position).normalized() * Vx * speed_multiplyer
 	z_velocity =  Vz * speed_multiplyer #since move_and_slide already multiplies by 60
@@ -137,5 +141,9 @@ func borderd():
 
 
 func _on_Ball_shadow_area_entered(area):
-	pass
+	if(area.name == "area_player"):
+		ball_is_in_left_field = true
+	if(area.name == "area_enemy"):
+		ball_is_in_left_field = false	
+		print("!ball is in left field")
 

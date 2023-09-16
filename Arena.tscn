@@ -56,7 +56,7 @@ position = Vector2( 152, 139 )
 script = ExtResource( 6 )
 
 [node name="Player" parent="YSort/Left" instance=ExtResource( 1 )]
-position = Vector2( 150, 135 )
+position = Vector2( 198, 191 )
 
 [node name="Player2" parent="YSort/Left" instance=ExtResource( 1 )]
 position = Vector2( 233, 137 )
@@ -93,6 +93,9 @@ __meta__ = {
 "_edit_lock_": true
 }
 
+[node name="AnimatedSprite" parent="YSort/Right/Player/Body" index="0"]
+frame = 1
+
 [node name="shadow" parent="YSort/Right/Player" index="1"]
 __meta__ = {
 "_edit_lock_": true
@@ -124,20 +127,32 @@ __meta__ = {
 "_edit_lock_": true
 }
 
+[node name="AnimatedSprite" parent="YSort/Right/Player5/Body" index="0"]
+frame = 1
+
 [node name="shadow" parent="YSort/Right/Player5" index="1"]
 __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="CPUController" type="Node" parent="YSort"]
+[node name="CPUControllerLeft" type="Node" parent="YSort"]
+script = ExtResource( 11 )
+
+[node name="CPUControllerRight" type="Node" parent="YSort"]
 script = ExtResource( 11 )
 
 [node name="Line2D" type="Node2D" parent="."]
 z_index = 16
 script = ExtResource( 7 )
 
+[connection signal="ball_stopped_on_floor" from="YSort/YSort_ball/Ball" to="YSort/CPUControllerLeft" method="_on_Ball_ball_stopped_on_floor"]
+[connection signal="ball_stopped_on_floor" from="YSort/YSort_ball/Ball" to="YSort/CPUControllerRight" method="_on_Ball_ball_stopped_on_floor"]
 [connection signal="got_ball" from="YSort/Left" to="Camera" method="_on_Left_got_ball"]
+[connection signal="got_ball" from="YSort/Left" to="YSort/CPUControllerLeft" method="_on_Left_got_ball"]
+[connection signal="got_ball" from="YSort/Left" to="YSort/CPUControllerRight" method="_on_Left_got_ball"]
 [connection signal="got_ball" from="YSort/Right" to="Camera" method="_on_Right_got_ball"]
+[connection signal="got_ball" from="YSort/Right" to="YSort/CPUControllerLeft" method="_on_Right_got_ball"]
+[connection signal="got_ball" from="YSort/Right" to="YSort/CPUControllerRight" method="_on_Right_got_ball"]
 
 [editable path="YSort/Right/Player"]
 [editable path="YSort/Right/Player5"]

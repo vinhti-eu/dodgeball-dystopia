@@ -1,6 +1,6 @@
 extends Node2D
 
-var isPlayer = false
+export var isPlayer = true
 
 var command = load("res://command.gd")
 var CPUController
@@ -254,5 +254,4 @@ func on_timer_timeout_run_to_center(player):
 	set_playerpos(player.get_index())
 	
 
-					
 

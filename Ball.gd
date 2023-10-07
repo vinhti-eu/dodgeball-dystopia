@@ -17,6 +17,7 @@ var ball_is_passed = null
 var ball_is_in_left_field = true
 var ball_is_lying = true
 signal ball_stopped_on_floor(isLying)
+signal ball_has_crossed_field(side)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -42,24 +43,25 @@ func _physics_process(delta):
 			move_and_slide(direction * speed)
 		else:
 			ball_is_shot = null# ball not dangerous after touching ground
-			if(abs(z_velocity)> 0.1):
+			if(abs(z_velocity)> 0.5):
 				z= 0
 				jumping = true
 				z_velocity= abs(z_velocity) * 0.5
 				direction= direction * 0.5
 
-
 			else:
+				print("BUGBUGBUGBUGBUGBUG")
 				jumping = false
 				z = 0
 				direction = Vector2.ZERO
 				z_velocity = 0
-				for p in get_parent().get_node("Left").get_children():
-					p.ready_to_catch_pass = false
-				for p in get_parent().get_node("Right").get_children():
-					p.ready_to_catch_pass = false
+				#for p in get_parent().get_node("Left").get_children():
+				#	p.ready_to_catch_pass = false
+				#for p in get_parent().get_node("Right").get_children():
+				#	p.ready_to_catch_pass = false
 				position.x = round(position.x)
 				position.y = round(position.y)	
+				print("THIS IS THE MOMENT WHERE TO SIGNAL SHOULD BE CALLED")
 				emit_floor_signal()
 		z = z+ z_velocity 
 	self.get_node("Ball_body").position.y = z_position - z
@@ -139,11 +141,16 @@ func borderd():
 		self.direction = direction * -1
 		self.speed = speed/8
 
-
+#this should actually alert
 func _on_Ball_shadow_area_entered(area):
 	if(area.name == "area_player"):
 		ball_is_in_left_field = true
+		if(attached_to == null):#might lead to problems while jumping
+			emit_signal("ball_has_crossed_field", ball_is_in_left_field)
 	if(area.name == "area_enemy"):
 		ball_is_in_left_field = false	
 		print("!ball is in left field")
+		if(attached_to == null):
+			emit_signal("ball_has_crossed_field", ball_is_in_left_field)
+
 

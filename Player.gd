@@ -212,7 +212,7 @@ func main_state():
 			z = 0
 	#no input needed for this one		
 	if( ball_is_in_catch !=null and attached_ball ==null 
-	and ball_is_in_catch.ball_is_shot==null and ball_is_in_catch.attached_to == null and ball_is_in_catch.ball_is_passed!=self and ball_shadow_is_in_shadow):
+	and ball_is_in_catch.ball_is_shot==null and ball_is_in_catch.attached_to == null and (ball_is_in_catch.ball_is_passed!=self || ball_is_in_catch.ball_is_lying) and ball_shadow_is_in_shadow):
 		attach_ball(ball_is_in_catch)
 		ready_to_catch_pass = false;
 		

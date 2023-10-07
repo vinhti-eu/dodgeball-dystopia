@@ -81,7 +81,7 @@ animations = [ {
 extents = Vector2( 6, 13.5 )
 
 [sub_resource type="RectangleShape2D" id=4]
-extents = Vector2( 2.875, 11.625 )
+extents = Vector2( 2.875, 12 )
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 6, 1.5 )
@@ -135,7 +135,7 @@ __meta__ = {
 position = Vector2( 0, -10 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Body/catchbox"]
-position = Vector2( 5, 1.625 )
+position = Vector2( 5, 2 )
 shape = SubResource( 4 )
 
 [node name="shadow" type="Area2D" parent="."]

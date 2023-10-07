@@ -54,6 +54,7 @@ position = Vector2( 152, 139 )
 
 [node name="Left" type="YSort" parent="YSort"]
 script = ExtResource( 6 )
+isPlayer = false
 
 [node name="Player" parent="YSort/Left" instance=ExtResource( 1 )]
 position = Vector2( 198, 191 )
@@ -73,6 +74,7 @@ spy = true
 
 [node name="Right" type="YSort" parent="YSort"]
 script = ExtResource( 6 )
+isPlayer = false
 p_left = "p2_left"
 p_right = "p2_right"
 p_down = "p2_down"
@@ -145,6 +147,8 @@ script = ExtResource( 11 )
 z_index = 16
 script = ExtResource( 7 )
 
+[connection signal="ball_has_crossed_field" from="YSort/YSort_ball/Ball" to="YSort/CPUControllerLeft" method="_on_Ball_ball_has_crossed_field"]
+[connection signal="ball_has_crossed_field" from="YSort/YSort_ball/Ball" to="YSort/CPUControllerRight" method="_on_Ball_ball_has_crossed_field"]
 [connection signal="ball_stopped_on_floor" from="YSort/YSort_ball/Ball" to="YSort/CPUControllerLeft" method="_on_Ball_ball_stopped_on_floor"]
 [connection signal="ball_stopped_on_floor" from="YSort/YSort_ball/Ball" to="YSort/CPUControllerRight" method="_on_Ball_ball_stopped_on_floor"]
 [connection signal="got_ball" from="YSort/Left" to="Camera" method="_on_Left_got_ball"]

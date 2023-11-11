@@ -17,6 +17,7 @@ var ball_side_left = true
 
 
 
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	has_ball = self.name == "CPUControllerLeft"
@@ -40,9 +41,9 @@ func get_actions(current_player, delta):
 	var bCommandRelease = command.BCommandRelease.new()
 
 
-	if(current_player.get_parent().name == "Left" and ball_side_left and ball_is_lying ):
+	if(current_player.get_parent().name == "Left" and ball_side_left and ball_is_lying and  current_player.attached_ball==null ):
 		run_to_ball(current_player)
-	if(current_player.get_parent().name == "Right" and !ball_side_left and ball_is_lying ):
+	if(current_player.get_parent().name == "Right" and !ball_side_left and ball_is_lying  and  current_player.attached_ball==null):
 		run_to_ball(current_player)	
 		print("runTOBALLRIGHT")
 	
@@ -64,8 +65,9 @@ func get_actions(current_player, delta):
 		#prevent trying to pass if trying to throw
 
 	
-	elif(passes>0 and !ball_is_lying and !throw and has_ball and current_player.attached_ball != null):
-		
+	elif(passes>0 and !ball_is_lying and !throw and has_ball and current_player.attached_ball != null):	
+		# prevents a double c press, so that random runs dont happen anyore
+		has_ball = false
 		cCommand.execute(current_player)
 		
 		
@@ -81,6 +83,7 @@ func get_actions(current_player, delta):
 func run_to_ball(player):
 	var move_command = command.MoveCommand.new()
 	move_command.executeMove(player, ball.global_position - player.global_position)
+	print("run_to_ball with ball_pos",ball.global_position)
 		
 func run_with_ball(player):
 	var move_command = command.MoveCommand.new()

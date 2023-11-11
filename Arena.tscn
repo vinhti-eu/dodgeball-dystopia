@@ -147,6 +147,8 @@ script = ExtResource( 11 )
 z_index = 16
 script = ExtResource( 7 )
 
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
 [connection signal="ball_has_crossed_field" from="YSort/YSort_ball/Ball" to="YSort/CPUControllerLeft" method="_on_Ball_ball_has_crossed_field"]
 [connection signal="ball_has_crossed_field" from="YSort/YSort_ball/Ball" to="YSort/CPUControllerRight" method="_on_Ball_ball_has_crossed_field"]
 [connection signal="ball_stopped_on_floor" from="YSort/YSort_ball/Ball" to="YSort/CPUControllerLeft" method="_on_Ball_ball_stopped_on_floor"]

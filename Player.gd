@@ -124,6 +124,7 @@ func passing_post():
 	self.state= STATE.main
 
 func throwing_post_state():
+	attached_ball = null
 	get_node("Body").get_node("AnimatedSprite").animation = "throw"
 	get_node("Body").get_node("AnimatedSprite").frame = 1
 	get_node("Body").get_node("AnimatedSprite").playing   = false
@@ -140,6 +141,7 @@ func throwing_state():
 		get_node("Body").get_node("AnimatedSprite").animation = "throw"
 
 		get_node("Body").get_node("AnimatedSprite").playing   = false
+
 
 	
 func executeBallThrow():
@@ -307,8 +309,9 @@ func throw_ball(direction):
 	attached_ball.throw(direction,1, self)
 	attached_ball = null
 
+
 func attach_ball(ball):
-	if(self.is_in_own_field):
+	if(self.is_in_own_field and attached_ball == null):
 		ball.attach(self)
 		attached_ball = ball
 		get_parent().current_player = self

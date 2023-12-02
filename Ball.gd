@@ -97,6 +97,7 @@ func drop(var vector, var speed_of_player,var shooting_player):
 	direction = vector
 	ball_is_shot = shooting_player
 	detach()	
+	emit_signal("ball_has_crossed_field", ball_is_in_left_field)#happens after the fact
 
 
 
@@ -153,15 +154,16 @@ func borderd():
 #this should actually alert
 func _on_Ball_shadow_area_entered(area):
 	if(area.name == "area_player"):
-
+		ball_is_in_left_field = true
 		if(attached_to == null):#might lead to problems while jumping
-			ball_is_in_left_field = true
+
 			emit_signal("ball_has_crossed_field", ball_is_in_left_field)
 	if(area.name == "area_enemy"):
 
 		print("!ball is in left field")
+		ball_is_in_left_field = false	
 		if(attached_to == null):
-			ball_is_in_left_field = false	
+
 			emit_signal("ball_has_crossed_field", ball_is_in_left_field)
 
 

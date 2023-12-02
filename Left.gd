@@ -85,8 +85,8 @@ func _process(delta):
 	
 	update()
 	
-	min_dist_team = get_player_closest_to_look_direction(team_players)
-	min_dist_opponent = get_player_closest_to_look_direction(opponent_players)
+	min_dist_team = get_player_closest_to_look_direction(team_players, false)
+	min_dist_opponent = get_player_closest_to_look_direction(opponent_players, true)
 	
 	pass_player = get_child(min_dist_team)
 	shoot_player = get_parent().get_node(opponent_label).get_child(min_dist_opponent)
@@ -193,8 +193,8 @@ func read_input():
 		cCommand.execute(current_player)
 
 
-func get_player_closest_to_look_direction(var players):
-
+func get_player_closest_to_look_direction(var players, var excludeSpy):
+	
 	var min_dist = 0
 	var angles = []
 	var current_angle_to_min = rad2deg(current_player.position.angle_to_point(players[min_dist].global_position))
@@ -213,6 +213,8 @@ func get_player_closest_to_look_direction(var players):
 			var line_between = current_player.global_position + player.global_position 
 			if(player == current_player):
 				angles.append(1000)
+			elif(excludeSpy and player.spy):
+				angles.append(999)
 			else:	
 				var angle = rad2deg(player.global_position.angle_to_point(current_player.position))
 				if (angle < 0):

@@ -39,6 +39,7 @@ func get_actions(current_player, delta):
 	var bCommand = command.BCommand.new()
 	var cCommand = command.CCommand.new()	
 	var bCommandRelease = command.BCommandRelease.new()
+	var moveCommand = command.MoveCommand.new()
 
 
 	if(current_player.get_parent().name == "Left" and ball_side_left and ball_is_lying and  current_player.attached_ball==null ):
@@ -53,6 +54,8 @@ func get_actions(current_player, delta):
 	if(throw):		
 		throw=false
 		print("trying to throw")
+
+
 		bCommand.execute(current_player)
 		yield(get_tree().create_timer(2.0), "timeout")
 
@@ -62,7 +65,7 @@ func get_actions(current_player, delta):
 
 		#start timmer for throw release
 		
-		#prevent trying to pass if trying to throw
+		#prevent trying to pass   if trying to throw
 
 	
 	elif(passes>0 and !ball_is_lying and !throw and has_ball and current_player.attached_ball != null):	

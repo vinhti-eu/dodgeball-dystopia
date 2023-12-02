@@ -54,7 +54,6 @@ position = Vector2( 152, 139 )
 
 [node name="Left" type="YSort" parent="YSort"]
 script = ExtResource( 6 )
-isPlayer = false
 
 [node name="Player" parent="YSort/Left" instance=ExtResource( 1 )]
 position = Vector2( 198, 191 )
@@ -95,9 +94,6 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="AnimatedSprite" parent="YSort/Right/Player/Body" index="0"]
-frame = 1
-
 [node name="shadow" parent="YSort/Right/Player" index="1"]
 __meta__ = {
 "_edit_lock_": true
@@ -128,9 +124,6 @@ spy = true
 __meta__ = {
 "_edit_lock_": true
 }
-
-[node name="AnimatedSprite" parent="YSort/Right/Player5/Body" index="0"]
-frame = 1
 
 [node name="shadow" parent="YSort/Right/Player5" index="1"]
 __meta__ = {

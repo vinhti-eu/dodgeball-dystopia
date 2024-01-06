@@ -46,7 +46,7 @@ func get_actions(current_player, delta):
 		run_to_ball(current_player)
 	if(current_player.get_parent().name == "Right" and !ball_side_left and ball_is_lying  and  current_player.attached_ball==null):
 		run_to_ball(current_player)	
-		print("runTOBALLRIGHT")
+
 	
 
 
@@ -86,7 +86,7 @@ func get_actions(current_player, delta):
 func run_to_ball(player):
 	var move_command = command.MoveCommand.new()
 	move_command.executeMove(player, ball.global_position - player.global_position)
-	print("run_to_ball with ball_pos",ball.global_position)
+
 		
 func run_with_ball(player):
 	var move_command = command.MoveCommand.new()
@@ -114,7 +114,6 @@ func setThrow():
 
 func _on_Ball_ball_stopped_on_floor(isLying):
 	ball_is_lying = isLying
-	print(self.name," BALLISLYING",isLying)
 	passes = 0
 
 
@@ -132,4 +131,4 @@ func _on_Right_got_ball(team):
 
 func _on_Ball_ball_has_crossed_field(side):
 	ball_side_left = side
-	print("ball has crossed with: ", side)
+

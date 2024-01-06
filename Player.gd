@@ -4,6 +4,7 @@ extends KinematicBody2D
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
+var health = 1
 var direction = Vector2();
 var run_speed = 100
 var attached_ball = null
@@ -22,6 +23,7 @@ var flip = Vector2(1,1)
 export var spy = false
 var location_change_time = 0
 var is_in_own_field
+signal player_koed(player)
 
 
 
@@ -32,10 +34,12 @@ enum STATE{
 	main,
 	knocked,
 	throwing,
-	throwing_post
-	passing
-	passing_post
-	freezing
+	throwing_post,
+	passing,
+	passing_post,
+	freezing,
+	KO,
+	removed
 }
 
 var state = STATE.main
@@ -50,7 +54,7 @@ enum TACTICS{
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-
+	get_parent().connect("player_koed", self, "_on_player_koed")
 
 	
 	location_change_time = 0
@@ -86,6 +90,27 @@ func _physics_process(delta):
 		passing_post()
 	elif(self.state==STATE.freezing):
 		freezing()
+	elif(self.state==STATE.KO):
+		koed_state()
+	elif(self.state==STATE.removed):
+		removed_state()	
+
+
+
+
+func removed_state():
+	pass
+
+func koed_state():
+	get_node("Body").get_node("AnimatedSprite").modulate = (Color(1.0, 0.2,0.2,0.4))
+	self.direction = Vector2(0,0)
+	get_node("Body/AnimatedSprite").animation = "knocked"
+	get_parent().get_parent().get_node("Left").emit_signal('got_ball',get_parent().name)
+	print("Before emitting player_koed signal")
+	emit_signal('player_koed', self);
+	self.state = STATE.removed
+	
+	
 
 
 func freezing():
@@ -133,7 +158,7 @@ func throwing_post_state():
 
 	self.state= STATE.main
 
-func throwing_state():
+func throwing_state():		
 	if(attached_ball != null):
 		direction= Vector2(0,0);	
 		get_node("Body").get_node("AnimatedSprite").modulate = (Color(1,1,0,1))
@@ -232,7 +257,10 @@ func knocked_state():
 		z_velocity = 0
 		knockback_direction = Vector2()
 		knockback_speed = 0
-		self.state = STATE.main
+		if(self.health <= 0):
+			self.state = STATE.KO
+		else: 
+			self.state = STATE.main
 	if(knockback_direction.length() !=0):
 		move_and_slide(knockback_direction * knockback_speed);
 
@@ -334,7 +362,7 @@ func _on_ballbox_area_entered(area):
 				hit_by_ball(ball)
 
 func hit_by_ball(ball):
-
+	self.health = self.health -1
 	self.state = STATE.knocked
 	self.knockback_speed = ball.speed /6
 	self.z_velocity = knockback_speed/30#/60 2

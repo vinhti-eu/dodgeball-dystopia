@@ -44,6 +44,16 @@ enum TACTICS{
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
+	
+	# this connects to all the children signals
+	# should replace any ineditor connection
+	var emitters = get_children()
+
+	for e in emitters:
+		e.connect("player_koed", self, "_on_player_koed")
+
+	
+	
 	CPUController = get_parent().get_node("CPUController" + self.name)
 	
 	
@@ -65,6 +75,12 @@ func _ready():
 	timer.start()
 
 
+func _on_player_koed(player):
+	print("KOEEEEEED with player:", player)
+	autoSwitch()
+	#the player got koed and removed from own players, now needs to be removed from oppenets
+	#by connection through enemy same signal but different node
+	team_players.erase(player)
 
 func on_timer_timeout():
 	for i in range(team_players.size()):
@@ -233,6 +249,9 @@ func get_player_closest_to_look_direction(var players, var excludeSpy):
 func switch(var player):
 	if(player.is_in_own_field):
 		current_player = player
+		
+func autoSwitch():
+	switch(pass_player)
 
 func run_to_center(player):
 	var timer = Timer.new()

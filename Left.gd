@@ -25,6 +25,7 @@ export var p_a = "p1_a"
 export var p_b = "p1_b"
 export var p_c = "p1_c"
 
+#export, since teams need to be swapped left-right
 export var team_label = "Left"
 export var opponent_label = "Right"
 
@@ -43,13 +44,21 @@ enum TACTICS{
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
 	CPUController = get_parent().get_node("CPUController" + self.name)
 	
 	
 	current_player = get_child(0)
 	team_players = get_children()
 	opponent_players = get_parent().get_node(opponent_label).get_children()
+	
+	# this connects to all the children signals
+	# should replace any ineditor connection
+	for e in team_players:
+		e.connect("player_koed", self, "_on_player_koed")
+		
+	for e in opponent_players:
+		e.connect("player_koed", self, "_on_opponent_koed")	
+		
 	
 	for i in rand_range(0,team_players.size() ):
 		set_playerpos(i)
@@ -65,6 +74,24 @@ func _ready():
 	timer.start()
 
 
+func _on_player_koed(player):
+	print("KOEEEEEED with player:", player)
+	autoSwitch()
+	#the player got koed and removed from own players, now needs to be removed from oppenets
+	#by connection through enemy same signal but different node
+	print(player)
+	print(team_players)
+
+	team_players.erase(player)
+	print(team_players)
+
+
+func _on_opponent_koed(player):
+	print("Enemy koed:", player)
+
+	opponent_players.erase(player)
+
+
 
 func on_timer_timeout():
 	for i in range(team_players.size()):
@@ -73,8 +100,9 @@ func on_timer_timeout():
 		else:
 			team_players[i].location_change_time = team_players[i].location_change_time-4
 		if team_players[i].location_change_time <= 0:
-			set_playerpos(i)
-			team_players[i].location_change_time = randf()  * 10
+			if(team_players.size()>=i):
+				set_playerpos(i)
+				team_players[i].location_change_time = randf()  * 10
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -84,12 +112,17 @@ func _process(delta):
 		CPUController.get_actions(current_player, tactics)
 	
 	update()
+
 	
 	min_dist_team = get_player_closest_to_look_direction(team_players, false)
 	min_dist_opponent = get_player_closest_to_look_direction(opponent_players, true)
 	
-	pass_player = get_child(min_dist_team)
-	shoot_player = get_parent().get_node(opponent_label).get_child(min_dist_opponent)
+	#refer to TEAM players
+	pass_player = team_players[min_dist_team]
+	#shoot_player = get_parent().get_node(opponent_label).get_child(min_dist_opponent)
+	shoot_player = opponent_players[min_dist_opponent]
+	
+
 	
 
 
@@ -225,14 +258,15 @@ func get_player_closest_to_look_direction(var players, var excludeSpy):
 		if(abs(angles[i])< abs(angles[min_dist])):
 			min_dist = i
 	
-	
-	
 	return min_dist
 
 
 func switch(var player):
 	if(player.is_in_own_field):
 		current_player = player
+		
+func autoSwitch():
+	switch(pass_player)
 
 func run_to_center(player):
 	var timer = Timer.new()
@@ -253,7 +287,8 @@ func on_timer_timeout_run_to_center(player):
 			switch(pass_player)
 	else:
 		player.setFreezing(0)
-	set_playerpos(player.get_index())
+	if(team_players.size()>player.get_index()):
+		set_playerpos(player.get_index())
 	
 
 

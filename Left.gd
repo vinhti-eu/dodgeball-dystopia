@@ -34,6 +34,7 @@ export var opponent_label = "Right"
 signal got_ball(team)
 
 
+
 enum TACTICS{
 	neutral,
 	offense,

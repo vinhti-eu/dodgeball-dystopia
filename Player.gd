@@ -24,7 +24,7 @@ export var spy = false
 var location_change_time = 0
 var is_in_own_field
 signal player_koed(player)
-
+signal ball_thrown(player)
 
 
 var knockback_speed = 200
@@ -55,6 +55,9 @@ enum TACTICS{
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	get_parent().connect("player_koed", self, "_on_player_koed")
+	
+	get_node("/root/@Arena@2").get_node("Camera").connect("ball_thrown", self,"_on_ball_thrown")
+	
 
 	
 	location_change_time = 0
@@ -183,6 +186,7 @@ func executeBallThrow():
 			throw_direction = throw_direction + Vector2(1.2,0) 
 			throw_direction = throw_direction.normalized() * Arena.y_ratio
 		throw_ball(throw_direction)
+
 		throwing_post_state()
 	
 
@@ -334,6 +338,7 @@ func has_touched_enemy_field():
 	get_parent().run_to_center(self)
 
 func throw_ball(direction):
+	emit_signal('ball_thrown', self)
 	attached_ball.throw(direction,1, self)
 	attached_ball = null
 
@@ -344,7 +349,6 @@ func attach_ball(ball):
 		attached_ball = ball
 		get_parent().current_player = self
 		#always called on attachement 
-		print("should be emitted now")
 		get_parent().get_parent().get_node("Left").emit_signal('got_ball',get_parent().name)
 		get_parent().get_parent().get_node("Right").emit_signal('got_ball',get_parent().name)
 

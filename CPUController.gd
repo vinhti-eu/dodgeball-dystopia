@@ -25,7 +25,7 @@ func _ready():
 
 	
 	var timer2 = Timer.new()
-	timer2.set_wait_time(4)
+	timer2.set_wait_time(3)
 	timer2.set_one_shot(false)
 	timer2.connect("timeout", self, "on_timer_timeout_pass")
 
@@ -97,7 +97,7 @@ func run_with_ball(player):
 func on_timer_timeout_pass():
 
 	if(passes <= 0 ):
-		if(rand_range(0,100) < 80):
+		if(rand_range(0,100) < 70):
 			passes = randi() % 3 + 1
 		else: 
 			setThrow()

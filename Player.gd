@@ -421,8 +421,8 @@ func _on_shadow_area_entered(area):
 	
 	if(area.get_name()=='Ball_shadow'):
 		ball_shadow_is_in_shadow = true
-
-	if(area.name == "area_player" and get_parent().name == "Right" or area.name == "area_enemy" and get_parent().name == "Left"):
+	print(area.get_parent().name)
+	if(area.get_parent().name == "area_player_all" and get_parent().name == "Right" or area.get_parent().name == "area_enemy_all" and get_parent().name == "Left"):
 		self.is_in_own_field = false
 		if(!jumping):
 			if(self.attached_ball != null):
@@ -443,7 +443,7 @@ func _on_shadow_area_entered(area):
 func _on_shadow_area_exited(area):
 	if(area.get_name()=='Ball_shadow'):
 		ball_shadow_is_in_shadow = false
-	if(area.name == "area_player" and get_parent().name == "Right" or area.name == "area_enemy" and get_parent().name == "Left"):	
+	if(area.get_parent().name == "area_player_all" and get_parent().name == "Right" or area.get_parent().name == "area_enemy_all" and get_parent().name == "Left"):	
 		self.is_in_own_field = true	
 		
 func drop_ball(direction):

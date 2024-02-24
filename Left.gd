@@ -47,6 +47,7 @@ enum TACTICS{
 func _ready():
 	CPUController = get_parent().get_node("CPUController" + self.name)
 	
+	get_parent().get_node("YSort_ball").get_node("Ball").connect("ball_has_crossed_field", self, "_on_ball_has_crossed_field")
 	
 	current_player = get_child(0)
 	team_players = get_children()
@@ -64,7 +65,6 @@ func _ready():
 	for i in rand_range(0,team_players.size() ):
 		set_playerpos(i)
 	
-		
 
 	var timer = Timer.new()
 	timer.set_wait_time(1)
@@ -93,6 +93,12 @@ func _on_opponent_koed(player):
 	opponent_players.erase(player)
 
 
+func _on_ball_has_crossed_field(side,spy):
+	if(spy):
+		for player in team_players:
+			if(player.spy):
+				switch(player)
+		
 
 func on_timer_timeout():
 	for i in range(team_players.size()):

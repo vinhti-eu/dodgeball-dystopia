@@ -129,6 +129,7 @@ func _on_Right_got_ball(team):
 
 
 
-func _on_Ball_ball_has_crossed_field(side):
+func _on_Ball_ball_has_crossed_field(side, spy):
 	ball_side_left = side
+	
 

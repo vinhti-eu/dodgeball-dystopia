@@ -15,9 +15,10 @@ var ball_is_shot = null #identifies if the ball can hurt someone
 var ball_is_passed = null
 
 var ball_is_in_left_field = true
+var ball_is_in_spy = false
 var ball_is_lying = true
 signal ball_stopped_on_floor(isLying)
-signal ball_has_crossed_field(side)
+signal ball_has_crossed_field(side, spy)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -50,8 +51,7 @@ func _physics_process(delta):
 				direction= direction * 0.5
 				
 			else:
-				#there is a bug, because the thinks that after the pass, the ball is on the ground for a splitsecond
-				print("BUGBUGBUGBUGBUGBUG with z =", z, "important:" , ball_is_passed, z_velocity, "speed is ", speed)
+				#there is a bug, because the thinks that after the pass, the ball is on the ground for a splitsecondf
 				jumping = false
 				z = 0
 				direction = Vector2.ZERO
@@ -97,7 +97,7 @@ func drop(var vector, var speed_of_player,var shooting_player):
 	direction = vector
 	ball_is_shot = shooting_player
 	detach()	
-	emit_signal("ball_has_crossed_field", ball_is_in_left_field)#happens after the fact
+	emit_signal("ball_has_crossed_field", ball_is_in_left_field, ball_is_in_spy)#happens after the fact
 
 
 
@@ -153,17 +153,22 @@ func borderd():
 
 #this should actually alert
 func _on_Ball_shadow_area_entered(area):
-	if(area.name == "area_player"):
+	if(area.get_parent().name == "area_player_all"):
 		ball_is_in_left_field = true
-		if(attached_to == null):#might lead to problems while jumping
-
-			emit_signal("ball_has_crossed_field", ball_is_in_left_field)
-	if(area.name == "area_enemy"):
-
-		print("!ball is in left field")
+		if(area.name == "area_player_spy"):
+			ball_is_in_spy = true
+		else:
+			ball_is_in_spy = false
+		if(attached_to == null):#might lead to problems while jumping	
+			emit_signal("ball_has_crossed_field", ball_is_in_left_field, ball_is_in_spy)
+	if(area.get_parent().name == "area_enemy_all"):
 		ball_is_in_left_field = false	
+		if(area.name == "area_enemy_spy"):
+			ball_is_in_spy = true
+		else:
+			ball_is_in_spy = false
+		
 		if(attached_to == null):
-
-			emit_signal("ball_has_crossed_field", ball_is_in_left_field)
+			emit_signal("ball_has_crossed_field", ball_is_in_left_field, ball_is_in_spy)
 
 

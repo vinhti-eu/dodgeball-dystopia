@@ -4,7 +4,7 @@ extends KinematicBody2D
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
-var health = 1
+var health = 3
 var direction = Vector2();
 var run_speed = 100
 var attached_ball = null
@@ -24,7 +24,7 @@ export var spy = false
 var location_change_time = 0
 var is_in_own_field
 signal player_koed(player)
-
+signal ball_thrown(player)
 
 
 var knockback_speed = 200
@@ -55,6 +55,9 @@ enum TACTICS{
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	get_parent().connect("player_koed", self, "_on_player_koed")
+	
+	get_node("/root/@Arena@2").get_node("Camera").connect("ball_thrown", self,"_on_ball_thrown")
+	
 
 	
 	location_change_time = 0
@@ -120,6 +123,7 @@ func freezing():
 
 func unfreeze():
 	self.state = STATE.main
+
 	
 func setFreezing(freezetime):
 	if(freezetime > 0):
@@ -183,11 +187,14 @@ func executeBallThrow():
 			throw_direction = throw_direction + Vector2(1.2,0) 
 			throw_direction = throw_direction.normalized() * Arena.y_ratio
 		throw_ball(throw_direction)
+
 		throwing_post_state()
 	
 
 
 func main_state():
+	
+	
 	get_node("Body").get_node("AnimatedSprite").modulate = (Color(1, 1 , 1, 1 ))
 	hand_x_offset = Vector2(7,0) * flip
 	
@@ -244,7 +251,7 @@ func main_state():
 		ready_to_catch_pass = false;
 		
 func knocked_state():
-
+	jumping = true
 	self.get_node("Body/AnimatedSprite").animation = "knocked"
 	
 	if(z>=0):
@@ -253,6 +260,7 @@ func knocked_state():
 		self.get_node("Body").position.y = z_position - z
 
 	else:
+		jumping= false
 		z = 0
 		z_velocity = 0
 		knockback_direction = Vector2()
@@ -260,9 +268,11 @@ func knocked_state():
 		if(self.health <= 0):
 			self.state = STATE.KO
 		else: 
-			self.state = STATE.main
+			landing_from_jump()
+			self.state= STATE.main
 	if(knockback_direction.length() !=0):
 		move_and_slide(knockback_direction * knockback_speed);
+
 
 
 func read_input():
@@ -301,6 +311,7 @@ func _draw():
 
 func landing_from_jump():
 	if(!self.is_in_own_field):
+		#TODO fix order of operation so that freezing happens first anyways
 		has_touched_enemy_field()
 
 func passing_state():
@@ -334,6 +345,7 @@ func has_touched_enemy_field():
 	get_parent().run_to_center(self)
 
 func throw_ball(direction):
+	emit_signal('ball_thrown', self)
 	attached_ball.throw(direction,1, self)
 	attached_ball = null
 
@@ -344,7 +356,6 @@ func attach_ball(ball):
 		attached_ball = ball
 		get_parent().current_player = self
 		#always called on attachement 
-		print("should be emitted now")
 		get_parent().get_parent().get_node("Left").emit_signal('got_ball',get_parent().name)
 		get_parent().get_parent().get_node("Right").emit_signal('got_ball',get_parent().name)
 

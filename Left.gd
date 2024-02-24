@@ -34,6 +34,7 @@ export var opponent_label = "Right"
 signal got_ball(team)
 
 
+
 enum TACTICS{
 	neutral,
 	offense,
@@ -280,7 +281,7 @@ func run_to_center(player):
 
 
 func on_timer_timeout_run_to_center(player):
-
+	print("jau freezing")
 	if(player == current_player):
 		player.setFreezing(0.5)
 		if(pass_player!= null):

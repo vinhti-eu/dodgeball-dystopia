@@ -62,7 +62,7 @@ func _physics_process(delta):
 				#	p.ready_to_catch_pass = false
 				position.x = round(position.x)
 				position.y = round(position.y)	
-				print("THIS IS THE MOMENT WHERE TO SIGNAL SHOULD BE CALLED")
+
 
 				emit_floor_signal()
 		z = z+ z_velocity 

@@ -35,6 +35,8 @@ func _ready():
 	for e in players2:
 		e.connect("ball_thrown", self, "_on_ball_thrown")	
 		
+	get_parent().get_node("YSort/YSort_ball/Ball").connect("ball_stopped_on_floor",self, "_on_ball_stoopen_on__floor")
+		
 	
 	postion_to_reach_x = self.position.x
 	postion_to_reach_y = self.position.y
@@ -51,6 +53,8 @@ func _process(delta):
 		followRight(delta)
 	elif(self.state ==  STATE.ballThrown):
 		ballThrown()
+	elif(self.state ==  STATE.ballLying):
+		ballLying()
 
 
 func auto():
@@ -74,7 +78,14 @@ func ballThrown():
 	postion_to_reach_x = get_parent().get_node("YSort/YSort_ball/Ball").global_position.x
 	postion_to_reach_y = get_parent().get_node("YSort/YSort_ball/Ball").global_position.y
 	gotoPosition(0.04,0.06)
-
+	
+	
+func ballLying():
+	postion_to_reach_x = get_parent().get_node("YSort/YSort_ball/Ball").global_position.x
+	postion_to_reach_y = get_parent().get_node("YSort/YSort_ball/Ball").global_position.y
+	gotoPosition(0.02,0.03)
+	
+	
 func gotoPosition(x_increase, y_increase):
 	self.position.x = self.position.x + ((postion_to_reach_x-self.position.x) * x_increase)
 	self.position.y = self.position.y + ((postion_to_reach_y-self.position.y) * y_increase)
@@ -104,3 +115,6 @@ func _on_Right_got_ball(team):
 		state = STATE.followLeft
 	if(team == "Right"):
 		state = STATE.followRight
+
+func _on_ball_stoopen_on__floor(stooped):
+	self.state=STATE.ballLying

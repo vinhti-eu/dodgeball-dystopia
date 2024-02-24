@@ -4,7 +4,7 @@ extends KinematicBody2D
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
-var health = 1
+var health = 3
 var direction = Vector2();
 var run_speed = 100
 var attached_ball = null
@@ -123,6 +123,7 @@ func freezing():
 
 func unfreeze():
 	self.state = STATE.main
+
 	
 func setFreezing(freezetime):
 	if(freezetime > 0):
@@ -192,6 +193,8 @@ func executeBallThrow():
 
 
 func main_state():
+	
+	
 	get_node("Body").get_node("AnimatedSprite").modulate = (Color(1, 1 , 1, 1 ))
 	hand_x_offset = Vector2(7,0) * flip
 	
@@ -248,7 +251,7 @@ func main_state():
 		ready_to_catch_pass = false;
 		
 func knocked_state():
-
+	jumping = true
 	self.get_node("Body/AnimatedSprite").animation = "knocked"
 	
 	if(z>=0):
@@ -257,6 +260,7 @@ func knocked_state():
 		self.get_node("Body").position.y = z_position - z
 
 	else:
+		jumping= false
 		z = 0
 		z_velocity = 0
 		knockback_direction = Vector2()
@@ -264,9 +268,11 @@ func knocked_state():
 		if(self.health <= 0):
 			self.state = STATE.KO
 		else: 
-			self.state = STATE.main
+			landing_from_jump()
+			self.state= STATE.main
 	if(knockback_direction.length() !=0):
 		move_and_slide(knockback_direction * knockback_speed);
+
 
 
 func read_input():
@@ -305,6 +311,7 @@ func _draw():
 
 func landing_from_jump():
 	if(!self.is_in_own_field):
+		#TODO fix order of operation so that freezing happens first anyways
 		has_touched_enemy_field()
 
 func passing_state():

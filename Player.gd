@@ -421,7 +421,6 @@ func _on_shadow_area_entered(area):
 	
 	if(area.get_name()=='Ball_shadow'):
 		ball_shadow_is_in_shadow = true
-	print(area.get_parent().name)
 	if(area.get_parent().name == "area_player_all" and get_parent().name == "Right" or area.get_parent().name == "area_enemy_all" and get_parent().name == "Left"):
 		self.is_in_own_field = false
 		if(!jumping):

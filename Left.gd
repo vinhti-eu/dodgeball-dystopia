@@ -29,6 +29,9 @@ export var p_c = "p1_c"
 export var team_label = "Left"
 export var opponent_label = "Right"
 
+# testing a feature where player gets autoswapped if targeted by throw
+export var autoswap_on_targeted = true;
+
 
 
 signal got_ball(team)
@@ -94,10 +97,12 @@ func _on_opponent_koed(player):
 
 
 func _on_ball_has_crossed_field(side,spy):
-	if(spy):
-		for player in team_players:
-			if(player.spy):
-				switch(player)
+	if(side and team_label == "Left" or !side and team_label == "Right"):
+		if(spy):
+			for player in team_players:
+				if(player.spy):
+					switch(player)
+
 		
 
 func on_timer_timeout():

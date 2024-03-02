@@ -25,7 +25,7 @@ func _ready():
 
 	
 	var timer2 = Timer.new()
-	timer2.set_wait_time(3)
+	timer2.set_wait_time(2.5)
 	timer2.set_one_shot(false)
 	timer2.connect("timeout", self, "on_timer_timeout_pass")
 

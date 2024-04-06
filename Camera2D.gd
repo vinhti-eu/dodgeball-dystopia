@@ -8,6 +8,15 @@ var postion_to_reach_x
 var postion_to_reach_y
 var team = "Left"
 
+var trauma = 0.0
+var trauma_decay = 1.2
+var trauma_power = 2
+export var max_offset = Vector2(10, 7.5)
+var noise_y = 0
+export var shake = false
+
+onready var noise = OpenSimplexNoise.new()
+
 var player_to_go_to
 
 var state = STATE.auto
@@ -24,6 +33,10 @@ enum STATE{
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	noise.seed = randi()
+	noise.period = 4
+	noise.octaves = 2
+	
 	var players
 	var players2
 	players = get_parent().get_node("YSort/Left").get_children()
@@ -34,9 +47,12 @@ func _ready():
 	# should replace any ineditor connection
 	for e in players:
 		e.connect("ball_thrown", self, "_on_ball_thrown")
+		e.connect("player_hit", self, "_on_player_hit")
 		
 	for e in players2:
 		e.connect("ball_thrown", self, "_on_ball_thrown")	
+		e.connect("player_hit", self, "_on_player_hit")
+	
 		
 	get_parent().get_node("YSort/YSort_ball/Ball").connect("ball_stopped_on_floor",self, "_on_ball_stoopen_on__floor")
 		
@@ -60,7 +76,16 @@ func _process(delta):
 		ballLying()
 	elif(self.state == STATE.go_to_player):
 		go_to_player()
-
+	if(shake):
+		if(trauma):
+			trauma = max(trauma - trauma_decay * delta, 0)
+			shake_screen()
+			
+func shake_screen():
+	var amount = pow(trauma, trauma_power)
+	noise_y += 1
+	offset.x = max_offset.x * amount * noise.get_noise_2d(noise.seed*2, noise_y)
+	offset.y = max_offset.y * amount * noise.get_noise_2d(noise.seed*3, noise_y)
 
 func auto():
 	pass
@@ -110,6 +135,7 @@ func _on_ball_thrown(player, player_aimed_at, actual_throw):
 	print("camera state swap")
 	player_to_go_to = player_aimed_at
 	go_to_player()
+
 	#self.state= STATE.ballThrown
 
 
@@ -131,3 +157,9 @@ func _on_Right_got_ball(team):
 
 func _on_ball_stoopen_on__floor(stooped):
 	self.state=STATE.ballLying
+
+func add_trauma(trauma):
+	self.trauma = self.trauma + trauma
+	
+func _on_player_hit(player):
+	add_trauma(0.8)

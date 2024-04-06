@@ -25,12 +25,13 @@ var location_change_time = 0
 var is_in_own_field
 signal player_koed(player)
 signal ball_thrown(player, player_aimed, actual_throw)
+signal player_hit(player)
 
 
 var knockback_speed = 200
 var knockback_direction = Vector2()
 var catch_time = 0.5 #seconds
-var auto_catch_chance = 1
+export var auto_catch_chance = 0.15
 
 enum STATE{
 	main,
@@ -58,7 +59,7 @@ enum TACTICS{
 func _ready():
 	get_parent().connect("player_koed", self, "_on_player_koed")
 	
-	get_node("/root/@Arena@2").get_node("Camera").connect("ball_thrown", self,"_on_ball_thrown")
+	#get_node("/root/@Arena@2").get_node("Camera").connect("ball_thrown", self,"_on_ball_thrown")
 	
 
 	
@@ -174,7 +175,7 @@ func throwing_post_state():
 
 func throwing_state():		
 	if(attached_ball != null):
-		emit_signal("ball_thrown", self, get_parent().shoot_player, false) #TODO XKCD
+
 		direction= Vector2(0,0);	
 		get_node("Body").get_node("AnimatedSprite").modulate = (Color(1,1,0,1))
 		hand_x_offset = Vector2(-23,-4) * flip
@@ -185,6 +186,7 @@ func throwing_state():
 
 	
 func executeBallThrow():
+	emit_signal("ball_thrown", self, get_parent().shoot_player, false) #TODO XKCD
 	if(attached_ball != null):	
 		hand_x_offset = Vector2(15,-4) * flip
 		attached_ball.position = self.position + hand_x_offset 
@@ -413,6 +415,7 @@ func _on_ballbox_area_entered(area):
 					attach_ball(ball)
 
 func hit_by_ball(ball):
+	emit_signal("player_hit",self)
 	self.health = self.health -1
 	self.state = STATE.knocked
 	self.knockback_speed = ball.speed /6

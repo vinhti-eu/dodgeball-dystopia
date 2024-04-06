@@ -30,6 +30,7 @@ signal ball_thrown(player, player_aimed, actual_throw)
 var knockback_speed = 200
 var knockback_direction = Vector2()
 var catch_time = 0.5 #seconds
+var auto_catch_chance = 1
 
 enum STATE{
 	main,
@@ -376,6 +377,7 @@ func throw_ball(direction):
 
 
 func attach_ball(ball):
+	ball.ball_is_shot = null
 	if(self.is_in_own_field and attached_ball == null):
 		ball.attach(self)
 		attached_ball = ball
@@ -392,14 +394,23 @@ func pass_ball(player):
 
 func _on_ballbox_area_entered(area):
 		var ball = area.get_parent();
-		if(ball.get_name()=='Ball'):
+		if(ball.get_name()=='Ball' and ball.attached_to == null):
 			ball_is_in_area = ball
 			if(ball.ball_is_shot != null and ball.ball_is_shot !=self 
 				and self.ball_shadow_is_in_shadow and self.state != STATE.knocked):
 				if(self.state != STATE.catching):
-					hit_by_ball(ball)
+					#if the non CPU player controls, no autochance
+					if(rand_range(0,1) > auto_catch_chance):
+							
+						hit_by_ball(ball)
+					else:
+						if(get_parent().current_player == self and get_parent().isPlayer):
+							hit_by_ball(ball)
+						else:	
+							print(get_parent().current_player != self, !get_parent().isPlayer)
+							attach_ball(ball)
 				else:
-					attach_ball(ball_is_in_catch)
+					attach_ball(ball)
 
 func hit_by_ball(ball):
 	self.health = self.health -1

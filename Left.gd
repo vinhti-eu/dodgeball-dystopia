@@ -63,6 +63,7 @@ func _ready():
 		
 	for e in opponent_players:
 		e.connect("player_koed", self, "_on_opponent_koed")	
+		e.connect("ball_thrown", self, "_on_ball_thrown")#by opponent	
 		
 	
 	for i in rand_range(0,team_players.size() ):
@@ -77,6 +78,15 @@ func _ready():
 	get_node("/root/Arena").add_child(timer)
 	timer.start()
 
+
+func _on_ball_thrown(opponent, own_player, acutal_throw):
+	# this will autoswap to the player aimed at
+	# PLAYTEST if it is better turned off or just to swap the swapping prio
+	# or maybe only swap if the player is a spy
+	if(autoswap_on_targeted and own_player!=null):
+		if(own_player.spy):
+			switch(own_player)
+	
 
 func _on_player_koed(player):
 	print("KOEEEEEED with player:", player)

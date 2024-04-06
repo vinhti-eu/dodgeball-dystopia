@@ -24,11 +24,12 @@ export var spy = false
 var location_change_time = 0
 var is_in_own_field
 signal player_koed(player)
-signal ball_thrown(player)
+signal ball_thrown(player, player_aimed, actual_throw)
 
 
 var knockback_speed = 200
 var knockback_direction = Vector2()
+var catch_time = 0.5 #seconds
 
 enum STATE{
 	main,
@@ -39,7 +40,8 @@ enum STATE{
 	passing_post,
 	freezing,
 	KO,
-	removed
+	removed,
+	catching
 }
 
 var state = STATE.main
@@ -47,8 +49,7 @@ var state = STATE.main
 enum TACTICS{
 	neutral,
 	offense,
-	defense
-	
+	defense	
 }
 
 
@@ -97,9 +98,17 @@ func _physics_process(delta):
 		koed_state()
 	elif(self.state==STATE.removed):
 		removed_state()	
+	elif(self.state==STATE.catching): 
+		catching_state()
 
 
+func catching_state():
+		get_node("Body").get_node("AnimatedSprite").modulate = (Color(0.5, 0.5,0.5,1))
 
+
+func uncatch():
+	print('uncatch')
+	self.state = STATE.main
 
 func removed_state():
 	pass
@@ -164,6 +173,7 @@ func throwing_post_state():
 
 func throwing_state():		
 	if(attached_ball != null):
+		emit_signal("ball_thrown", self, get_parent().shoot_player, false) #TODO XKCD
 		direction= Vector2(0,0);	
 		get_node("Body").get_node("AnimatedSprite").modulate = (Color(1,1,0,1))
 		hand_x_offset = Vector2(-23,-4) * flip
@@ -180,13 +190,15 @@ func executeBallThrow():
 		var throw_direction
 		if(get_parent().shoot_player !=null):
 			throw_direction = (get_parent().shoot_player.get_node("shadow").get_node("walkbox").global_position - self.hand_x_offset  - self.get_node("shadow").get_node("walkbox").global_position).normalized()
-			
+			emit_signal('ball_thrown', self, get_parent().shoot_player ,true)
 		else:
 			throw_direction = direction 
 			throw_direction.x = abs(throw_direction.x)
 			throw_direction = throw_direction + Vector2(1.2,0) 
 			throw_direction = throw_direction.normalized() * Arena.y_ratio
+			emit_signal('ball_thrown', self, null ,true)
 		throw_ball(throw_direction)
+
 
 		throwing_post_state()
 	
@@ -291,12 +303,26 @@ func aCommand():
 		jump()
 
 func bCommand():
-	if(attached_ball != null and state==STATE.main):	
-		state = STATE.throwing
+	if(state==STATE.main):	
+		if(attached_ball != null):
+			state = STATE.throwing
+		elif (!jumping):
+			var timer = Timer.new()
+			timer.set_wait_time(catch_time)
+			timer.set_one_shot(true)
+			timer.connect("timeout", self, "uncatch")
+			add_child(timer)
+			timer.start()
+			catch_ball()
 		
+		#TODO PREVENT ON CATCH STATE
 func bCommandRelease():
 	if(attached_ball != null and state==STATE.throwing):
 		executeBallThrow()
+
+
+func catch_ball():
+	self.state = STATE.catching
 
 func cCommand():
 	if(state==STATE.main or state == STATE.throwing):
@@ -345,7 +371,6 @@ func has_touched_enemy_field():
 	get_parent().run_to_center(self)
 
 func throw_ball(direction):
-	emit_signal('ball_thrown', self)
 	attached_ball.throw(direction,1, self)
 	attached_ball = null
 
@@ -369,8 +394,12 @@ func _on_ballbox_area_entered(area):
 		var ball = area.get_parent();
 		if(ball.get_name()=='Ball'):
 			ball_is_in_area = ball
-			if(ball.ball_is_shot != null and ball.ball_is_shot !=self and self.ball_shadow_is_in_shadow and self.state != STATE.knocked):
-				hit_by_ball(ball)
+			if(ball.ball_is_shot != null and ball.ball_is_shot !=self 
+				and self.ball_shadow_is_in_shadow and self.state != STATE.knocked):
+				if(self.state != STATE.catching):
+					hit_by_ball(ball)
+				else:
+					attach_ball(ball_is_in_catch)
 
 func hit_by_ball(ball):
 	self.health = self.health -1

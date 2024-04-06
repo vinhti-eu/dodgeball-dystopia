@@ -8,6 +8,8 @@ var postion_to_reach_x
 var postion_to_reach_y
 var team = "Left"
 
+var player_to_go_to
+
 var state = STATE.auto
 
 enum STATE{
@@ -15,7 +17,8 @@ enum STATE{
 	followLeft,
 	followRight,
 	ballLying,
-	ballThrown
+	ballThrown,
+	go_to_player
 }
 
 
@@ -55,6 +58,8 @@ func _process(delta):
 		ballThrown()
 	elif(self.state ==  STATE.ballLying):
 		ballLying()
+	elif(self.state == STATE.go_to_player):
+		go_to_player()
 
 
 func auto():
@@ -85,6 +90,12 @@ func ballLying():
 	postion_to_reach_y = get_parent().get_node("YSort/YSort_ball/Ball").global_position.y
 	gotoPosition(0.02,0.03)
 	
+func go_to_player():
+	print("plEEAASE")
+	postion_to_reach_x = player_to_go_to.global_position.x
+	postion_to_reach_y = player_to_go_to.global_position.y
+	gotoPosition(0.02,0.03)
+		
 	
 func gotoPosition(x_increase, y_increase):
 	self.position.x = self.position.x + ((postion_to_reach_x-self.position.x) * x_increase)
@@ -95,9 +106,11 @@ func gotoPosition(x_increase, y_increase):
 		position.y = 	round(postion_to_reach_y)
 		
 		
-func _on_ball_thrown(player):
+func _on_ball_thrown(player, player_aimed_at, actual_throw):
 	print("camera state swap")
-	self.state= STATE.ballThrown
+	player_to_go_to = player_aimed_at
+	go_to_player()
+	#self.state= STATE.ballThrown
 
 
 

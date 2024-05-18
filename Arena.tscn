@@ -95,6 +95,9 @@ __meta__ = {
 "_edit_lock_": true
 }
 
+[node name="AnimatedSprite" parent="YSort/Right/Player/Body" index="0"]
+frame = 0
+
 [node name="shadow" parent="YSort/Right/Player" index="1"]
 __meta__ = {
 "_edit_lock_": true
@@ -126,6 +129,9 @@ __meta__ = {
 "_edit_lock_": true
 }
 
+[node name="AnimatedSprite" parent="YSort/Right/Player5/Body" index="0"]
+frame = 0
+
 [node name="shadow" parent="YSort/Right/Player5" index="1"]
 __meta__ = {
 "_edit_lock_": true
@@ -149,6 +155,8 @@ margin_left = 4.0
 margin_top = 7.0
 margin_right = 90.0
 margin_bottom = 26.0
+custom_colors/font_color_selected = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 tab_size = 3
 text = "TEST"
 

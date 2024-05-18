@@ -1,0 +1,166 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://sprites/career/main/carrer_main.png" type="Texture" id=1]
+[ext_resource path="res://fonts/Early GameBoy.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://fonts/ambitsek.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://CalendarHelper.gd" type="Script" id=4]
+[ext_resource path="res://Calendar.gd" type="Script" id=5]
+
+[sub_resource type="DynamicFont" id=1]
+size = 8
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 8
+outline_color = Color( 0.823529, 0.823529, 0.823529, 1 )
+extra_spacing_char = -1
+font_data = ExtResource( 3 )
+
+[node name="Career_Menu" type="Node2D"]
+
+[node name="CarrerMain" type="Sprite" parent="."]
+position = Vector2( 192, 109 )
+texture = ExtResource( 1 )
+
+[node name="Team" type="RichTextLabel" parent="."]
+margin_left = 38.0
+margin_top = 55.0
+margin_right = 127.0
+margin_bottom = 67.0
+rect_pivot_offset = Vector2( 54, 4 )
+custom_colors/default_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 0
+custom_fonts/mono_font = SubResource( 1 )
+custom_fonts/normal_font = SubResource( 2 )
+text = "Team Management"
+
+[node name="Coaching" type="RichTextLabel" parent="."]
+margin_left = 40.0
+margin_top = 91.0
+margin_right = 145.0
+margin_bottom = 107.0
+rect_pivot_offset = Vector2( 54, 4 )
+custom_colors/default_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 0
+custom_fonts/mono_font = SubResource( 1 )
+custom_fonts/normal_font = SubResource( 2 )
+text = "Coaches and Staff
+"
+scroll_active = false
+
+[node name="Training" type="RichTextLabel" parent="."]
+margin_left = 41.0
+margin_top = 128.0
+margin_right = 146.0
+margin_bottom = 144.0
+rect_pivot_offset = Vector2( 54, 4 )
+custom_colors/default_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 0
+custom_fonts/mono_font = SubResource( 1 )
+custom_fonts/normal_font = SubResource( 2 )
+text = "Training
+
+
+
+"
+scroll_active = false
+
+[node name="CalendarHelper" type="Node2D" parent="."]
+script = ExtResource( 4 )
+
+[node name="Calendar" type="Node2D" parent="."]
+script = ExtResource( 5 )
+
+[node name="Mon" type="RichTextLabel" parent="Calendar"]
+margin_left = 10.0
+margin_top = 180.0
+margin_right = 37.0
+margin_bottom = 196.0
+rect_pivot_offset = Vector2( 4, 8 )
+custom_colors/default_color = Color( 0.2, 0.2, 0.2, 1 )
+custom_constants/shadow_offset_x = 0
+custom_fonts/mono_font = SubResource( 1 )
+custom_fonts/normal_font = SubResource( 2 )
+text = "1"
+scroll_active = false
+
+[node name="Tue" type="RichTextLabel" parent="Calendar"]
+margin_left = 64.0
+margin_top = 180.0
+margin_right = 84.0
+margin_bottom = 196.0
+rect_pivot_offset = Vector2( 4, 8 )
+custom_colors/default_color = Color( 0.2, 0.2, 0.2, 1 )
+custom_constants/shadow_offset_x = 0
+custom_fonts/mono_font = SubResource( 1 )
+custom_fonts/normal_font = SubResource( 2 )
+text = "2"
+scroll_active = false
+
+[node name="Wed" type="RichTextLabel" parent="Calendar"]
+margin_left = 118.0
+margin_top = 180.0
+margin_right = 133.0
+margin_bottom = 196.0
+rect_pivot_offset = Vector2( 4, 8 )
+custom_colors/default_color = Color( 0.2, 0.2, 0.2, 1 )
+custom_constants/shadow_offset_x = 0
+custom_fonts/mono_font = SubResource( 1 )
+custom_fonts/normal_font = SubResource( 2 )
+text = "3"
+scroll_active = false
+
+[node name="Thu" type="RichTextLabel" parent="Calendar"]
+margin_left = 172.0
+margin_top = 180.0
+margin_right = 185.0
+margin_bottom = 196.0
+rect_pivot_offset = Vector2( 4, 8 )
+custom_colors/default_color = Color( 0.2, 0.2, 0.2, 1 )
+custom_constants/shadow_offset_x = 0
+custom_fonts/mono_font = SubResource( 1 )
+custom_fonts/normal_font = SubResource( 2 )
+text = "4"
+scroll_active = false
+
+[node name="Fri" type="RichTextLabel" parent="Calendar"]
+margin_left = 226.0
+margin_top = 180.0
+margin_right = 241.0
+margin_bottom = 196.0
+rect_pivot_offset = Vector2( 4, 8 )
+custom_colors/default_color = Color( 0.2, 0.2, 0.2, 1 )
+custom_constants/shadow_offset_x = 0
+custom_fonts/mono_font = SubResource( 1 )
+custom_fonts/normal_font = SubResource( 2 )
+text = "5"
+scroll_active = false
+
+[node name="Sat" type="RichTextLabel" parent="Calendar"]
+margin_left = 280.0
+margin_top = 180.0
+margin_right = 294.0
+margin_bottom = 196.0
+rect_pivot_offset = Vector2( 4, 8 )
+custom_colors/default_color = Color( 0.2, 0.2, 0.2, 1 )
+custom_constants/shadow_offset_x = 0
+custom_fonts/mono_font = SubResource( 1 )
+custom_fonts/normal_font = SubResource( 2 )
+text = "6"
+scroll_active = false
+
+[node name="Sun" type="RichTextLabel" parent="Calendar"]
+margin_left = 334.0
+margin_top = 180.0
+margin_right = 349.0
+margin_bottom = 196.0
+rect_pivot_offset = Vector2( 4, 8 )
+custom_colors/default_color = Color( 0.2, 0.2, 0.2, 1 )
+custom_constants/shadow_offset_x = 0
+custom_fonts/mono_font = SubResource( 1 )
+custom_fonts/normal_font = SubResource( 2 )
+text = "7"
+scroll_active = false

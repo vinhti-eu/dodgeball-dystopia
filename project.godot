@@ -33,6 +33,7 @@ window=false
 color=false
 start=false
 fullscre=false
+width=false
 
 [gui]
 

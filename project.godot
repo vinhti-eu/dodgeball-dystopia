@@ -20,8 +20,8 @@ Arena="*res://Arena.gd"
 
 [display]
 
-window/size/width=384
-window/size/height=216
+window/size/width=768
+window/size/height=432
 window/size/test_width=768
 window/size/test_height=432
 window/stretch/mode="viewport"
@@ -34,6 +34,7 @@ color=false
 start=false
 fullscre=false
 width=false
+resolut=false
 
 [gui]
 

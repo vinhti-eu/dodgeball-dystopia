@@ -15,6 +15,8 @@ export var max_offset = Vector2(10, 7.5)
 var noise_y = 0
 export var shake = false
 
+signal transform_updated
+
 onready var noise = OpenSimplexNoise.new()
 
 var player_to_go_to
@@ -79,7 +81,8 @@ func _process(delta):
 	if(shake):
 		if(trauma):
 			trauma = max(trauma - trauma_decay * delta, 0)
-			shake_screen()
+			shake_screen()		
+	emit_signal("transform_updated")
 			
 func shake_screen():
 	var amount = pow(trauma, trauma_power)

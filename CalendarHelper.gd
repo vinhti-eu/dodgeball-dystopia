@@ -117,8 +117,5 @@ func _ready():
 	next_day()
 	next_day()
 	next_day()
-	next_day()
-	next_day()
-	next_day()
-	next_day()
+	
 	print(curr_day, ':', curr_month, ':', curr_year, ':',get_weekday(curr_day,curr_month,curr_year))

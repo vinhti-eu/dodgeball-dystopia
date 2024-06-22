@@ -23,8 +23,8 @@ void fragment() {
 	float PI = 3.14159;
     vec2 uv = SCREEN_UV;
     float r = texture(SCREEN_TEXTURE, uv_curve(uv) + vec2(SCREEN_PIXEL_SIZE.x * 0.0, 0.0)).r;
-    float g = texture(SCREEN_TEXTURE, uv_curve(uv) + vec2(SCREEN_PIXEL_SIZE.x * 0.5, 0.0)).g;
-    float b = texture(SCREEN_TEXTURE, uv_curve(uv) + vec2(SCREEN_PIXEL_SIZE.x * -0.5, 0.0)).b;
+    float g = texture(SCREEN_TEXTURE, uv_curve(uv) + vec2(SCREEN_PIXEL_SIZE.x * 0.25, 0.0)).g;
+    float b = texture(SCREEN_TEXTURE, uv_curve(uv) + vec2(SCREEN_PIXEL_SIZE.x * -0.25, 0.0)).b;
 
     vec4 color = vec4(r, g, b, 1.0);
 	

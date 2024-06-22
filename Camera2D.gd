@@ -98,31 +98,31 @@ func followLeft(delta):
 	postion_to_reach_x = ((get_parent().get_node("YSort").get_node(team).current_player.global_position.x) *1.6)-self.global_position.x  * delta;
 
 	postion_to_reach_y = ((get_parent().get_node("YSort").get_node(team).current_player.global_position.y +15 -get_parent().get_node("YSort/Left").current_player.z *1.1))- self.global_position.x  * delta;
-	gotoPosition(0.02,0.03)
+	gotoPosition(0.04,0.06)
 
 func followRight(delta):
 
 	postion_to_reach_x = ((get_parent().get_node("YSort").get_node(team).current_player.global_position.x) *1.6)-self.global_position.x  * delta -288;
 	postion_to_reach_y = ((get_parent().get_node("YSort").get_node(team).current_player.global_position.y +15 -get_parent().get_node("YSort/Left").current_player.z *1.1))-self.global_position.x  * delta;
 	
-	gotoPosition(0.02,0.03)
+	gotoPosition(0.04,0.06)
 
 func ballThrown():
 	postion_to_reach_x = get_parent().get_node("YSort/YSort_ball/Ball").global_position.x
 	postion_to_reach_y = get_parent().get_node("YSort/YSort_ball/Ball").global_position.y
-	gotoPosition(0.04,0.06)
+	gotoPosition(0.08,0.12)
 	
 	
 func ballLying():
 	postion_to_reach_x = get_parent().get_node("YSort/YSort_ball/Ball").global_position.x
 	postion_to_reach_y = get_parent().get_node("YSort/YSort_ball/Ball").global_position.y
-	gotoPosition(0.02,0.03)
+	gotoPosition(0.04,0.06)
 	
 func go_to_player():
 	print("plEEAASE")
 	postion_to_reach_x = player_to_go_to.global_position.x
 	postion_to_reach_y = player_to_go_to.global_position.y
-	gotoPosition(0.02,0.03)
+	gotoPosition(0.04,0.06)
 		
 	
 func gotoPosition(x_increase, y_increase):
@@ -137,6 +137,7 @@ func gotoPosition(x_increase, y_increase):
 func _on_ball_thrown(player, player_aimed_at, actual_throw):
 	print("camera state swap")
 	player_to_go_to = player_aimed_at
+	print(postion_to_reach_x)
 	go_to_player()
 
 	#self.state= STATE.ballThrown

@@ -22,9 +22,6 @@ font_data = ExtResource( 3 )
 position = Vector2( 384, 216 )
 scale = Vector2( 2, 2 )
 texture = ExtResource( 1 )
-__meta__ = {
-"_edit_lock_": true
-}
 
 [node name="Team" type="RichTextLabel" parent="."]
 margin_left = 121.0

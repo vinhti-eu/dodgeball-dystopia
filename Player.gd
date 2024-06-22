@@ -6,7 +6,7 @@ extends KinematicBody2D
 # var b = "text"
 var health = 3
 var direction = Vector2();
-var run_speed = 100
+var run_speed = 110
 var attached_ball = null
 var ball_is_in_area = null
 var z = 0

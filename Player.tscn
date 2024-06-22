@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
 [ext_resource path="res://sprites/p1/running_cloud.png" type="Texture" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://sprites/p1/player1_run-Sheet.png" type="Texture" id=6]
 [ext_resource path="res://sprites/p1/player1_throw-Sheet.png" type="Texture" id=7]
 [ext_resource path="res://sprites/p1/player1_pass-Sheet.png" type="Texture" id=8]
+[ext_resource path="res://AnimatedSprite.gd" type="Script" id=9]
 
 [sub_resource type="AtlasTexture" id=19]
 atlas = ExtResource( 3 )
@@ -119,6 +120,7 @@ animation = "main"
 frame = 1
 playing = true
 offset = Vector2( 0, -10 )
+script = ExtResource( 9 )
 __meta__ = {
 "_edit_lock_": true
 }

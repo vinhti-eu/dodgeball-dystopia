@@ -98,6 +98,9 @@ __meta__ = {
 "_edit_lock_": true
 }
 
+[node name="AnimatedSprite" parent="YSort/Right/Player/Body" index="0"]
+frame = 0
+
 [node name="shadow" parent="YSort/Right/Player" index="1"]
 __meta__ = {
 "_edit_lock_": true
@@ -128,6 +131,9 @@ spy = true
 __meta__ = {
 "_edit_lock_": true
 }
+
+[node name="AnimatedSprite" parent="YSort/Right/Player5/Body" index="0"]
+frame = 0
 
 [node name="shadow" parent="YSort/Right/Player5" index="1"]
 __meta__ = {

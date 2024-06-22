@@ -1,0 +1,24 @@
+extends Sprite
+
+# script to change ball appearance and shaders depending on throw type
+# needs shader material for further functionality
+var x_scale = 1
+var y_scale = 1
+var normal_speed = 400
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	print(get_parent().get_parent().speed)
+	
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	print(get_parent().get_parent().speed)
+	print("is jumping",get_parent().get_parent().jumping)
+	if(get_parent().get_parent().jumping):
+		self.scale.x = 1 + ( get_parent().get_parent().speed* 0.00025) -  (get_parent().get_parent().z_velocity) * 0.1
+		scale.y = 1/scale.x
+		print(scale.x)
+	else:
+		scale.x = 1
+		scale.y = 1

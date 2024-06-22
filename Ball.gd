@@ -78,6 +78,7 @@ func attach(var person):
 	if(attached_to == null):
 		attached_to = person
 		ball_is_lying = false
+		jumping = false
 		emit_signal("ball_stopped_on_floor",ball_is_lying)
 
 	

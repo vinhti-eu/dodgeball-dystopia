@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=2]
+[gd_scene load_steps=56 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
 [ext_resource path="res://sprites/p1/running_cloud.png" type="Texture" id=2]
@@ -12,6 +12,7 @@
 [ext_resource path="res://sprites/player_sprites/P1_1_head.png" type="Texture" id=10]
 [ext_resource path="res://sprites/player_sprites/P1_1_body.png" type="Texture" id=11]
 [ext_resource path="res://Animations.gd" type="Script" id=12]
+[ext_resource path="res://sprites/player_sprites/P1_1_hair.png" type="Texture" id=13]
 
 [sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 6, 13.5 )
@@ -153,10 +154,10 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( -0.5, 0.25 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0, 0.25, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
-"values": [ Vector2( 0, 1 ), Vector2( 1, 1 ) ]
+"values": [ Vector2( 0, 1 ), Vector2( 1, 1 ), Vector2( 2, 1 ) ]
 }
 
 [sub_resource type="Animation" id=30]
@@ -282,17 +283,41 @@ tracks/2/keys = {
 "update": 0,
 "values": [ Vector2( 0, 0 ) ]
 }
+tracks/3/type = "value"
+tracks/3/path = NodePath("Sprite:frame_coords")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 0, 1 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("Sprite:frame")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 8 ]
+}
 
 [sub_resource type="Animation" id=42]
 resource_name = "knocked"
 tracks/0/type = "value"
-tracks/0/path = NodePath("Animations/body/Sprite:frame_coords")
+tracks/0/path = NodePath("Sprite:frame_coords")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0.3 ),
+"times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
 "values": [ Vector2( 0, 4 ) ]
@@ -304,16 +329,16 @@ length = 0.5
 loop = true
 step = 0.25
 tracks/0/type = "value"
-tracks/0/path = NodePath("Animations/body/Sprite:frame_coords")
+tracks/0/path = NodePath("Sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( -0.5, 0.25 ),
+"times": PoolRealArray( 0, 0.25 ),
 "transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Vector2( 0, 1 ), Vector2( 1, 1 ) ]
+"update": 1,
+"values": [ 8, 9 ]
 }
 
 [sub_resource type="Animation" id=44]
@@ -321,7 +346,7 @@ resource_name = "pass_a"
 loop = true
 step = 0.15
 tracks/0/type = "value"
-tracks/0/path = NodePath("Animations/body/Sprite:frame_coords")
+tracks/0/path = NodePath("Sprite:frame_coords")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -339,7 +364,7 @@ length = 0.5
 loop = true
 step = 0.2
 tracks/0/type = "value"
-tracks/0/path = NodePath("Animations/body/Sprite:frame_coords")
+tracks/0/path = NodePath("Sprite:frame_coords")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -356,7 +381,7 @@ resource_name = "run"
 length = 0.5
 step = 0.125
 tracks/0/type = "value"
-tracks/0/path = NodePath("Animations/body/Sprite:frame_coords")
+tracks/0/path = NodePath("Sprite:frame_coords")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -373,7 +398,7 @@ resource_name = "throw_a"
 loop = true
 step = 0.2
 tracks/0/type = "value"
-tracks/0/path = NodePath("Animations/body/Sprite:frame_coords")
+tracks/0/path = NodePath("Sprite:frame_coords")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -389,7 +414,7 @@ tracks/0/keys = {
 resource_name = "throw_b"
 step = 0.2
 tracks/0/type = "value"
-tracks/0/path = NodePath("Animations/body/Sprite:frame_coords")
+tracks/0/path = NodePath("Sprite:frame_coords")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -621,7 +646,6 @@ shape = SubResource( 4 )
 visible = false
 frames = SubResource( 1 )
 animation = "main"
-frame = 1
 playing = true
 offset = Vector2( 0, -10 )
 script = ExtResource( 9 )
@@ -653,17 +677,15 @@ anims/throw_a = SubResource( 28 )
 anims/throw_b = SubResource( 29 )
 
 [node name="hair" type="Node2D" parent="Body/Animations"]
-visible = false
 
 [node name="Sprite" type="Sprite" parent="Body/Animations/hair"]
-texture = ExtResource( 11 )
+texture = ExtResource( 13 )
 offset = Vector2( 0, -10 )
 hframes = 8
 vframes = 8
 frame = 8
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Body/Animations/hair"]
-root_node = NodePath("../../..")
 anims/RESET = SubResource( 41 )
 anims/knocked = SubResource( 42 )
 anims/main = SubResource( 43 )

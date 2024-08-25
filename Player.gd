@@ -130,6 +130,7 @@ func koed_state():
 func freezing():
 	get_node("Body").get_node("AnimatedSprite").modulate = (Color(0.8, 0.8 ,0.8,0.8))
 	get_node("Body/AnimatedSprite").animation = "main"
+
 	self.direction = Vector2(0,0)
 
 func unfreeze():
@@ -150,15 +151,24 @@ func setFreezing(freezetime):
 
 
 func passing_post():
+#	get_node("Body/Animations").play("pass_b")
 	get_node("Body").get_node("AnimatedSprite").animation = "pass"
 	get_node("Body").get_node("AnimatedSprite").frame = 0
 	get_node("Body").get_node("AnimatedSprite").playing   = false
 	get_node("Body").get_node("AnimatedSprite").modulate = (Color(1,1,1,1))
-	yield(get_tree().create_timer(0.15), "timeout")  # Wait for one second
+	#get_node("Body/Animations").play("pass_a")
+
+	yield(get_tree().create_timer(0.12), "timeout")  # Wait for one second
 	get_node("Body").get_node("AnimatedSprite").animation = "pass"
 	get_node("Body").get_node("AnimatedSprite").frame = 1
 	get_node("Body").get_node("AnimatedSprite").playing   = false
 	get_node("Body").get_node("AnimatedSprite").modulate = (Color(1,1,1,1))
+	get_node("Body/Animations").play("pass_b")
+	yield(get_tree().create_timer(0.15), "timeout")  # Wait for one second
+
+
+
+
 
 
 	self.state= STATE.main
@@ -169,17 +179,19 @@ func throwing_post_state():
 	get_node("Body").get_node("AnimatedSprite").frame = 1
 	get_node("Body").get_node("AnimatedSprite").playing   = false
 	get_node("Body").get_node("AnimatedSprite").modulate = (Color(1,1,1,1))
+	get_node("Body/Animations").play("throw_b")
+	
 	yield(get_tree().create_timer(0.25), "timeout")  # Wait for one second
 
 	self.state= STATE.main
 
 func throwing_state():		
 	if(attached_ball != null):
-
 		direction= Vector2(0,0);	
 		get_node("Body").get_node("AnimatedSprite").modulate = (Color(1,1,0,1))
 		hand_x_offset = Vector2(-23,-4) * flip
 		get_node("Body").get_node("AnimatedSprite").animation = "throw"
+		get_node("Body/Animations").play("throw_a")
 
 		get_node("Body").get_node("AnimatedSprite").playing   = false
 
@@ -212,8 +224,6 @@ func main_state():
 	
 	get_node("Body").get_node("AnimatedSprite").modulate = (Color(1, 1 , 1, 1 ))
 	hand_x_offset = Vector2(7,0) * flip
-	
-	
 	get_node("Body/AnimatedSprite").playing = true
 	if(get_parent().name == 'Left'|| 'Right'):
 		if(get_parent().current_player == self):
@@ -226,6 +236,8 @@ func main_state():
 	if(direction.length() !=0):
 		if(get_node("Body/AnimatedSprite").animation != "run"):
 			get_node("Body/AnimatedSprite").animation = "run"
+
+		get_node("Body/Animations").play("run")
 		if(get_node("Body/AnimatedSprite").get_frame()==1 ):
 			if(attached_ball != null):
 				hand_x_offset = Vector2(5,-1)*flip
@@ -241,6 +253,7 @@ func main_state():
 		else:
 			get_node("shadow/Particles2D").position.x = -11
 	else:
+		get_node("Body/Animations").play("main")
 		get_node("Body/AnimatedSprite").animation = "main"
 		get_node("shadow/Particles2D").emitting = false
 
@@ -268,6 +281,7 @@ func main_state():
 func knocked_state():
 	jumping = true
 	self.get_node("Body/AnimatedSprite").animation = "knocked"
+	get_node("Body/Animations").play("knocked")
 	
 	if(z>=0):
 		z = z+ z_velocity
@@ -347,6 +361,9 @@ func passing_state():
 	get_node("Body").get_node("AnimatedSprite").animation = "pass"
 	get_node("Body").get_node("AnimatedSprite").frame = 0
 	get_node("Body").get_node("AnimatedSprite").playing   = false
+	
+	get_node("Body/Animations").play("pass_a")
+	
 	hand_x_offset = Vector2(-13,0) * flip
 	attached_ball.position = self.position + hand_x_offset
 
@@ -358,6 +375,7 @@ func passing_state():
 	timer.start()
 
 	state = STATE.passing_post #hacky solution that needs to keep in sync
+
 
 
 

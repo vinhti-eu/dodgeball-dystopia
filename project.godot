@@ -14,10 +14,6 @@ config/name="dodgeball_dystopia"
 run/main_scene="res://Arena.tscn"
 config/icon="res://icon.png"
 
-[autoload]
-
-Arena="*res://Arena.gd"
-
 [display]
 
 window/size/width=768
@@ -37,6 +33,7 @@ width=false
 resolut=false
 fra=false
 uniqe=false
+global=false
 
 [gui]
 

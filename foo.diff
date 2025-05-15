@@ -1,0 +1,643 @@
+[1mdiff --git a/.mono/metadata/ide_messaging_meta.txt b/.mono/metadata/ide_messaging_meta.txt[m
+[1mindex 23366fe..c95bb0e 100644[m
+[1m--- a/.mono/metadata/ide_messaging_meta.txt[m
+[1m+++ b/.mono/metadata/ide_messaging_meta.txt[m
+[36m@@ -1,2 +1,2 @@[m
+[31m-﻿39583[m
+[32m+[m[32m﻿35211[m
+ /opt/godot-mono-bin/godot/Godot_v3.5.1-stable_mono_x11.64[m
+[1mdiff --git a/Animations.gd b/Animations.gd[m
+[1mindex ca1dbac..f6ea9bf 100644[m
+[1m--- a/Animations.gd[m
+[1m+++ b/Animations.gd[m
+[36m@@ -8,11 +8,22 @@[m [mextends Node2D[m
+ [m
+ # Called when the node enters the scene tree for the first time.[m
+ func _ready():[m
+[31m-	pass[m
+[31m-	#if(randi()%2 == 0):[m
+[31m-	#	get_node("body/Sprite").texture = load("res://sprites/player_sprites/P1_1_body.png")[m
+[31m-	#else:[m
+[31m-	#	get_node("body/Sprite").texture = load("res://sprites/player_sprites/P1_2_body.png")[m
+[32m+[m	[32mrandomize()[m
+[32m+[m	[32mif(false):[m
+[32m+[m		[32mif(randi()%1 == 0):[m
+[32m+[m			[32mget_node("body/Sprite").texture = load("res://sprites/player_sprites/P1_1_body.png")[m
+[32m+[m		[32melse:[m
+[32m+[m			[32mget_node("body/Sprite").texture = load("res://sprites/player_sprites/P1_2_body.png")[m
+[32m+[m		[32mif(randi()%3 == 0):[m
+[32m+[m			[32mget_node("head/Sprite").texture = load("res://sprites/player_sprites/P1_1_head.png")[m
+[32m+[m		[32melif(randi()%2 == 0):[m
+[32m+[m			[32mget_node("head/Sprite").texture = load("res://sprites/player_sprites/P1_2_head.png")[m
+[32m+[m		[32melse:[m
+[32m+[m			[32mget_node("head/Sprite").texture = load("res://sprites/player_sprites/P1_3_head.png")[m
+[32m+[m		[32mif(randi()%2 == 0):[m
+[32m+[m			[32mget_node("hair/Sprite").texture = load("res://sprites/player_sprites/P1_1_hair.png")[m
+[32m+[m		[32melse:[m
+[32m+[m			[32mget_node("hair/Sprite").texture = load("res://sprites/player_sprites/P1_2_hair.png")[m[41m		[m
+ [m
+ [m
+ func play(var animation):[m
+[1mdiff --git a/Arena.gd b/Arena.gd[m
+[1mindex d13fd28..08a97a2 100644[m
+[1m--- a/Arena.gd[m
+[1m+++ b/Arena.gd[m
+[36m@@ -27,7 +27,7 @@[m [mvar debug_mode = false;[m
+ # Declare member variables here. Examples:[m
+ # var a = 2[m
+ # var b = "text"[m
+[31m-signal got_ball(team, true)[m
+[32m+[m
+ [m
+ # Called when the node enters the scene tree for the first time.[m
+ func _ready():[m
+[1mdiff --git a/Arena.tscn b/Arena.tscn[m
+[1mindex e14f857..0d912cb 100644[m
+[1m--- a/Arena.tscn[m
+[1m+++ b/Arena.tscn[m
+[36m@@ -98,9 +98,6 @@[m [m__meta__ = {[m
+ "_edit_lock_": true[m
+ }[m
+ [m
+[31m-[node name="AnimatedSprite" parent="YSort/Right/Player/Body" index="2"][m
+[31m-frame = 1[m
+[31m-[m
+ [node name="shadow" parent="YSort/Right/Player" index="1"][m
+ __meta__ = {[m
+ "_edit_lock_": true[m
+[36m@@ -132,9 +129,6 @@[m [m__meta__ = {[m
+ "_edit_lock_": true[m
+ }[m
+ [m
+[31m-[node name="AnimatedSprite" parent="YSort/Right/Player5/Body" index="2"][m
+[31m-frame = 1[m
+[31m-[m
+ [node name="shadow" parent="YSort/Right/Player5" index="1"][m
+ __meta__ = {[m
+ "_edit_lock_": true[m
+[36m@@ -167,10 +161,9 @@[m [m__meta__ = {[m
+ }[m
+ [m
+ [node name="debug" type="RichTextLabel" parent="HUD"][m
+[31m-margin_left = 726.0[m
+[31m-margin_top = 2.0[m
+[31m-margin_right = 812.0[m
+[31m-margin_bottom = 21.0[m
+[32m+[m[32mmargin_left = 681.0[m
+[32m+[m[32mmargin_right = 767.0[m
+[32m+[m[32mmargin_bottom = 63.0[m
+ custom_colors/font_color_selected = Color( 0, 0, 0, 1 )[m
+ custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )[m
+ tab_size = 3[m
+[36m@@ -181,12 +174,6 @@[m [mscript = ExtResource( 13 )[m
+ [connection signal="ball_has_crossed_field" from="YSort/YSort_ball/Ball" to="YSort/CPUControllerRight" method="_on_Ball_ball_has_crossed_field"][m
+ [connection signal="ball_stopped_on_floor" from="YSort/YSort_ball/Ball" to="YSort/CPUControllerLeft" method="_on_Ball_ball_stopped_on_floor"][m
+ [connection signal="ball_stopped_on_floor" from="YSort/YSort_ball/Ball" to="YSort/CPUControllerRight" method="_on_Ball_ball_stopped_on_floor"][m
+[31m-[connection signal="got_ball" from="YSort/Left" to="Camera" method="_on_Left_got_ball"][m
+[31m-[connection signal="got_ball" from="YSort/Left" to="YSort/CPUControllerLeft" method="_on_Left_got_ball"][m
+[31m-[connection signal="got_ball" from="YSort/Left" to="YSort/CPUControllerRight" method="_on_Left_got_ball"][m
+[31m-[connection signal="got_ball" from="YSort/Right" to="Camera" method="_on_Right_got_ball"][m
+[31m-[connection signal="got_ball" from="YSort/Right" to="YSort/CPUControllerLeft" method="_on_Right_got_ball"][m
+[31m-[connection signal="got_ball" from="YSort/Right" to="YSort/CPUControllerRight" method="_on_Right_got_ball"][m
+ [m
+ [editable path="YSort/Right/Player"][m
+ [editable path="YSort/Right/Player5"][m
+[1mdiff --git a/Ball.gd b/Ball.gd[m
+[1mindex c98ddaa..66000d0 100644[m
+[1m--- a/Ball.gd[m
+[1m+++ b/Ball.gd[m
+[36m@@ -14,6 +14,7 @@[m [mvar jumping = false[m
+ var ball_is_shot = null #identifies if the ball can hurt someone[m
+ var ball_is_passed = null[m
+ [m
+[32m+[m[32m#replace with signal?[m
+ var ball_is_in_left_field = true[m
+ var ball_is_in_spy = false[m
+ var ball_is_lying = true[m
+[36m@@ -123,16 +124,11 @@[m [mfunc pass(var player, var speed_multiplyer, var passing_player):[m
+ [m
+ 	var Vx[m
+ 	var Vz[m
+[31m-[m
+ 	# calculate horizontal velocity[m
+ 	Vx = ((distance * cos(radians)) / T)[m
+ 	# calculate vertical velocity[m
+ 	Vz = ((distance * sin(radians) * g) / T)[m
+ [m
+[31m-[m
+[31m-		[m
+[31m-	[m
+[31m-[m
+ 	direction = (player.get_node("shadow").get_node("walkbox").global_position + player.hand_x_offset - self.global_position).normalized() * Vx * speed_multiplyer[m
+ 	z_velocity =  Vz * speed_multiplyer #since move_and_slide already multiplies by 60[m
+ 	speed = velocity[m
+[1mdiff --git a/CPUController.gd b/CPUController.gd[m
+[1mindex 3a487f6..0c2cf1f 100644[m
+[1m--- a/CPUController.gd[m
+[1m+++ b/CPUController.gd[m
+[36m@@ -53,9 +53,8 @@[m [mfunc get_actions(current_player, delta):[m
+ 		[m
+ 	if(throw):		[m
+ 		throw=false[m
+[31m-		print("trying to throw")[m
+[31m-[m
+ [m
+[32m+[m		[32mprint("try to throw")[m
+ 		bCommand.execute(current_player)[m
+ 		yield(get_tree().create_timer(2.0), "timeout")[m
+ [m
+[1mdiff --git a/Left.gd b/Left.gd[m
+[1mindex 59dfd70..6be165e 100644[m
+[1m--- a/Left.gd[m
+[1m+++ b/Left.gd[m
+[36m@@ -34,7 +34,7 @@[m [mexport var autoswap_on_targeted = true;[m
+ [m
+ [m
+ [m
+[31m-signal got_ball(team)[m
+[32m+[m[32m#signal got_ball(team)[m
+ [m
+ [m
+ [m
+[36m@@ -302,7 +302,6 @@[m [mfunc run_to_center(player):[m
+ [m
+ [m
+ func on_timer_timeout_run_to_center(player):[m
+[31m-	print("jau freezing")[m
+ 	if(player == current_player):[m
+ 		player.setFreezing(0.5)[m
+ 		if(pass_player!= null):[m
+[36m@@ -313,4 +312,10 @@[m [mfunc on_timer_timeout_run_to_center(player):[m
+ 		set_playerpos(player.get_index())[m
+ 	[m
+ [m
+[32m+[m[32mfunc _on_got_ball(player):[m
+[32m+[m	[32mtactics = TACTICS.offense[m
+[32m+[m	[32mprint("TACTICS CHANGE", self.tactics)[m
+[41m+[m
+[41m+[m
+[41m+[m
+ [m
+[1mdiff --git a/Player.gd b/Player.gd[m
+[1mindex 857c620..f3fca7d 100644[m
+[1m--- a/Player.gd[m
+[1m+++ b/Player.gd[m
+[36m@@ -26,6 +26,7 @@[m [mvar is_in_own_field[m
+ signal player_koed(player)[m
+ signal ball_thrown(player, player_aimed, actual_throw)[m
+ signal player_hit(player)[m
+[32m+[m[32msignal got_ball(player)[m
+ [m
+ [m
+ var knockback_speed = 200[m
+[36m@@ -58,14 +59,16 @@[m [menum TACTICS{[m
+ # Called when the node enters the scene tree for the first time.[m
+ func _ready():[m
+ 	get_parent().connect("player_koed", self, "_on_player_koed")[m
+[31m-	[m
+[32m+[m
+[32m+[m	[32mvar connecte = self.connect("got_ball",get_parent(),"_on_got_ball")[m
+[32m+[m
+ 	#get_node("/root/@Arena@2").get_node("Camera").connect("ball_thrown", self,"_on_ball_thrown")[m
+ 	[m
+ [m
+ 	[m
+ 	location_change_time = 0[m
+ 	[m
+[31m-	get_parent().connect("got_ball", self, "_on_got_ball")[m
+[32m+[m	[32m#get_parent().connect("got_ball", self, "_on_got_ball")[m
+ 	if(get_parent().name !='Left' and !spy || (get_parent().name =='Left') and spy):[m
+ 		get_node("Body").scale = Vector2(-1, 1)[m
+ 		var sprite = self.get_node("Body").get_node("AnimatedSprite")[m
+[36m@@ -119,6 +122,7 @@[m [mfunc koed_state():[m
+ 	get_node("Body").get_node("AnimatedSprite").modulate = (Color(1.0, 0.2,0.2,0.4))[m
+ 	self.direction = Vector2(0,0)[m
+ 	get_node("Body/AnimatedSprite").animation = "knocked"[m
+[32m+[m	[32m#todo replace with own signal[m
+ 	get_parent().get_parent().get_node("Left").emit_signal('got_ball',get_parent().name)[m
+ 	print("Before emitting player_koed signal")[m
+ 	emit_signal('player_koed', self);[m
+[36m@@ -324,6 +328,7 @@[m [mfunc bCommand():[m
+ 		if(attached_ball != null):[m
+ 			state = STATE.throwing[m
+ 		elif (!jumping):[m
+[32m+[m			[32mget_node("Body/Animations").play("catch")[m
+ 			var timer = Timer.new()[m
+ 			timer.set_wait_time(catch_time)[m
+ 			timer.set_one_shot(true)[m
+[36m@@ -403,6 +408,8 @@[m [mfunc attach_ball(ball):[m
+ 		attached_ball = ball[m
+ 		get_parent().current_player = self[m
+ 		#always called on attachement [m
+[32m+[m		[32mprint("Emitting got_ball signal with: ", self)[m
+[32m+[m		[32memit_signal('got_ball', self);[m
+ 		get_parent().get_parent().get_node("Left").emit_signal('got_ball',get_parent().name)[m
+ 		get_parent().get_parent().get_node("Right").emit_signal('got_ball',get_parent().name)[m
+ [m
+[36m@@ -511,9 +518,10 @@[m [mfunc drop_ball(direction):[m
+ 	attached_ball = null[m
+ [m
+ func _on_got_ball(team) -> void:[m
+[31m-	if team == get_parent().name:[m
+[31m-		get_parent().tactics = TACTICS.offense[m
+[31m-	else:[m
+[31m-		get_parent().tactics = TACTICS.defense[m
+[31m-		self.location_change_time = rand_range(0,1)[m
+[32m+[m	[32m#if team == get_parent().name:[m
+[32m+[m	[32m#	get_parent().tactics = TACTICS.offense[m
+[32m+[m	[32m#else:[m
+[32m+[m	[32m#	get_parent().tactics = TACTICS.defense[m
+[32m+[m	[32m#	self.location_change_time = rand_range(0,1)[m
+[32m+[m	[32mpass[m
+ [m
+[1mdiff --git a/Player.tscn b/Player.tscn[m
+[1mindex d50a9cc..118e600 100644[m
+[1m--- a/Player.tscn[m
+[1m+++ b/Player.tscn[m
+[36m@@ -1,4 +1,4 @@[m
+[31m-[gd_scene load_steps=56 format=2][m
+[32m+[m[32m[gd_scene load_steps=59 format=2][m
+ [m
+ [ext_resource path="res://Player.gd" type="Script" id=1][m
+ [ext_resource path="res://sprites/p1/running_cloud.png" type="Texture" id=2][m
+[36m@@ -127,6 +127,21 @@[m [mtracks/2/keys = {[m
+ "values": [ Vector2( 0, 0 ) ][m
+ }[m
+ [m
+[32m+[m[32m[sub_resource type="Animation" id=49][m
+[32m+[m[32mresource_name = "catch"[m
+[32m+[m[32mtracks/0/type = "value"[m
+[32m+[m[32mtracks/0/path = NodePath("Animations/body/Sprite:frame_coords")[m
+[32m+[m[32mtracks/0/interp = 1[m
+[32m+[m[32mtracks/0/loop_wrap = true[m
+[32m+[m[32mtracks/0/imported = false[m
+[32m+[m[32mtracks/0/enabled = true[m
+[32m+[m[32mtracks/0/keys = {[m
+[32m+[m[32m"times": PoolRealArray( 0 ),[m
+[32m+[m[32m"transitions": PoolRealArray( 1 ),[m
+[32m+[m[32m"update": 0,[m
+[32m+[m[32m"values": [ Vector2( 0, 5 ) ][m
+[32m+[m[32m}[m
+[32m+[m
+ [sub_resource type="Animation" id=32][m
+ resource_name = "knocked"[m
+ tracks/0/type = "value"[m
+[36m@@ -245,7 +260,7 @@[m [mtracks/0/keys = {[m
+ "values": [ Vector2( 1, 3 ) ][m
+ }[m
+ [m
+[31m-[sub_resource type="Animation" id=41][m
+[32m+[m[32m[sub_resource type="Animation" id=33][m
+ length = 0.001[m
+ tracks/0/type = "value"[m
+ tracks/0/path = NodePath("Animations/body/Sprite:frame")[m
+[36m@@ -295,20 +310,23 @@[m [mtracks/3/keys = {[m
+ "update": 0,[m
+ "values": [ Vector2( 0, 1 ) ][m
+ }[m
+[31m-tracks/4/type = "value"[m
+[31m-tracks/4/path = NodePath("Sprite:frame")[m
+[31m-tracks/4/interp = 1[m
+[31m-tracks/4/loop_wrap = true[m
+[31m-tracks/4/imported = false[m
+[31m-tracks/4/enabled = true[m
+[31m-tracks/4/keys = {[m
+[32m+[m
+[32m+[m[32m[sub_resource type="Animation" id=51][m
+[32m+[m[32mresource_name = "catch"[m
+[32m+[m[32mtracks/0/type = "value"[m
+[32m+[m[32mtracks/0/path = NodePath("Sprite:frame_coords")[m
+[32m+[m[32mtracks/0/interp = 1[m
+[32m+[m[32mtracks/0/loop_wrap = true[m
+[32m+[m[32mtracks/0/imported = false[m
+[32m+[m[32mtracks/0/enabled = true[m
+[32m+[m[32mtracks/0/keys = {[m
+ "times": PoolRealArray( 0 ),[m
+ "transitions": PoolRealArray( 1 ),[m
+ "update": 0,[m
+[31m-"values": [ 8 ][m
+[32m+[m[32m"values": [ Vector2( 0, 5 ) ][m
+ }[m
+ [m
+[31m-[sub_resource type="Animation" id=42][m
+[32m+[m[32m[sub_resource type="Animation" id=34][m
+ resource_name = "knocked"[m
+ tracks/0/type = "value"[m
+ tracks/0/path = NodePath("Sprite:frame_coords")[m
+[36m@@ -323,25 +341,25 @@[m [mtracks/0/keys = {[m
+ "values": [ Vector2( 0, 4 ) ][m
+ }[m
+ [m
+[31m-[sub_resource type="Animation" id=43][m
+[32m+[m[32m[sub_resource type="Animation" id=35][m
+ resource_name = "main"[m
+ length = 0.5[m
+ loop = true[m
+ step = 0.25[m
+ tracks/0/type = "value"[m
+[31m-tracks/0/path = NodePath("Sprite:frame")[m
+[32m+[m[32mtracks/0/path = NodePath("Sprite:frame_coords")[m
+ tracks/0/interp = 1[m
+ tracks/0/loop_wrap = true[m
+ tracks/0/imported = false[m
+ tracks/0/enabled = true[m
+ tracks/0/keys = {[m
+[31m-"times": PoolRealArray( 0, 0.25 ),[m
+[32m+[m[32m"times": PoolRealArray( -0.25, 0.25 ),[m
+ "transitions": PoolRealArray( 1, 1 ),[m
+[31m-"update": 1,[m
+[31m-"values": [ 8, 9 ][m
+[32m+[m[32m"update": 0,[m
+[32m+[m[32m"values": [ Vector2( 0, 1 ), Vector2( 1, 1 ) ][m
+ }[m
+ [m
+[31m-[sub_resource type="Animation" id=44][m
+[32m+[m[32m[sub_resource type="Animation" id=36][m
+ resource_name = "pass_a"[m
+ loop = true[m
+ step = 0.15[m
+[36m@@ -358,7 +376,7 @@[m [mtracks/0/keys = {[m
+ "values": [ Vector2( 0, 2 ) ][m
+ }[m
+ [m
+[31m-[sub_resource type="Animation" id=45][m
+[32m+[m[32m[sub_resource type="Animation" id=37][m
+ resource_name = "pass_b"[m
+ length = 0.5[m
+ loop = true[m
+[36m@@ -376,7 +394,7 @@[m [mtracks/0/keys = {[m
+ "values": [ Vector2( 1, 2 ) ][m
+ }[m
+ [m
+[31m-[sub_resource type="Animation" id=46][m
+[32m+[m[32m[sub_resource type="Animation" id=38][m
+ resource_name = "run"[m
+ length = 0.5[m
+ step = 0.125[m
+[36m@@ -393,7 +411,7 @@[m [mtracks/0/keys = {[m
+ "values": [ Vector2( 0, 0 ), Vector2( 1, 0 ), Vector2( 2, 0 ), Vector2( 3, 0 ) ][m
+ }[m
+ [m
+[31m-[sub_resource type="Animation" id=47][m
+[32m+[m[32m[sub_resource type="Animation" id=39][m
+ resource_name = "throw_a"[m
+ loop = true[m
+ step = 0.2[m
+[36m@@ -410,7 +428,7 @@[m [mtracks/0/keys = {[m
+ "values": [ Vector2( 0, 3 ) ][m
+ }[m
+ [m
+[31m-[sub_resource type="Animation" id=48][m
+[32m+[m[32m[sub_resource type="Animation" id=40][m
+ resource_name = "throw_b"[m
+ step = 0.2[m
+ tracks/0/type = "value"[m
+[36m@@ -426,7 +444,7 @@[m [mtracks/0/keys = {[m
+ "values": [ Vector2( 1, 3 ) ][m
+ }[m
+ [m
+[31m-[sub_resource type="Animation" id=33][m
+[32m+[m[32m[sub_resource type="Animation" id=41][m
+ length = 0.001[m
+ tracks/0/type = "value"[m
+ tracks/0/path = NodePath("Animations/body/Sprite:frame")[m
+[36m@@ -476,8 +494,35 @@[m [mtracks/3/keys = {[m
+ "update": 0,[m
+ "values": [ Vector2( 0, 1 ) ][m
+ }[m
+[32m+[m[32mtracks/4/type = "value"[m
+[32m+[m[32mtracks/4/path = NodePath("Sprite:frame")[m
+[32m+[m[32mtracks/4/interp = 1[m
+[32m+[m[32mtracks/4/loop_wrap = true[m
+[32m+[m[32mtracks/4/imported = false[m
+[32m+[m[32mtracks/4/enabled = true[m
+[32m+[m[32mtracks/4/keys = {[m
+[32m+[m[32m"times": PoolRealArray( 0 ),[m
+[32m+[m[32m"transitions": PoolRealArray( 1 ),[m
+[32m+[m[32m"update": 0,[m
+[32m+[m[32m"values": [ 8 ][m
+[32m+[m[32m}[m
+ [m
+[31m-[sub_resource type="Animation" id=34][m
+[32m+[m[32m[sub_resource type="Animation" id=50][m
+[32m+[m[32mresource_name = "catch"[m
+[32m+[m[32mtracks/0/type = "value"[m
+[32m+[m[32mtracks/0/path = NodePath("Sprite:frame_coords")[m
+[32m+[m[32mtracks/0/interp = 1[m
+[32m+[m[32mtracks/0/loop_wrap = true[m
+[32m+[m[32mtracks/0/imported = false[m
+[32m+[m[32mtracks/0/enabled = true[m
+[32m+[m[32mtracks/0/keys = {[m
+[32m+[m[32m"times": PoolRealArray( 0 ),[m
+[32m+[m[32m"transitions": PoolRealArray( 1 ),[m
+[32m+[m[32m"update": 0,[m
+[32m+[m[32m"values": [ Vector2( 0, 5 ) ][m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m[sub_resource type="Animation" id=42][m
+ resource_name = "knocked"[m
+ tracks/0/type = "value"[m
+ tracks/0/path = NodePath("Sprite:frame_coords")[m
+[36m@@ -492,25 +537,25 @@[m [mtracks/0/keys = {[m
+ "values": [ Vector2( 0, 4 ) ][m
+ }[m
+ [m
+[31m-[sub_resource type="Animation" id=35][m
+[32m+[m[32m[sub_resource type="Animation" id=43][m
+ resource_name = "main"[m
+ length = 0.5[m
+ loop = true[m
+ step = 0.25[m
+ tracks/0/type = "value"[m
+[31m-tracks/0/path = NodePath("Sprite:frame_coords")[m
+[32m+[m[32mtracks/0/path = NodePath("Sprite:frame")[m
+ tracks/0/interp = 1[m
+ tracks/0/loop_wrap = true[m
+ tracks/0/imported = false[m
+ tracks/0/enabled = true[m
+ tracks/0/keys = {[m
+[31m-"times": PoolRealArray( -0.25, 0.25 ),[m
+[32m+[m[32m"times": PoolRealArray( 0, 0.25 ),[m
+ "transitions": PoolRealArray( 1, 1 ),[m
+[31m-"update": 0,[m
+[31m-"values": [ Vector2( 0, 1 ), Vector2( 1, 1 ) ][m
+[32m+[m[32m"update": 1,[m
+[32m+[m[32m"values": [ 8, 9 ][m
+ }[m
+ [m
+[31m-[sub_resource type="Animation" id=36][m
+[32m+[m[32m[sub_resource type="Animation" id=44][m
+ resource_name = "pass_a"[m
+ loop = true[m
+ step = 0.15[m
+[36m@@ -527,7 +572,7 @@[m [mtracks/0/keys = {[m
+ "values": [ Vector2( 0, 2 ) ][m
+ }[m
+ [m
+[31m-[sub_resource type="Animation" id=37][m
+[32m+[m[32m[sub_resource type="Animation" id=45][m
+ resource_name = "pass_b"[m
+ length = 0.5[m
+ loop = true[m
+[36m@@ -545,7 +590,7 @@[m [mtracks/0/keys = {[m
+ "values": [ Vector2( 1, 2 ) ][m
+ }[m
+ [m
+[31m-[sub_resource type="Animation" id=38][m
+[32m+[m[32m[sub_resource type="Animation" id=46][m
+ resource_name = "run"[m
+ length = 0.5[m
+ step = 0.125[m
+[36m@@ -562,7 +607,7 @@[m [mtracks/0/keys = {[m
+ "values": [ Vector2( 0, 0 ), Vector2( 1, 0 ), Vector2( 2, 0 ), Vector2( 3, 0 ) ][m
+ }[m
+ [m
+[31m-[sub_resource type="Animation" id=39][m
+[32m+[m[32m[sub_resource type="Animation" id=47][m
+ resource_name = "throw_a"[m
+ loop = true[m
+ step = 0.2[m
+[36m@@ -579,7 +624,7 @@[m [mtracks/0/keys = {[m
+ "values": [ Vector2( 0, 3 ) ][m
+ }[m
+ [m
+[31m-[sub_resource type="Animation" id=40][m
+[32m+[m[32m[sub_resource type="Animation" id=48][m
+ resource_name = "throw_b"[m
+ step = 0.2[m
+ tracks/0/type = "value"[m
+[36m@@ -668,6 +713,7 @@[m [mframe = 8[m
+ [node name="AnimationPlayer" type="AnimationPlayer" parent="Body/Animations/body"][m
+ root_node = NodePath("../../..")[m
+ anims/RESET = SubResource( 26 )[m
+[32m+[m[32manims/catch = SubResource( 49 )[m
+ anims/knocked = SubResource( 32 )[m
+ anims/main = SubResource( 25 )[m
+ anims/pass_a = SubResource( 30 )[m
+[36m@@ -676,25 +722,6 @@[m [manims/run = SubResource( 27 )[m
+ anims/throw_a = SubResource( 28 )[m
+ anims/throw_b = SubResource( 29 )[m
+ [m
+[31m-[node name="hair" type="Node2D" parent="Body/Animations"][m
+[31m-[m
+[31m-[node name="Sprite" type="Sprite" parent="Body/Animations/hair"][m
+[31m-texture = ExtResource( 13 )[m
+[31m-offset = Vector2( 0, -10 )[m
+[31m-hframes = 8[m
+[31m-vframes = 8[m
+[31m-frame = 8[m
+[31m-[m
+[31m-[node name="AnimationPlayer" type="AnimationPlayer" parent="Body/Animations/hair"][m
+[31m-anims/RESET = SubResource( 41 )[m
+[31m-anims/knocked = SubResource( 42 )[m
+[31m-anims/main = SubResource( 43 )[m
+[31m-anims/pass_a = SubResource( 44 )[m
+[31m-anims/pass_b = SubResource( 45 )[m
+[31m-anims/run = SubResource( 46 )[m
+[31m-anims/throw_a = SubResource( 47 )[m
+[31m-anims/throw_b = SubResource( 48 )[m
+[31m-[m
+ [node name="head" type="Node2D" parent="Body/Animations"][m
+ [m
+ [node name="Sprite" type="Sprite" parent="Body/Animations/head"][m
+[36m@@ -706,6 +733,7 @@[m [mframe = 8[m
+ [m
+ [node name="AnimationPlayer" type="AnimationPlayer" parent="Body/Animations/head"][m
+ anims/RESET = SubResource( 33 )[m
+[32m+[m[32manims/catch = SubResource( 51 )[m
+ anims/knocked = SubResource( 34 )[m
+ anims/main = SubResource( 35 )[m
+ anims/pass_a = SubResource( 36 )[m
+[36m@@ -714,6 +742,26 @@[m [manims/run = SubResource( 38 )[m
+ anims/throw_a = SubResource( 39 )[m
+ anims/throw_b = SubResource( 40 )[m
+ [m
+[32m+[m[32m[node name="hair" type="Node2D" parent="Body/Animations"][m
+[32m+[m
+[32m+[m[32m[node name="Sprite" type="Sprite" parent="Body/Animations/hair"][m
+[32m+[m[32mtexture = ExtResource( 13 )[m
+[32m+[m[32moffset = Vector2( 0, -10 )[m
+[32m+[m[32mhframes = 8[m
+[32m+[m[32mvframes = 8[m
+[32m+[m[32mframe = 8[m
+[32m+[m
+[32m+[m[32m[node name="AnimationPlayer" type="AnimationPlayer" parent="Body/Animations/hair"][m
+[32m+[m[32manims/RESET = SubResource( 41 )[m
+[32m+[m[32manims/catch = SubResource( 50 )[m
+[32m+[m[32manims/knocked = SubResource( 42 )[m
+[32m+[m[32manims/main = SubResource( 43 )[m
+[32m+[m[32manims/pass_a = SubResource( 44 )[m
+[32m+[m[32manims/pass_b = SubResource( 45 )[m
+[32m+[m[32manims/run = SubResource( 46 )[m
+[32m+[m[32manims/throw_a = SubResource( 47 )[m
+[32m+[m[32manims/throw_b = SubResource( 48 )[m
+[32m+[m
+ [node name="shadow" type="Area2D" parent="."][m
+ position = Vector2( 0, -10 )[m
+ z_index = -1[m
+[1mdiff --git a/debug.gd b/debug.gd[m
+[1mindex 771cbbe..ec0361d 100644[m
+[1m--- a/debug.gd[m
+[1m+++ b/debug.gd[m
+[36m@@ -1,16 +1,15 @@[m
+ extends RichTextLabel[m
+ [m
+[32m+[m[32m#autoloaded[m
+[32m+[m[32m# call down from arena[m
+ [m
+[31m-# Declare member variables here. Examples:[m
+[31m-# var a = 2[m
+[31m-# var b = "text"[m
+ [m
+[32m+[m[32mvar ball_in_field = "ball_field" #filed that ball is on according to ball, L or R[m
+ [m
+[31m-# Called when the node enters the scene tree for the first time.[m
+[31m-func _ready():[m
+[31m-	pass # Replace with function body.[m
+ [m
+ [m
+ # Called every frame. 'delta' is the elapsed time since the previous frame.[m
+ func _process(delta):[m
+ 	self.text = str(Engine.get_frames_per_second())[m
+[32m+[m	[32mself.text = self.text + "\n" +  ball_in_field[m
+[41m+	[m
+[1mdiff --git a/project.godot b/project.godot[m
+[1mindex b38fa79..77c6656 100644[m
+[1m--- a/project.godot[m
+[1m+++ b/project.godot[m
+[36m@@ -17,6 +17,7 @@[m [mconfig/icon="res://icon.png"[m
+ [autoload][m
+ [m
+ Arena="*res://Arena.gd"[m
+[32m+[m[32mDebug="*res://debug.gd"[m
+ [m
+ [display][m
+ [m
+[1mdiff --git a/spr_ball.gd b/spr_ball.gd[m
+[1mindex 7ea1de1..1236a74 100644[m
+[1m--- a/spr_ball.gd[m
+[1m+++ b/spr_ball.gd[m
+[36m@@ -13,8 +13,6 @@[m [mfunc _ready():[m
+ [m
+ # Called every frame. 'delta' is the elapsed time since the previous frame.[m
+ func _process(delta):[m
+[31m-	print(get_parent().get_parent().speed)[m
+[31m-	print("is jumping",get_parent().get_parent().jumping)[m
+ 	if(get_parent().get_parent().jumping):[m
+ 		self.scale.x = 1 + ( get_parent().get_parent().speed* 0.00025) -  (get_parent().get_parent().z_velocity) * 0.1[m
+ 		scale.y = 1/scale.x[m
+[1mdiff --git a/sprites/player_sprites/P1_1.aseprite b/sprites/player_sprites/P1_1.aseprite[m
+[1mindex 43cbac5..0a0aa93 100644[m
+Binary files a/sprites/player_sprites/P1_1.aseprite and b/sprites/player_sprites/P1_1.aseprite differ
+[1mdiff --git a/sprites/player_sprites/P1_1_body.png b/sprites/player_sprites/P1_1_body.png[m
+[1mindex 21b735a..13301a3 100644[m
+Binary files a/sprites/player_sprites/P1_1_body.png and b/sprites/player_sprites/P1_1_body.png differ
+[1mdiff --git a/sprites/player_sprites/P1_1_hair.png b/sprites/player_sprites/P1_1_hair.png[m
+[1mindex abd76db..b7283b4 100644[m
+Binary files a/sprites/player_sprites/P1_1_hair.png and b/sprites/player_sprites/P1_1_hair.png differ
+[1mdiff --git a/sprites/player_sprites/P1_1_head.png b/sprites/player_sprites/P1_1_head.png[m
+[1mindex 2749d8f..4e5ab0b 100644[m
+Binary files a/sprites/player_sprites/P1_1_head.png and b/sprites/player_sprites/P1_1_head.png differ
+[1mdiff --git a/sprites/player_sprites/P1_2_body.png b/sprites/player_sprites/P1_2_body.png[m
+[1mindex 30bae3d..42890a5 100644[m
+Binary files a/sprites/player_sprites/P1_2_body.png and b/sprites/player_sprites/P1_2_body.png differ

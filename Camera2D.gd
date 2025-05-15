@@ -26,7 +26,7 @@ var state = STATE.auto
 enum STATE{
 	auto, #camera moves with own vars
 	followLeft,
-	followRight,
+	followRight,a
 	ballLying,
 	ballThrown,
 	go_to_player
@@ -57,7 +57,6 @@ func _ready():
 	
 		
 	get_parent().get_node("YSort/YSort_ball/Ball").connect("ball_stopped_on_floor",self, "_on_ball_stoopen_on__floor")
-		
 	
 	postion_to_reach_x = self.position.x
 	postion_to_reach_y = self.position.y
@@ -66,6 +65,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	print(player_to_go_to)
 	if(self.state == STATE.auto):
 		auto()
 	elif(self.state == STATE.followLeft):
@@ -95,34 +95,35 @@ func auto():
 	
 func followLeft(delta):
 
-	postion_to_reach_x = ((get_parent().get_node("YSort").get_node(team).current_player.global_position.x) *1.6)-self.global_position.x  * delta;
+	postion_to_reach_x = ((get_parent().get_node("YSort").get_node(team).current_player.global_position.x) *1.7)-self.global_position.x  * delta;
 
 	postion_to_reach_y = ((get_parent().get_node("YSort").get_node(team).current_player.global_position.y +15 -get_parent().get_node("YSort/Left").current_player.z *1.1))- self.global_position.x  * delta;
-	gotoPosition(0.04,0.06)
+	gotoPosition(0.03,0.045)
 
 func followRight(delta):
 
-	postion_to_reach_x = ((get_parent().get_node("YSort").get_node(team).current_player.global_position.x) *1.6)-self.global_position.x  * delta -288;
+	postion_to_reach_x = ((get_parent().get_node("YSort").get_node(team).current_player.global_position.x) *1.7)-self.global_position.x  * delta -288;
 	postion_to_reach_y = ((get_parent().get_node("YSort").get_node(team).current_player.global_position.y +15 -get_parent().get_node("YSort/Left").current_player.z *1.1))-self.global_position.x  * delta;
 	
-	gotoPosition(0.04,0.06)
+	gotoPosition(0.03,0.045)
 
+	# move camera to player thrown at
 func ballThrown():
-	postion_to_reach_x = get_parent().get_node("YSort/YSort_ball/Ball").global_position.x
-	postion_to_reach_y = get_parent().get_node("YSort/YSort_ball/Ball").global_position.y
-	gotoPosition(0.08,0.12)
+	postion_to_reach_x = player_to_go_to.global_position.x
+	postion_to_reach_y = player_to_go_to.global_position.y
+	gotoPosition(0.03,0.045)
 	
 	
 func ballLying():
 	postion_to_reach_x = get_parent().get_node("YSort/YSort_ball/Ball").global_position.x
 	postion_to_reach_y = get_parent().get_node("YSort/YSort_ball/Ball").global_position.y
-	gotoPosition(0.04,0.06)
+	gotoPosition(0.03,0.045)
 	
 func go_to_player():
-	print("plEEAASE")
+	print("GOING?")
 	postion_to_reach_x = player_to_go_to.global_position.x
 	postion_to_reach_y = player_to_go_to.global_position.y
-	gotoPosition(0.04,0.06)
+	gotoPosition(0.03,0.045)
 		
 	
 func gotoPosition(x_increase, y_increase):
@@ -137,14 +138,16 @@ func gotoPosition(x_increase, y_increase):
 func _on_ball_thrown(player, player_aimed_at, actual_throw):
 	print("camera state swap")
 	player_to_go_to = player_aimed_at
-	print(postion_to_reach_x)
+	# only goes for one frame or so..
 	go_to_player()
 
-	#self.state= STATE.ballThrown
+	# weird backjerk because of lacking offset
+	self.state= STATE.ballThrown
 
 
 
 func _on_Left_got_ball(team):
+	print("check for change")
 	self.team = team
 	if(team == "Left"):
 		state = STATE.followLeft
@@ -159,7 +162,7 @@ func _on_Right_got_ball(team):
 	if(team == "Right"):
 		state = STATE.followRight
 
-func _on_ball_stoopen_on__floor(stooped):
+func _on_ball_stoopen_on__floor(stoped):
 	self.state=STATE.ballLying
 
 func add_trauma(trauma):

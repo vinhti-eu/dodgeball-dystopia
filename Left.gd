@@ -50,7 +50,9 @@ enum TACTICS{
 func _ready():
 	CPUController = get_parent().get_node("CPUController" + self.name)
 	
-	get_parent().get_node("YSort_ball").get_node("Ball").connect("ball_has_crossed_field", self, "_on_ball_has_crossed_field")
+	#get_parent().get_node("YSort_ball").get_node("Ball").connect("ball_has_crossed_field", self, "_on_ball_has_crossed_field")
+	get_node("/root/Arena").connect("ball_has_crossed_field", self, "_on_ball_has_crossed_field")
+
 	
 	current_player = get_child(0)
 	team_players = get_children()
@@ -69,14 +71,27 @@ func _ready():
 	for i in rand_range(0,team_players.size() ):
 		set_playerpos(i)
 	
-
+	print("DOES THIS HAPPEN")
 	var timer = Timer.new()
 	timer.set_wait_time(1)
 	timer.set_one_shot(false)
+	timer.autostart = true
 	timer.connect("timeout", self, "on_timer_timeout")
 
-	get_node("/root/Arena").add_child(timer)
-	timer.start()
+	var arena = get_node_or_null("/root/Arena")
+	if arena:
+		timer.connect("timeout", self, "on_timer_timeout_pass")  # Connect first
+		arena.call_deferred("add_child", timer)
+		arena.call_deferred("add_child", timer)
+		#timer is deferred, bad practice, attach to other node or self
+		yield(get_tree(), "idle_frame")  # Wait one frame
+		timer.start()
+	else:
+		print("Arena not found! Timer not added.")
+
+
+	print(timer)
+	print("this happens?")
 
 
 func _on_ball_thrown(opponent, own_player, acutal_throw):
@@ -89,24 +104,22 @@ func _on_ball_thrown(opponent, own_player, acutal_throw):
 	
 
 func _on_player_koed(player):
-	print("KOEEEEEED with player:", player)
 	autoSwitch()
 	#the player got koed and removed from own players, now needs to be removed from oppenets
 	#by connection through enemy same signal but different node
-	print(player)
-	print(team_players)
 
 	team_players.erase(player)
-	print(team_players)
+
 
 
 func _on_opponent_koed(player):
-	print("Enemy koed:", player)
 
 	opponent_players.erase(player)
 
-
-func _on_ball_has_crossed_field(side,spy):
+#should be called by arena
+func ball_has_crossed_field(side,spy):
+	print("DOES THIS HAPPEN FIELD CROSS SPY SWAP")
+	#check for correct side left -> true, right -> false
 	if(side and team_label == "Left" or !side and team_label == "Right"):
 		if(spy):
 			for player in team_players:
@@ -153,7 +166,7 @@ func _process(delta):
 
 func set_playerpos(i):
 		if(self.tactics == TACTICS.offense or self.tactics == TACTICS.neutral):
-			var vec = (Vector2.ONE * rand_range(0, 25)).rotated(rand_range(0, PI))
+			var vec = (Vector2.ONE * rand_range(0, 15)).rotated(rand_range(0, PI))
 			if(self.team_label == "Left" ):
 				if(! team_players[i].spy):
 					team_players[i].pos_to_reach = (get_node("/root/Arena").positions_array[i]) + vec
@@ -178,8 +191,8 @@ func set_playerpos(i):
 
 					var x = clamp(pos_to_reach.x, left_upleft.x, left_upright.x)
 					var y = clamp(pos_to_reach.y, left_upleft.y, left_downleft.y)
-
-					var vec = (Vector2.ONE * rand_range(0, 25)).rotated(rand_range(0, PI))
+					#random walk
+					var vec = (Vector2.ONE * rand_range(0, 15)).rotated(rand_range(0, PI))
 					team_players[i].pos_to_reach = Vector2(x, y) + vec
 			else :
 				team_players[i].pos_to_reach = get_node("/root/Arena").left_spy
@@ -302,7 +315,6 @@ func run_to_center(player):
 
 
 func on_timer_timeout_run_to_center(player):
-	print("jau freezing")
 	if(player == current_player):
 		player.setFreezing(0.5)
 		if(pass_player!= null):

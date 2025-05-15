@@ -20,6 +20,9 @@ var ball_side_left = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	#ball node to listen for ball signals
+	var ball = get_parent().get_node("YSort_ball/Ball")
+	ball.connect("ball_has_crossed_field",self, "_on_ball_has_crossed_field")
 	has_ball = self.name == "CPUControllerLeft"
 	ball_is_lying = self.name == "CPUControllerLeft"
 
@@ -27,10 +30,19 @@ func _ready():
 	var timer2 = Timer.new()
 	timer2.set_wait_time(2.5)
 	timer2.set_one_shot(false)
-	timer2.connect("timeout", self, "on_timer_timeout_pass")
 
-	get_node("/root/Arena").add_child(timer2)
-	timer2.start()
+
+	var arena = get_node_or_null("/root/Arena")
+	if arena:
+		timer2.connect("timeout", self, "on_timer_timeout_pass")  # Connect first
+		arena.call_deferred("add_child", timer2)
+		arena.call_deferred("add_child", timer2)
+		#timer is deferred, bad practice, attach to other node or self
+		yield(get_tree(), "idle_frame")  # Wait one frame
+		timer2.start()
+	else:
+		print("Arena not found! Timer not added.")
+
 
 
 
@@ -53,7 +65,6 @@ func get_actions(current_player, delta):
 		
 	if(throw):		
 		throw=false
-		print("trying to throw")
 
 
 		bCommand.execute(current_player)
@@ -101,6 +112,7 @@ func on_timer_timeout_pass():
 			passes = randi() % 3 + 1
 		else: 
 			setThrow()
+
 			
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -129,7 +141,7 @@ func _on_Right_got_ball(team):
 
 
 
-func _on_Ball_ball_has_crossed_field(side, spy):
+func _on_ball_has_crossed_field(side, spy):
 	ball_side_left = side
 	
 

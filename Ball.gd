@@ -22,7 +22,7 @@ signal ball_has_crossed_field(side, spy)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	self.connect("ball_has_crossed_field",$"/root/Arena","_on_ball_has_crossed_field")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -40,7 +40,7 @@ func _process(delta):
 func _physics_process(delta):
 	if(jumping and attached_to==null):
 		if(z>=0):
-			z_velocity = z_velocity -0.1
+			z_velocity = z_velocity -0.075
 			move_and_slide(direction * speed)
 		else:
 			ball_is_shot = null# ball not dangerous after touching ground
@@ -98,6 +98,7 @@ func drop(var vector, var speed_of_player,var shooting_player):
 	direction = vector
 	ball_is_shot = shooting_player
 	detach()	
+	print("test1")
 	emit_signal("ball_has_crossed_field", ball_is_in_left_field, ball_is_in_spy)#happens after the fact
 
 
@@ -106,36 +107,35 @@ func drop(var vector, var speed_of_player,var shooting_player):
 	
 func pass(var player, var speed_multiplyer, var passing_player):
 	var distance = (player.get_node("shadow").get_node("walkbox").global_position+ player.hand_x_offset -self.global_position).length()# distance in meters
-	var angle = 45 # angle in degrees
-	var g = 6 # acceleration due to gravity in m/s^2
+	#var angle = 45 # angle in degrees
+	var g = 4.5 # acceleration due to gravity in m/s^2 only for ball
 	ball_is_passed = passing_player
 	get_node("AudioPass").pitch_scale = rand_range(1,1.5)
 	get_node("AudioPass").play()
 
-# convert angle to radians
-	var radians = angle * PI / 180
+	#fixed xV , velocity in field direction multiplied by param
+	
+	#experimental lerp depending on distance
+	# simulates slower throws on close distance and faster throws 
+	# on long distance throws
+	# might need a clamp and should be tested on different multipliers
+	#initial xV should be at least 150 for sensible passes
+	var xV = 200 * speed_multiplyer * range_lerp(distance,0,400,0.5,2)
+	xV = clamp(xV,200,1000)
+	print("distance is",distance)
+	print("xV is", xV)
+	var T = distance / xV
+	
+	z_velocity = (T * g)/2 # highest point of throw t*g
 
-	# calculate velocity
-	var velocity = (distance * g) / (2 * (sin(radians) * sin(radians)))
-
-	# Calculate time of flight (T)
-	var T = ((2 * (distance * sin(radians))) / g) * 10
-
-	var Vx
-	var Vz
-
-	# calculate horizontal velocity
-	Vx = ((distance * cos(radians)) / T)
-	# calculate vertical velocity
-	Vz = ((distance * sin(radians) * g) / T)
-
-
-		
+	print("xV",xV,"zV",z_velocity * 1000)
+	print("angle is",rad2deg(atan2(z_velocity * 1000,xV))) #print angle in deg
+	
 	
 
-	direction = (player.get_node("shadow").get_node("walkbox").global_position + player.hand_x_offset - self.global_position).normalized() * Vx * speed_multiplyer
-	z_velocity =  Vz * speed_multiplyer #since move_and_slide already multiplies by 60
-	speed = velocity
+	direction = (player.get_node("shadow").get_node("walkbox").global_position + player.hand_x_offset - self.global_position).normalized() # * Vx * speed_multiplyer
+	#z_velocity = # Vz * speed_multiplyer #since move_and_slide already multiplies by 60
+	speed = xV
 	detach()	
 
 func detach():
@@ -162,14 +162,15 @@ func _on_Ball_shadow_area_entered(area):
 			ball_is_in_spy = false
 		if(attached_to == null):#might lead to problems while jumping	
 			emit_signal("ball_has_crossed_field", ball_is_in_left_field, ball_is_in_spy)
+			print("test2")
 	if(area.get_parent().name == "area_enemy_all"):
 		ball_is_in_left_field = false	
 		if(area.name == "area_enemy_spy"):
 			ball_is_in_spy = true
 		else:
 			ball_is_in_spy = false
-		
 		if(attached_to == null):
 			emit_signal("ball_has_crossed_field", ball_is_in_left_field, ball_is_in_spy)
+			print("test3")
 
 

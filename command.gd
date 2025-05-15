@@ -12,7 +12,6 @@ class MoveCommand extends Command:
 
 class ACommand extends Command:
 	func execute(player:Node) -> void:
-		print('command jump test')
 		player.aCommand()
 
 #throwing and TODO catching

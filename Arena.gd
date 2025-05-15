@@ -31,7 +31,7 @@ signal got_ball(team, true)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	pass
 
 func _draw():
 	if(debug_mode):
@@ -43,6 +43,30 @@ func _draw():
 		draw_circle(left_upright, 5, point_color)
 		draw_circle(left_downright, 5, point_color)
 
+func _process(delta):
+	pass
+
+# signal functions
+# self used as signal container
+# changes debug hud
+func _on_ball_has_crossed_field(side,spy):
+	var side_text = ""
+	if(side):
+		side_text = "left"
+		get_node("YSort/Left").ball_has_crossed_field(side,spy)
+	else: 
+		side_text = "right"
+		get_node("YSort/Right").ball_has_crossed_field(side,spy)
+	if(spy):
+		side_text = side_text + "spy"
+	yield(get_tree(), "idle_frame")
+	if(has_node("HUD")):
+		get_node("HUD/debug").side_text = side_text
+	else:
+		print("node not found")
+
+
+	
 
 
 

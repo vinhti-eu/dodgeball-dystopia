@@ -210,7 +210,7 @@ func executeBallThrow():
 			throw_direction = direction 
 			throw_direction.x = abs(throw_direction.x)
 			throw_direction = throw_direction + Vector2(1.2,0) 
-			throw_direction = throw_direction.normalized() * Arena.y_ratio
+			throw_direction = throw_direction.normalized() * $"/root/Arena".y_ratio
 			emit_signal('ball_thrown', self, null ,true)
 		throw_ball(throw_direction)
 
@@ -309,7 +309,7 @@ func read_input():
 
 
 func set_direction(move_direction):
-	direction = move_direction.normalized() * Arena.y_ratio
+	direction = move_direction.normalized() * $"/root/Arena".y_ratio
 	
 func jump():
 	jumping = true
@@ -403,6 +403,9 @@ func attach_ball(ball):
 		attached_ball = ball
 		get_parent().current_player = self
 		#always called on attachement 
+		# TODO replace with ball knowledge instead of player
+		# Signal emission does currently not consider spies and leads to wonky camera 
+		# behaviour
 		get_parent().get_parent().get_node("Left").emit_signal('got_ball',get_parent().name)
 		get_parent().get_parent().get_node("Right").emit_signal('got_ball',get_parent().name)
 

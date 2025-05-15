@@ -12,7 +12,7 @@ func _process(delta):
 	team_players =  get_parent().get_node("YSort").get_node("Left").team_players
 	update()
 	
-	if(Arena.debug_mode):
+	if($"/root/Arena".debug_mode):
 		for child in get_parent().get_node("YSort/Left").get_children():
 			child.modulate = Color(1,1,1)	
 		get_parent().get_node("YSort/Left").pass_player.modulate = Color(1,0,1)

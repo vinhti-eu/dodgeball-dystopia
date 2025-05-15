@@ -58,6 +58,7 @@ position = Vector2( 152, 139 )
 
 [node name="Left" type="YSort" parent="YSort"]
 script = ExtResource( 6 )
+isPlayer = false
 
 [node name="Player" parent="YSort/Left" instance=ExtResource( 1 )]
 position = Vector2( 198, 191 )
@@ -98,9 +99,6 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="AnimatedSprite" parent="YSort/Right/Player/Body" index="2"]
-frame = 1
-
 [node name="shadow" parent="YSort/Right/Player" index="1"]
 __meta__ = {
 "_edit_lock_": true
@@ -132,9 +130,6 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="AnimatedSprite" parent="YSort/Right/Player5/Body" index="2"]
-frame = 1
-
 [node name="shadow" parent="YSort/Right/Player5" index="1"]
 __meta__ = {
 "_edit_lock_": true
@@ -162,23 +157,18 @@ custom_colors/font_color_selected = Color( 0, 0, 0, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 tab_size = 3
 text = "TEST"
-__meta__ = {
-"_edit_lock_": true
-}
 
 [node name="debug" type="RichTextLabel" parent="HUD"]
-margin_left = 726.0
+margin_left = 702.0
 margin_top = 2.0
-margin_right = 812.0
-margin_bottom = 21.0
+margin_right = 768.0
+margin_bottom = 117.0
 custom_colors/font_color_selected = Color( 0, 0, 0, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 tab_size = 3
-text = "TEST"
+text = "debug off"
 script = ExtResource( 13 )
 
-[connection signal="ball_has_crossed_field" from="YSort/YSort_ball/Ball" to="YSort/CPUControllerLeft" method="_on_Ball_ball_has_crossed_field"]
-[connection signal="ball_has_crossed_field" from="YSort/YSort_ball/Ball" to="YSort/CPUControllerRight" method="_on_Ball_ball_has_crossed_field"]
 [connection signal="ball_stopped_on_floor" from="YSort/YSort_ball/Ball" to="YSort/CPUControllerLeft" method="_on_Ball_ball_stopped_on_floor"]
 [connection signal="ball_stopped_on_floor" from="YSort/YSort_ball/Ball" to="YSort/CPUControllerRight" method="_on_Ball_ball_stopped_on_floor"]
 [connection signal="got_ball" from="YSort/Left" to="Camera" method="_on_Left_got_ball"]

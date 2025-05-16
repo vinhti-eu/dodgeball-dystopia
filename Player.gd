@@ -1,9 +1,7 @@
 extends KinematicBody2D
 
-
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
+# turning towards balls or other events
+var is_flipped
 var health = 3
 var direction = Vector2();
 var run_speed = 110
@@ -66,7 +64,7 @@ func _ready():
 	location_change_time = 0
 	
 	get_parent().connect("got_ball", self, "_on_got_ball")
-	if(get_parent().name !='Left' and !spy || (get_parent().name =='Left') and spy):
+	if(get_parent().name !='Left' and !spy || (get_parent().name =='Left') and spy):			
 		get_node("Body").scale = Vector2(-1, 1)
 		var sprite = self.get_node("Body").get_node("AnimatedSprite")
 		sprite.frame = 1
@@ -81,7 +79,14 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _physics_process(delta):	
+func _physics_process(delta):
+	# check for ball position
+	# turn towards ball
+	# add own function
+	
+	process_sprite_flip()
+	
+	
 	if(self.state== STATE.main):
 		main_state()
 	elif(self.state == STATE.knocked):
@@ -109,7 +114,6 @@ func catching_state():
 
 
 func uncatch():
-	print('uncatch')
 	self.state = STATE.main
 
 func removed_state():
@@ -195,6 +199,38 @@ func throwing_state():
 
 		get_node("Body").get_node("AnimatedSprite").playing   = false
 
+func process_sprite_flip():
+
+	if(attached_ball == null and get_parent().tactics != TACTICS.offense):
+		if((ball.global_position.x < self.global_position.x) and get_parent().tactics):
+			get_node("Body").scale = Vector2(-1, 1)	
+			flip = Vector2(-1,1)
+		else:
+			get_node("Body").scale = Vector2(1, 1)	
+			flip = Vector2(1,1)
+	else:
+		if(get_parent().name !='Left' and !spy || (get_parent().name =='Left') and spy):			
+			get_node("Body").scale = Vector2(-1, 1)
+			flip = Vector2(-1,1)
+		else:
+			get_node("Body").scale = Vector2(1, 1)
+			flip = Vector2(1,1)
+	if(spy and get_parent().tactics== get_parent().TACTICS.offense):
+		if(get_parent().name =='Left'):
+			if(get_parent().tactics == get_parent().TACTICS.offense and self.global_position.x >380):
+				get_node("Body").scale = Vector2(-1, 1)
+				flip = Vector2(-1,1)
+			else:
+				get_node("Body").scale = Vector2(1, 1)
+				flip = Vector2(1,1)
+		else:
+			if(get_parent().tactics == get_parent().TACTICS.offense and self.global_position.x >196):
+				get_node("Body").scale = Vector2(-1, 1)
+				flip = Vector2(-1,1)
+			else:
+				get_node("Body").scale = Vector2(1, 1)
+				flip = Vector2(1,1)
+	
 
 	
 func executeBallThrow():
@@ -358,21 +394,22 @@ func landing_from_jump():
 		has_touched_enemy_field()
 
 func passing_state():
-	get_node("Body").get_node("AnimatedSprite").animation = "pass"
-	get_node("Body").get_node("AnimatedSprite").frame = 0
-	get_node("Body").get_node("AnimatedSprite").playing   = false
-	
-	get_node("Body/Animations").play("pass_a")
-	
-	hand_x_offset = Vector2(-13,0) * flip
-	attached_ball.position = self.position + hand_x_offset
+	if(attached_ball !=null):
+		get_node("Body").get_node("AnimatedSprite").animation = "pass"
+		get_node("Body").get_node("AnimatedSprite").frame = 0
+		get_node("Body").get_node("AnimatedSprite").playing   = false
+		
+		get_node("Body/Animations").play("pass_a")
+		
+		hand_x_offset = Vector2(-13,0) * flip
+		attached_ball.position = self.position + hand_x_offset
 
-	var timer = Timer.new()
-	timer.set_wait_time(0.15)
-	timer.set_one_shot(true)
-	timer.connect("timeout", self, "on_timer_timeout")
-	add_child(timer)
-	timer.start()
+		var timer = Timer.new()
+		timer.set_wait_time(0.15)
+		timer.set_one_shot(true)
+		timer.connect("timeout", self, "on_timer_timeout")
+		add_child(timer)
+		timer.start()
 
 	state = STATE.passing_post #hacky solution that needs to keep in sync
 

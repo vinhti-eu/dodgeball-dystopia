@@ -49,6 +49,7 @@ func _physics_process(delta):
 				jumping = true
 				z_velocity= abs(z_velocity) * 0.5
 				direction= direction * 0.5
+				# TODO emit bounce signal here for camera
 				
 			else:
 				#there is a bug, because the thinks that after the pass, the ball is on the ground for a splitsecondf

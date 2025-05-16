@@ -1,5 +1,6 @@
 extends Node2D
 
+var ballside
 export var y_ratio = 0.8
 export var left_center = Vector2(186, 168)
 export var left_upleft = Vector2(125, 145)
@@ -51,6 +52,7 @@ func _process(delta):
 # changes debug hud
 func _on_ball_has_crossed_field(side,spy):
 	var side_text = ""
+	ballside = side
 	if(side):
 		side_text = "left"
 		get_node("YSort/Left").ball_has_crossed_field(side,spy)

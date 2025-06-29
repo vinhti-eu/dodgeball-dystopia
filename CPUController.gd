@@ -108,7 +108,7 @@ func run_with_ball(player):
 func on_timer_timeout_pass():
 
 	if(passes <= 0 ):
-		if(rand_range(0,100) < 70):
+		if(rand_range(0,100) < 50):
 			passes = randi() % 3 + 1
 		else: 
 			setThrow()

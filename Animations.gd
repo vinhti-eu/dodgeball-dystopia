@@ -8,11 +8,14 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass
-	#if(randi()%2 == 0):
-	#	get_node("body/Sprite").texture = load("res://sprites/player_sprites/P1_1_body.png")
-	#else:
-	#	get_node("body/Sprite").texture = load("res://sprites/player_sprites/P1_2_body.png")
+	if(randi()%2 == 0):
+		get_node("hair/Sprite").texture = load("res://sprites/player_sprites/P1_1_hair.png")
+	else:
+		get_node("hair/Sprite").texture = load("res://sprites/player_sprites/P1_2_hair.png")
+	if(randi()%2 == 0):
+		get_node("body/Sprite").texture = load("res://sprites/player_sprites/P1_1_body.png")
+	else:
+		get_node("body/Sprite").texture = load("res://sprites/player_sprites/P1_2_body.png")
 
 
 func play(var animation):

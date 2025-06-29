@@ -1,9 +1,15 @@
 extends KinematicBody2D
 
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
+#possible field
+var field_dict = {
+	"SPY_FIELD_P":"area_player_spy",
+	"SPY_FIELD_E" : "area_enemy_spy",
+	"MAIN_FIELD_P": "area_player",
+	"MAIN_FIELD_E":"area_enemy"
+}
+var ball_overlapping_fields = []
+
 var attached_to = null
 var direction = null
 var speed = 400
@@ -13,7 +19,8 @@ var z_velocity = 0
 var jumping = false
 var ball_is_shot = null #identifies if the ball can hurt someone
 var ball_is_passed = null
-
+var ball_is_in_spy_temp = false
+var ball_is_in_left_field_temp = true
 var ball_is_in_left_field = true
 var ball_is_in_spy = false
 var ball_is_lying = true
@@ -22,6 +29,8 @@ signal ball_has_crossed_field(side, spy)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	# we currently start the ball in the player field
+	#ball_overlapping_fields.append(field_dict.MAIN_FIELD_P)
 	self.connect("ball_has_crossed_field",$"/root/Arena","_on_ball_has_crossed_field")
 
 
@@ -99,7 +108,6 @@ func drop(var vector, var speed_of_player,var shooting_player):
 	direction = vector
 	ball_is_shot = shooting_player
 	detach()	
-	print("test1")
 	emit_signal("ball_has_crossed_field", ball_is_in_left_field, ball_is_in_spy)#happens after the fact
 
 
@@ -123,14 +131,10 @@ func pass(var player, var speed_multiplyer, var passing_player):
 	#initial xV should be at least 150 for sensible passes
 	var xV = 200 * speed_multiplyer * range_lerp(distance,0,400,0.5,2)
 	xV = clamp(xV,200,1000)
-	print("distance is",distance)
-	print("xV is", xV)
 	var T = distance / xV
 	
 	z_velocity = (T * g)/2 # highest point of throw t*g
 
-	print("xV",xV,"zV",z_velocity * 1000)
-	print("angle is",rad2deg(atan2(z_velocity * 1000,xV))) #print angle in deg
 	
 	
 
@@ -153,25 +157,36 @@ func borderd():
 		self.direction = direction * -1
 		self.speed = speed/8
 
-#this should actually alert
+# TODO overlapping areas lead to a race condition, where the wrong area might take priority
+# possible fix by setting a var and checking for area exited instead
+# can also be checked by only checking single dot instead of whole hitbox area
 func _on_Ball_shadow_area_entered(area):
-	if(area.get_parent().name == "area_player_all"):
-		ball_is_in_left_field = true
-		if(area.name == "area_player_spy"):
-			ball_is_in_spy = true
-		else:
-			ball_is_in_spy = false
-		if(attached_to == null):#might lead to problems while jumping	
-			emit_signal("ball_has_crossed_field", ball_is_in_left_field, ball_is_in_spy)
-			print("test2")
-	if(area.get_parent().name == "area_enemy_all"):
-		ball_is_in_left_field = false	
-		if(area.name == "area_enemy_spy"):
-			ball_is_in_spy = true
-		else:
-			ball_is_in_spy = false
-		if(attached_to == null):
-			emit_signal("ball_has_crossed_field", ball_is_in_left_field, ball_is_in_spy)
-			print("test3")
+	if(field_dict.values().has(area.name)):
+		ball_overlapping_fields.append(area.name)
 
 
+func _on_Ball_shadow_area_exited(area):
+	if(ball_overlapping_fields.has(area.name)):
+		ball_overlapping_fields.erase(area.name)
+		#check if there is a definitive ball area
+		if(ball_overlapping_fields.size() == 1):
+			assign_field_and_notify()
+		
+
+func assign_field_and_notify():
+	match ball_overlapping_fields[0]:
+		field_dict.MAIN_FIELD_P:
+			ball_is_in_spy = false
+			ball_is_in_left_field = true
+		field_dict.SPY_FIELD_P:
+			ball_is_in_spy = true
+			ball_is_in_left_field = true
+		field_dict.MAIN_FIELD_E:
+			ball_is_in_spy = false
+			ball_is_in_left_field = false
+		field_dict.SPY_FIELD_E:
+			ball_is_in_spy = true
+			ball_is_in_left_field = false
+	emit_signal("ball_has_crossed_field", ball_is_in_left_field, ball_is_in_spy)
+
+		

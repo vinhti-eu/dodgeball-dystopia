@@ -21,9 +21,9 @@ void fragment() {
 
     vec4 color = vec4(r, g, b, 1.0);
 	
-	r= r* 0.4;
-	g = g * 0.48;
-	b = b* 0.42;
+	r= r* 0.5;
+	g = g * 0.58;
+	b = b* 0.52;
 	
     COLOR = vec4(r,g,b, 1);
 }

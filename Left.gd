@@ -279,7 +279,7 @@ func get_player_closest_to_look_direction(var players, var excludeSpy):
 	var current_dif_to_min = rad2deg(min(abs(current_look_angle-current_angle_to_min),360-abs(current_look_angle-current_angle_to_min)))
 	for player in players:
 			var line_between = current_player.global_position + player.global_position 
-			if(player == current_player):
+			if(player == current_player or !player.is_visible()):
 				angles.append(1000)
 			elif(excludeSpy and player.spy):
 				angles.append(999)

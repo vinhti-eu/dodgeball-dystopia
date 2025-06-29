@@ -65,7 +65,6 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	print(player_to_go_to)
 	if(self.state == STATE.auto):
 		auto()
 	elif(self.state == STATE.followLeft):

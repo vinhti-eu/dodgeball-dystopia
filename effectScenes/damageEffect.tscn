@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://fonts/ambitsek.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://DamageNumber.gd" type="Script" id=2]
+
+[sub_resource type="DynamicFont" id=1]
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 8
+font_data = ExtResource( 1 )
+
+[node name="damageEffect" type="Node2D"]
+
+[node name="DamageNumber" type="RichTextLabel" parent="."]
+margin_left = 7.0
+margin_top = -28.0
+margin_right = 40.0
+margin_bottom = 40.0
+custom_fonts/mono_font = SubResource( 1 )
+custom_fonts/normal_font = SubResource( 2 )
+tab_size = 3
+text = "100"
+script = ExtResource( 2 )

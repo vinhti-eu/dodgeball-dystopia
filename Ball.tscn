@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=2]
 
-[ext_resource path="res://ball.png" type="Texture" id=1]
+[ext_resource path="res://ball2.png" type="Texture" id=1]
 [ext_resource path="res://Ball.gd" type="Script" id=2]
 [ext_resource path="res://ball-shadow.png" type="Texture" id=3]
 [ext_resource path="res://sounds/sound(6).wav" type="AudioStream" id=4]
@@ -45,7 +45,6 @@ __meta__ = {
 }
 
 [node name="spr_ball" type="Sprite" parent="Ball_body"]
-modulate = Color( 1, 0.690196, 0.858824, 1 )
 light_mask = 7
 z_index = 1
 texture = ExtResource( 1 )
@@ -66,3 +65,4 @@ volume_db = 1.592
 pitch_scale = 1.12
 
 [connection signal="area_entered" from="Ball_shadow" to="." method="_on_Ball_shadow_area_entered"]
+[connection signal="area_exited" from="Ball_shadow" to="." method="_on_Ball_shadow_area_exited"]

@@ -117,7 +117,12 @@ func uncatch():
 	self.state = STATE.main
 
 func removed_state():
-	pass
+	self.hide()
+	#TODO find a better way..
+	self.get_node("CollisionShape2D").set_deferred("disabled",true)
+	self.get_node("Body/ballbox/CollisionShape2D").set_deferred("disabled",true)
+	self.get_node("Body/catchbox/CollisionShape2D").set_deferred("disabled",true)
+
 
 func koed_state():
 	get_node("Body").get_node("AnimatedSprite").modulate = (Color(1.0, 0.2,0.2,0.4))
@@ -263,10 +268,11 @@ func main_state():
 	get_node("Body/AnimatedSprite").playing = true
 	if(get_parent().name == 'Left'|| 'Right'):
 		if(get_parent().current_player == self):
-			run_speed = 100
+			#good range 96 to  192
+			run_speed = 128
 			read_input();
 		else:
-			run_speed = 75
+			run_speed = 96
 			ai_move()
 
 	if(direction.length() !=0):
@@ -330,7 +336,7 @@ func knocked_state():
 		z_velocity = 0
 		knockback_direction = Vector2()
 		knockback_speed = 0
-		if(self.health <= 0):
+		if(self.health <= 0): 
 			self.state = STATE.KO
 		else: 
 			landing_from_jump()
@@ -435,7 +441,8 @@ func throw_ball(direction):
 
 func attach_ball(ball):
 	ball.ball_is_shot = null
-	if(self.is_in_own_field and attached_ball == null):
+	# todo own field overhaul check..
+	if(attached_ball == null):
 		ball.attach(self)
 		attached_ball = ball
 		get_parent().current_player = self
@@ -467,7 +474,6 @@ func _on_ballbox_area_entered(area):
 						if(get_parent().current_player == self and get_parent().isPlayer):
 							hit_by_ball(ball)
 						else:	
-							print(get_parent().current_player != self, !get_parent().isPlayer)
 							attach_ball(ball)
 				else:
 					attach_ball(ball)
@@ -480,7 +486,8 @@ func hit_by_ball(ball):
 	self.z_velocity = knockback_speed/30#/60 2
 	knockback_direction = ball.direction.normalized()
 	ball.knocked(self)
-	get_parent().switch(self)
+	#get_parent().switch(self)
+	get_node("playerEffectSpawner").hit(randi()%20)
 	
 
 

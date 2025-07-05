@@ -442,7 +442,7 @@ func throw_ball(direction):
 func attach_ball(ball):
 	ball.ball_is_shot = null
 	# todo own field overhaul check..
-	if(attached_ball == null):
+	if(attached_ball == null and ball.attached_to == null):
 		ball.attach(self)
 		attached_ball = ball
 		get_parent().current_player = self

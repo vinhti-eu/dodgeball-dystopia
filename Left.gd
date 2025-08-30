@@ -2,6 +2,7 @@ extends Node2D
 
 export var isPlayer = true
 
+
 var command = load("res://command.gd")
 var CPUController
 # var team 
@@ -51,7 +52,7 @@ func _ready():
 	CPUController = get_parent().get_node("CPUController" + self.name)
 	
 	#get_parent().get_node("YSort_ball").get_node("Ball").connect("ball_has_crossed_field", self, "_on_ball_has_crossed_field")
-	get_node("/root/Arena").connect("ball_has_crossed_field", self, "_on_ball_has_crossed_field")
+	get_parent().get_parent().connect("ball_has_crossed_field", self, "_on_ball_has_crossed_field")
 
 	
 	current_player = get_child(0)
@@ -169,25 +170,25 @@ func set_playerpos(i):
 			var vec = (Vector2.ONE * rand_range(0, 15)).rotated(rand_range(0, PI))
 			if(self.team_label == "Left" ):
 				if(! team_players[i].spy):
-					team_players[i].pos_to_reach = (get_node("/root/Arena").positions_array[i]) + vec
+					team_players[i].pos_to_reach = (get_parent().get_parent().positions_array[i]) + vec
 				else: 
-					team_players[i].pos_to_reach = (get_node("/root/Arena").left_spy)
+					team_players[i].pos_to_reach = (get_parent().get_parent().left_spy)
 			elif(self.team_label == "Right"):
 				if(! team_players[i].spy):
-					team_players[i].pos_to_reach = (get_node("/root/Arena").positions_array2[i]) + vec
+					team_players[i].pos_to_reach = (get_parent().get_parent().positions_array2[i]) + vec
 				else: 
-					team_players[i].pos_to_reach = (get_node("/root/Arena").right_spy)
+					team_players[i].pos_to_reach = (get_parent().get_parent().right_spy)
 			
 		else:
 			if self.team_label == "Left" and self.tactics == TACTICS.defense:
 				if( ! team_players[i].spy):
 					var opp = get_parent().get_node("Right").current_player
-					var pos_to_reach = get_node("/root/Arena").positions_array[i] - (opp.global_position - get_node("/root/Arena").left_center)
-					var left_center = get_node("/root/Arena").left_center
-					var left_upleft = get_node("/root/Arena").left_upleft
-					var left_downleft = get_node("/root/Arena").left_downleft
-					var left_upright = get_node("/root/Arena").left_upright
-					var left_downright = get_node("/root/Arena").left_downright
+					var pos_to_reach = get_parent().get_parent().positions_array[i] - (opp.global_position - get_parent().get_parent().left_center)
+					var left_center = get_parent().get_parent().left_center
+					var left_upleft = get_parent().get_parent().left_upleft
+					var left_downleft = get_parent().get_parent().left_downleft
+					var left_upright = get_parent().get_parent().left_upright
+					var left_downright = get_parent().get_parent().left_downright
 
 					var x = clamp(pos_to_reach.x, left_upleft.x, left_upright.x)
 					var y = clamp(pos_to_reach.y, left_upleft.y, left_downleft.y)
@@ -195,16 +196,16 @@ func set_playerpos(i):
 					var vec = (Vector2.ONE * rand_range(0, 15)).rotated(rand_range(0, PI))
 					team_players[i].pos_to_reach = Vector2(x, y) + vec
 			else :
-				team_players[i].pos_to_reach = get_node("/root/Arena").left_spy
+				team_players[i].pos_to_reach = get_parent().get_parent().left_spy
 			if self.team_label == "Right" and self.tactics == TACTICS.defense :
 				if( ! team_players[i].spy):
 					var opp = get_parent().get_node("Left").current_player
-					var pos_to_reach = get_node("/root/Arena").positions_array2[i] + (opp.global_position - get_node("/root/Arena").right_center)
-					var right_center = get_node("/root/Arena").right_center
-					var right_upleft = get_node("/root/Arena").right_upleft
-					var right_downleft = get_node("/root/Arena").right_downleft
-					var right_upright = get_node("/root/Arena").right_upright
-					var right_downright = get_node("/root/Arena").right_downright
+					var pos_to_reach = get_parent().get_parent().positions_array2[i] + (opp.global_position - get_parent().get_parent().right_center)
+					var right_center = get_parent().get_parent().right_center
+					var right_upleft = get_parent().get_parent().right_upleft
+					var right_downleft = get_parent().get_parent().right_downleft
+					var right_upright = get_parent().get_parent().right_upright
+					var right_downright = get_parent().get_parent().right_downright
 					
 					var x = clamp(pos_to_reach.x, right_upleft.x, right_upright.x)
 					var y = clamp(pos_to_reach.y, right_downleft.y, right_upleft.y)
@@ -212,7 +213,7 @@ func set_playerpos(i):
 					var vec = (Vector2.ONE * rand_range(0, 25)).rotated(rand_range(0, PI))
 					team_players[i].pos_to_reach = Vector2(x, y) + vec
 				else :
-					team_players[i].pos_to_reach = get_node("/root/Arena").right_spy
+					team_players[i].pos_to_reach = get_parent().get_parent().right_spy
 
 
 		

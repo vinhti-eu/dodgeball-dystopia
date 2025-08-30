@@ -4,7 +4,7 @@ extends Button
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
-
+var fieldScene = load("res://Arena.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -18,4 +18,5 @@ func _ready():
 
 func _on_Button_button_down():
 	if(self.name == "Button"):
+		
 		get_tree().change_scene("res://Arena.tscn")

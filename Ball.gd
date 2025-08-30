@@ -13,6 +13,8 @@ var ball_overlapping_fields = []
 var attached_to = null
 var direction = null
 var speed = 400
+var damage = 0
+
 var z_position = 0
 var z = 0
 var z_velocity = 0
@@ -92,12 +94,13 @@ func attach(var person):
 		emit_signal("ball_stopped_on_floor",ball_is_lying)
 
 	
-func throw(var vector, var speed_multiplyer,var shooting_player):
+func throw(var vector, var speed_multiplyer,var shooting_player, var damage):
 	speed = 400
 
 	ball_is_shot = shooting_player
 	direction = vector * speed_multiplyer
 	z_velocity = 1.5
+	self.damage = damage
 	get_node("AudioThrow").pitch_scale = rand_range(1,1.5)
 	get_node("AudioThrow").play()
 	detach()	
@@ -157,9 +160,6 @@ func borderd():
 		self.direction = direction * -1
 		self.speed = speed/8
 
-# TODO overlapping areas lead to a race condition, where the wrong area might take priority
-# possible fix by setting a var and checking for area exited instead
-# can also be checked by only checking single dot instead of whole hitbox area
 func _on_Ball_shadow_area_entered(area):
 	if(field_dict.values().has(area.name)):
 		ball_overlapping_fields.append(area.name)

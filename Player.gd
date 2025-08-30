@@ -1,8 +1,19 @@
 extends KinematicBody2D
 
+#TODO export to be filled by class
+#20 + 8 per level?
+var max_health 
+var health
+#TODO implement
+var off = 2 # damage and knockback
+var thr # lowers  opponents catch chance, increase throw speed/distance
+var sta = 2 # max health
+var def # catch chance, slight damage decrease rand
+var dex # crit chance + running speed
+var spe # special throw
 # turning towards balls or other events
 var is_flipped
-var health = 3
+
 var direction = Vector2();
 var run_speed = 110
 var attached_ball = null
@@ -16,7 +27,9 @@ var ball_is_in_catch = null
 var hand_x_offset = Vector2(7,0)
 var pos_to_reach = Vector2(186, 168)
 var ball_shadow_is_in_shadow =false
-onready var ball = get_node("/root/Arena/YSort/YSort_ball/Ball")
+
+export(NodePath) onready var ball = get_parent().get_parent().get_node("YSort_ball").get_node("Ball")
+export(NodePath) onready var arena = get_parent().get_parent().get_parent()
 var flip = Vector2(1,1)
 export var spy = false
 var location_change_time = 0
@@ -55,6 +68,8 @@ enum TACTICS{
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	max_health = 20 + (sta * 8)
+	health = max_health
 	get_parent().connect("player_koed", self, "_on_player_koed")
 	
 	#get_node("/root/@Arena@2").get_node("Camera").connect("ball_thrown", self,"_on_ball_thrown")
@@ -351,7 +366,7 @@ func read_input():
 
 
 func set_direction(move_direction):
-	direction = move_direction.normalized() * $"/root/Arena".y_ratio
+	direction = move_direction.normalized() * arena.y_ratio
 	
 func jump():
 	jumping = true
@@ -391,7 +406,7 @@ func cCommand():
 			get_parent().switch(get_parent().pass_player) 
 
 func _draw():
-	if(get_node("/root/Arena").debug_mode):
+	if(arena.debug_mode):
 		draw_line(global_position.normalized() ,global_position.normalized() + direction * 100 , Color(1,1,1), 1)
 
 func landing_from_jump():
@@ -434,8 +449,10 @@ func has_touched_enemy_field():
 		drop_ball(direction)
 	get_parent().run_to_center(self)
 
+#TODO implement damage using off
 func throw_ball(direction):
-	attached_ball.throw(direction,1, self)
+	var damage = 8 + self.off * 4
+	attached_ball.throw(direction,1, self, damage)
 	attached_ball = null
 
 
@@ -479,15 +496,16 @@ func _on_ballbox_area_entered(area):
 					attach_ball(ball)
 
 func hit_by_ball(ball):
+	var damage = round(ball.damage * rand_range(0.5,1.5))
 	emit_signal("player_hit",self)
-	self.health = self.health -1
+	self.health = self.health -ball.damage
 	self.state = STATE.knocked
 	self.knockback_speed = ball.speed /6
 	self.z_velocity = knockback_speed/30#/60 2
 	knockback_direction = ball.direction.normalized()
 	ball.knocked(self)
 	#get_parent().switch(self)
-	get_node("playerEffectSpawner").hit(randi()%20)
+	get_node("playerEffectSpawner").hit(damage)
 	
 
 

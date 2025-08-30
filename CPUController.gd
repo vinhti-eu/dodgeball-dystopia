@@ -14,7 +14,7 @@ onready var ball = get_node("../YSort_ball/Ball")
 var ball_is_lying 
 
 var ball_side_left = true
-
+export(NodePath) onready var arena = get_parent().get_parent()
 
 
 
@@ -32,7 +32,7 @@ func _ready():
 	timer2.set_one_shot(false)
 
 
-	var arena = get_node_or_null("/root/Arena")
+
 	if arena:
 		timer2.connect("timeout", self, "on_timer_timeout_pass")  # Connect first
 		arena.call_deferred("add_child", timer2)

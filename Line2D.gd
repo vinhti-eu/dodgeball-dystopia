@@ -6,13 +6,14 @@ extends Node2D
 # var b = "text"
 var current_player = null
 var team_players = null
+export(NodePath) onready var arena = get_parent()
 
 func _process(delta):
 	current_player = get_parent().get_node("YSort").get_node("Left").current_player
 	team_players =  get_parent().get_node("YSort").get_node("Left").team_players
 	update()
 	
-	if($"/root/Arena".debug_mode):
+	if(arena.debug_mode):
 		for child in get_parent().get_node("YSort/Left").get_children():
 			child.modulate = Color(1,1,1)	
 		get_parent().get_node("YSort/Left").pass_player.modulate = Color(1,0,1)
@@ -30,7 +31,7 @@ func _ready():
 	team_players =  get_parent().get_node("YSort").get_node("Left").team_players
 
 func _draw():
-	if( get_node("/root/Arena").debug_mode):
+	if( arena.debug_mode):
 			if(current_player != null and team_players != null):
 				for player in team_players:
 					if(current_player != player):

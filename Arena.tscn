@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Field.tscn" type="PackedScene" id=2]
@@ -17,6 +17,9 @@
 [ext_resource path="res://healthbar.png" type="Texture" id=15]
 [ext_resource path="res://sprites/player_sprites/P1_1_head.png" type="Texture" id=16]
 [ext_resource path="res://sprites/player_sprites/P1_1_hair.png" type="Texture" id=17]
+[ext_resource path="res://healthbar_health.png" type="Texture" id=18]
+[ext_resource path="res://HUD_Player.gd" type="Script" id=19]
+[ext_resource path="res://OverlayEffects.gd" type="Script" id=20]
 
 [sub_resource type="Animation" id=2]
 length = 0.001
@@ -72,6 +75,13 @@ tracks/0/keys = {
 "values": [ Vector2( 0, 0 ) ]
 }
 
+[sub_resource type="DynamicFontData" id=4]
+font_path = "res://fonts/ambitsek.ttf"
+
+[sub_resource type="DynamicFont" id=3]
+size = 8
+font_data = SubResource( 4 )
+
 [node name="Arena" type="Node2D"]
 z_index = 3
 script = ExtResource( 5 )
@@ -122,6 +132,7 @@ script = ExtResource( 6 )
 
 [node name="Player" parent="YSort/Left" instance=ExtResource( 1 )]
 position = Vector2( 198, 191 )
+ball = NodePath("../../YSort_ball/Ball")
 
 [node name="Player2" parent="YSort/Left" instance=ExtResource( 1 )]
 position = Vector2( 233, 137 )
@@ -240,35 +251,60 @@ tab_size = 3
 text = "debug off"
 script = ExtResource( 13 )
 
-[node name="Sprite" type="Sprite" parent="HUD"]
-position = Vector2( 100, 22 )
+[node name="HUD_Player" type="Node2D" parent="HUD"]
 scale = Vector2( 2, 2 )
+script = ExtResource( 19 )
+
+[node name="Healthbar" type="Sprite" parent="HUD/HUD_Player"]
+position = Vector2( 53, 14 )
 texture = ExtResource( 15 )
 
-[node name="Head" type="Node2D" parent="HUD"]
+[node name="TextureProgress" type="TextureProgress" parent="HUD/HUD_Player"]
+margin_left = 28.0
+margin_top = 10.0
+margin_right = 81.0
+margin_bottom = 13.0
+max_value = 53.0
+value = 53.0
+texture_progress = ExtResource( 18 )
 
-[node name="Sprite" type="Sprite" parent="HUD/Head"]
-position = Vector2( 21, 16 )
-scale = Vector2( 2, 2 )
+[node name="Head" type="Node2D" parent="HUD/HUD_Player"]
+
+[node name="Sprite" type="Sprite" parent="HUD/HUD_Player/Head"]
+position = Vector2( 13.5, 11.5 )
 texture = ExtResource( 16 )
 hframes = 8
 vframes = 16
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="HUD/Head"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="HUD/HUD_Player/Head"]
 anims/RESET = SubResource( 2 )
 anims/head = SubResource( 1 )
 
-[node name="Hair" type="Node2D" parent="HUD"]
+[node name="Hair" type="Node2D" parent="HUD/HUD_Player"]
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="HUD/Hair"]
-root_node = NodePath("../..")
+[node name="AnimationPlayer" type="AnimationPlayer" parent="HUD/HUD_Player/Hair"]
+root_node = NodePath("../../..")
 
-[node name="Sprite" type="Sprite" parent="HUD/Hair"]
-position = Vector2( 21, 16 )
-scale = Vector2( 2, 2 )
+[node name="Sprite" type="Sprite" parent="HUD/HUD_Player/Hair"]
+position = Vector2( 13.5, 11.5 )
 texture = ExtResource( 17 )
 hframes = 8
 vframes = 16
+
+[node name="OverlayEffects" type="Node2D" parent="HUD/HUD_Player"]
+position = Vector2( 27, 10 )
+script = ExtResource( 20 )
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HUD/HUD_Player"]
+margin_left = 26.0
+margin_top = 18.0
+margin_right = 157.0
+margin_bottom = 31.0
+rect_scale = Vector2( 0.5, 0.5 )
+custom_colors/default_color = Color( 0.94902, 0.94902, 0.94902, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_fonts/normal_font = SubResource( 3 )
+text = "ChalkChaser"
 
 [node name="BackgroundMusic" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 14 )

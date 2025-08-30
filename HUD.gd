@@ -18,3 +18,5 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	get_node("health_label").text = "health: "+  str(left_team.current_player.health)
+	get_node("HUD_Player").max_health = left_team.current_player.max_health
+	get_node("HUD_Player").health = left_team.current_player.health
